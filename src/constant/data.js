@@ -5,16 +5,16 @@ export const menuItems = [
   // },
 
   {
-    title: "Dashboard",
+    title: "मुखपृष्ठ",
     icon: "heroicons-outline:home",
-    link:"dashboard",
+    link: "dashboard",
     isOpen: true,
     isHide: true,
   },
   {
     title: "रिपोर्ट 1 ",
     icon: "heroicons-outline:table",
-    link:"vendor-list",
+    link: "vendor-list",
     isOpen: true,
     isHide: true,
     child: [
@@ -24,83 +24,146 @@ export const menuItems = [
       },
       {
         childtitle: "अल्फाबेटिकल यादी ",
-        childlink: "ecommerce",
+        childlink: "Alphabeticalwise",
       },
       {
         childtitle: "पत्त्यानुसार  यादी",
-        childlink: "project",
+        childlink: "Addresswise",
       },
       {
         childtitle: "आडनावानुसार यादी",
-        childlink: "crm",
+        childlink: "Surnamewise",
       },
       {
         childtitle: "वयानुसार यादी",
-        childlink: "banking",
+        childlink: "Agewise",
       },
       {
         childtitle: "कुटुंबानुसार यादी",
-        childlink: "bankng",
+        childlink: "Familywise",
       },
       {
         childtitle: "जातीनुसार यादी",
-        childlink: "baking",
+        childlink: "Castwise",
       },
     ],
   },
-
   {
     title: "रिपोर्ट 2 ",
     icon: "heroicons-outline:table",
-    link:"vendo-list",
+    link: "vendo-list",
     isOpen: true,
     isHide: true,
     child: [
       {
         childtitle: "  दुबार",
-        childlink: "dasoard",
+        childlink: "dubar",
       },
       {
         childtitle: "जन्मतारखेनुसार ",
-        childlink: "ecom=merce",
+        childlink: "by-dob-report2",
       },
       {
         childtitle: " लग्नाचा वाढदिवस",
-        childlink: "poject",
+        childlink: "by-marriage-anniversary-report2",
       },
       {
         childtitle: "पुरवणी संक्षिप्त मतदार",
-        childlink: "rm",
+        childlink: "by-supplementary",
       },
       {
         childtitle: "बदललेले पत्त्यानुसार",
-        childlink: "bnking",
+        childlink: "by-changed-address",
       },
       {
         childtitle: "व्यवसायानुसार",
-        childlink: "bakng",
+        childlink: "by-business",
       },
       {
         childtitle: " संदर्भानुसार",
-        childlink: "king",
+        childlink: "by-context",
       },
     ],
   },
-  
-
+  {
+    title: "नियोजन",
+    icon: "heroicons-outline:table",
+    link: "vendo-list",
+    isOpen: true,
+    isHide: true,
+    child: [
+      {
+        childtitle: "रेड / ग्रीन मतदार",
+        childlink: "red-green-voter",
+      },
+      {
+        childtitle: "यादी कमिटी ",
+        childlink: "yadi-committee",
+      },
+      {
+        childtitle: "कार्यकर्त्यानुसार",
+        childlink: "karyakartyanusar",
+      },
+      {
+        childtitle: "जिवंत / मृत",
+        childlink: "jivant-mrut",
+      },
+      {
+        childtitle: "सर्वे निकाल",
+        childlink: "survey-result",
+      },
+    ],
+  },
+  {
+    title: "सर्वे ",
+    icon: "heroicons-outline:table",
+    link: "vendo-list",
+    isOpen: true,
+    isHide: true,
+    child: [
+      {
+        childtitle: "मास्टर मोबाईल",
+        childlink: "master-mobile",
+      },
+      {
+        childtitle: "सर्वे रजिस्ट्रेशन",
+        childlink: "survey-registration",
+      },
+      {
+        childtitle: "फोटो सिंक्रोनाईज",
+        childlink: "photo-synchronize",
+      },
+      {
+        childtitle: "सर्वे डेटा पाहणे",
+        childlink: "view-survey-data",
+      },
+      {
+        childtitle: "लोकेशन असणारे",
+        childlink: "with-location",
+      },
+      {
+        childtitle: "सर्वे झालेले न झालेले",
+        childlink: "surveyed-or-unsurveyed",
+      },
+      {
+        childtitle: "नवीन मतदार",
+        childlink: "new-voters",
+      },
+    ],
+  },
   {
     title: "Bookings",
     icon: "heroicons-outline:table",
-    link:"bookings",
+    link: "bookings",
     isOpen: true,
     isHide: true,
   },
- 
+
 ];
 
 export const topMenu = [
   {
-    title: "Dashboard",
+    title: "मुखपृष्ठ",
     icon: "heroicons-outline:home",
     link: "/app/home",
     child: [
@@ -158,7 +221,7 @@ export const topMenu = [
       },
     ],
   },
- 
+
 ];
 
 import User1 from "@/assets/images/all-img/user.png";

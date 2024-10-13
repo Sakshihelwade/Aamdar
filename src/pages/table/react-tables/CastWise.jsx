@@ -6,39 +6,35 @@ import Select from "@/components/ui/Select";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
 import { toast } from "react-toastify";
+import CommonTableAddressWise from "./CommonTableAddressWise";
 
-const NameWiseList = () => {
+const CastWise = () => {
   const [villageId, setVillageId] = useState("");
   const [villageName, setVillageName] = useState("");
   const [boothNo, setBoothNo] = useState("");
-  const [srNo, setSrNo] = useState("");
-  const [voterName, setVoterName] = useState("");
-  const [cardNo, setCardNo] = useState("");
-  const [relative, setRelative] = useState("");
-  const [relativeName, setRelativeName] = useState("");
+  const [fromList, setFromList] = useState("");
+  const [toList, setToList] = useState("");
+  const [gender, setGender] = useState("");
   const [allVoter,setAllVoter]=useState([])
   const [voterCount,setVoterCount]=useState()
   const [villageOption, setVillageOption] = useState([]);
   const [boothOption,setBoothOption]=useState([])
   const [currentPage, setCurrentPage] = useState(1);
 
+  
   const SerachBy = [
-    { label: "आडनावानुसार", value: "आडनावानुसार" },
-    { label: "वडिलांचे नाव", value: "वडिलांचे नाव" },
-    { label: "आईचे नाव", value: "आईचे नाव" },
-    { label: "पतीचे नाव", value: "पतीचे नाव" },
-    { label: "इतर", value: "इतर" },
+    { label: "पुरुष", value: "पुरुष" },
+    { label: "स्त्री", value: "स्त्री" },
+    
   ];
 
   const handleClear = () => {
     setVillageId("");
     setVillageName("");
     setBoothNo("");
-    setSrNo("");
-    setVoterName("");
-    setCardNo("");
-    setRelative("");
-    setRelativeName("");
+    setFromList('')
+    setToList('')
+    setGender('')
   };
   
   const handlePageChange = (page) => {
@@ -81,7 +77,7 @@ const NameWiseList = () => {
 
   const getAllVoters = () => {
     axios
-      .get(`${base_url}/api/surve/searchVotter?name=true&boothNo=${boothNo}&serialNo=${srNo}&nameFilter=${voterName}&village=${villageName}&cardNumber=${cardNo}&page=${currentPage}`)
+      .get(`${base_url}/api/surve/searchVotter?name=true&boothNo=${boothNo}&village=${villageName}&minBooth=${fromList}&maxBooth=${toList}&gender=${gender}&page=${currentPage}`)
       .then((resp) => {
         setAllVoter(resp.data.voters);
         setVoterCount(resp.data);
@@ -97,7 +93,6 @@ const NameWiseList = () => {
   useEffect(() => {
     getVillageOption();
     getBoothNo()
-    
     }, []);
 
  useEffect(()=>{
@@ -113,7 +108,7 @@ useEffect(()=>{
       <div className="mb-4">
         <Card>
           <div className="mb-2">
-            <h6 className="font-bold text-orange-400">नावानुसार यादी</h6>
+            <h6 className="font-bold text-orange-400">जातीनुसार यादी</h6>
           </div>
           <hr className="py-2" />
           <p>
@@ -139,44 +134,30 @@ useEffect(()=>{
             />
             <InputGroup
               type="text"
-              label="अ.नं."
+              label="यादी नं. पासून"
               id="ps-1"
-              placeholder="अ.नं."
-              value={srNo}
-              onChange={(e) => setSrNo(e.target.value)}
+              placeholder="यादी नं. पासून"
+              value={fromList}
+              onChange={(e) => setFromList(e.target.value)}
             />
             <InputGroup
               type="text"
-              label="मतदाराचे नाव "
+              label="यादी नं. पर्यंत"
               id="ps-1"
-              placeholder="मतदाराचे नाव "
-              value={voterName}
-              onChange={(e) => setVoterName(e.target.value)}
+              placeholder="यादी नं. पर्यंत "
+              value={toList}
+              onChange={(e) => setToList(e.target.value)}
             />
-            <InputGroup
-              type="text"
-              label="EPIC/कार्ड नं"
-              id="ps-1"
-              placeholder="EPIC/कार्ड नं"
-              value={cardNo}
-              onChange={(e) => setCardNo(e.target.value)}
-            />
+           
             <Select
-              label="नातेसंबंधानुसार शोधा"
+              label="लिंग"
               className="w-full"
-              placeholder="नातेसंबंधानुसार शोधा"
+              placeholder="लिंग"
               options={SerachBy}
-              value={relative}
-              onChange={(e) => setRelative(e.target.value)}
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
             />
-            <InputGroup
-              type="text"
-              label="नातेदराचे नाव"
-              id="ps-1"
-              placeholder="नातेदराचे नाव"
-              value={relativeName}
-              onChange={(e) => setRelativeName(e.target.value)}
-            />
+           
             <div className="flex justify-end items-center mt-6">
               <button className="bg-orange-400 text-white px-5 h-10 rounded-md" onClick={(e)=>{handleClear()
                 getAllVoters()
@@ -190,11 +171,13 @@ useEffect(()=>{
         </Card>
       </div>
       <Card>
-        <CommonTable Props={allVoter} voterCount={voterCount}  currentPage={currentPage} 
-  setCurrentPage={setCurrentPage} onPageChange={handlePageChange} />
+     
+
+<CommonTableAddressWise  Props={allVoter} voterCount={voterCount}  currentPage={currentPage} 
+  setCurrentPage={setCurrentPage} onPageChange={handlePageChange}/>
       </Card>
     </div>
   );
 };
 
-export default NameWiseList;
+export default CastWise;

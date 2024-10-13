@@ -111,6 +111,32 @@ const CalenderPage = lazy(() => import("./pages/app/calender"));
 import Loading from "@/components/Loading";
 import Bookings from "./pages/table/react-tables/Bookings";
 import NameWiseList from "./pages/table/react-tables/NameWiseList";
+import Dubar from "./pages/table/report2/Dubar";
+import ByDob from "./pages/table/report2/ByDob";
+import ByMarriageAnniversary from "./pages/table/report2/ByMarriageAnniversary";
+import BySupplementary from "./pages/table/report2/BySupplementary";
+import ByChangedAdd from "./pages/table/report2/ByChangedAdd";
+import ByBusiness from "./pages/table/report2/ByBusiness";
+import ByContext from "./pages/table/report2/ByContext";
+import RedGreenVoter from "./pages/table/niyojan/RedGreenVoter";
+import YadiCommittee from "./pages/table/niyojan/YadiCommittee";
+import Karyakartyanusar from "./pages/table/niyojan/Karyakartyanusar";
+import SurveyResult from "./pages/table/niyojan/SurveyResult";
+import JivantMrut from "./pages/table/niyojan/JivantMrut";
+import MasterMobile from "./pages/table/survey/MasterMobile";
+import SurveyReg from "./pages/table/survey/SurveyReg";
+import PhotoSync from "./pages/table/survey/PhotoSync";
+import SurveyDataView from "./pages/table/survey/SurveyDataView";
+import WithLocation from "./pages/table/survey/WithLocation";
+import SurveyedOrUnsurveyed from "./pages/table/survey/SurveyedOrUnsurveyed";
+import NewVoters from "./pages/table/survey/NewVoters";
+import AlphabeticalWise from "./pages/table/react-tables/AlphabeticalWise";
+import AddressWise from "./pages/table/react-tables/AddressWise";
+import SurnameWise from "./pages/table/react-tables/SurnameWise";
+import AgeWise from "./pages/table/react-tables/AgeWise";
+import FamilyWise from "./pages/table/react-tables/FamilyWise";
+import CastWise from "./pages/table/react-tables/CastWise";
+
 function App() {
   return (
     <main className="App  relative">
@@ -220,11 +246,37 @@ function App() {
           <Route path="project" element={<ProjectPage />} />
           <Route path="banking" element={<BankingPage />} />
 
-
           {/* Aamdar Panel */}
-   <Route path="Namewiselist" element={<NameWiseList/>}/>
-
-
+          {/* report 1 */}
+          <Route path="Namewiselist" element={<NameWiseList />} />
+          <Route path="Alphabeticalwise" element={<AlphabeticalWise />} />
+          <Route path="Addresswise" element={<AddressWise />} />
+          <Route path="Surnamewise" element={<SurnameWise />} />
+          <Route path="Agewise" element={<AgeWise />} />
+          <Route path="Familywise" element={<FamilyWise />} />
+          <Route path="Castwise" element={<CastWise />} />
+          {/* report2  */}
+          <Route path="dubar" element={<Dubar />} />
+          <Route path="by-dob-report2" element={<ByDob />} />
+          <Route path="by-marriage-anniversary-report2" element={<ByMarriageAnniversary />} />
+          <Route path="by-supplementary" element={<BySupplementary />} />
+          <Route path='by-changed-address' element={<ByChangedAdd />} />
+          <Route path='by-business' element={<ByBusiness />} />
+          <Route path="by-context" element={<ByContext />} />
+          {/* niyojan */}
+          <Route path="red-green-voter" element={<RedGreenVoter />} />
+          <Route path="yadi-committee" element={<YadiCommittee />} />
+          <Route path="karyakartyanusar" element={<Karyakartyanusar />} />
+          <Route path="jivant-mrut" element={<JivantMrut />} />
+          <Route path="survey-result" element={<SurveyResult />} />
+          {/* Survey */}
+          <Route path="master-mobile" element={<MasterMobile />} />
+          <Route path="survey-registration" element={<SurveyReg />} />
+          <Route path="photo-synchronize" element={<PhotoSync />} />
+          <Route path="view-survey-data" element={<SurveyDataView />} />
+          <Route path="with-location" element={<WithLocation />} />
+          <Route path="surveyed-or-unsurveyed" element={<SurveyedOrUnsurveyed />} />
+          <Route path="new-voters" element={<NewVoters />} />
 
           {/* App pages */}
           <Route path="todo" element={<TodoPage />} />
