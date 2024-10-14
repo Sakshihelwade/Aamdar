@@ -63,26 +63,26 @@ export const menuItems = [
         childtitle: "जन्मतारखेनुसार ",
         childlink: "by-dob-report2",
       },
-      {
-        childtitle: " लग्नाचा वाढदिवस",
-        childlink: "by-marriage-anniversary-report2",
-      },
+      // {
+      //   childtitle: " लग्नाचा वाढदिवस",
+      //   childlink: "by-marriage-anniversary-report2",
+      // },
       {
         childtitle: "पुरवणी संक्षिप्त मतदार",
         childlink: "by-supplementary",
       },
-      {
-        childtitle: "बदललेले पत्त्यानुसार",
-        childlink: "by-changed-address",
-      },
-      {
-        childtitle: "व्यवसायानुसार",
-        childlink: "by-business",
-      },
-      {
-        childtitle: " संदर्भानुसार",
-        childlink: "by-context",
-      },
+      // {
+      //   childtitle: "बदललेले पत्त्यानुसार",
+      //   childlink: "by-changed-address",
+      // },
+      // {
+      //   childtitle: "व्यवसायानुसार",
+      //   childlink: "by-business",
+      // },
+      // {
+      //   childtitle: " संदर्भानुसार",
+      //   childlink: "by-context",
+      // },
     ],
   },
   {

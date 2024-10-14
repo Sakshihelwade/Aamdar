@@ -1,24 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonTable from "../react-tables/CommonTable";
 import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
 import Select from "@/components/ui/Select";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { base_url } from "../../../config/base_url";
 
 const ByMarriageAnniversary = () => {
-    const [village, setVillage] = useState('')
-    const [boothNo, setBoothNo] = useState('')
-    const [srNo, setSrNo] = useState('')
-    const [voterName, setVoterName] = useState('')
-    const [cardNo, setCardNo] = useState('')
-    const [relative, setRelative] = useState('')
-    const [relativeName, setReltiveName] = useState('')
-    const [isSelected1, setIsSelected1] = useState(false);  // checkbox state 1
-    const [isSelected2, setIsSelected2] = useState(false);  // checkbox state 2
+
+    const [date,setDate]=useState(new Date())
+    const [allVoter,setAllVoter]=useState('')
+    const [voterCount,setVoterCount]=useState()
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+    const getAllVoters = () => {
+        axios.get(`${base_url}/api/surve/searchVotter?name=true&page=${currentPage}`)
+          .then((resp) => {
+            setAllVoter(resp.data.voters);
+            setVoterCount(resp.data);
+            toast.success('Filter Sucessfully')
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.warning('No results found for the provided search criteria')
+          });
+      };
+
+useEffect(()=>{
+    getAllVoters()
+},[currentPage])
 
     return (
         <div>
             <div className=" mb-4">
                 <Card>
+                <div className="mb-2">
+            <h6 className="font-bold text-orange-400">लग्नाचा वाढदिवस </h6>
+          </div>
+          <hr className="py-2" />
                     <p>
 
                         <span className="font-bold">विधानसभा</span>{" "}
@@ -30,25 +54,10 @@ const ByMarriageAnniversary = () => {
                             label="लग्नाचा वाढदिवस"
                             id="ps-1"
                             placeholder="लग्नाचा वाढदिवस"
+                            value={date}
+                            onChange={(e)=>setDate(e.target.value)}
                         />
-                        {/* <div className="col-span-1 flex mt-8 gap-2 items-center ml-24">
-                            <input
-                                type="checkbox"
-                                checked={isSelected1}
-                                onChange={() => setIsSelected1(!isSelected1)}
-                                className="form-checkbox"
-                            />
-                            <label className="ml-2">Monthwise</label></div>
-
-                        <div className="col-span-2 flex mt-8 items-center">
-                            <input
-                                type="checkbox"
-                                checked={isSelected2}
-                                onChange={() => setIsSelected2(!isSelected2)}
-                                className="form-checkbox"
-                            />
-                            <label className="ml-2">Show All</label>
-                        </div> */}
+                    
                         <div className=" col-span-3 justify-end items-center mt-8">
                             <button className=" bg-orange-400 text-white px-5 h-10 rounded-md ">
                                 Export
@@ -60,31 +69,12 @@ const ByMarriageAnniversary = () => {
 
 
                     </div>
-                    {/* <div className="col-span-2 flex mt-8 gap-2 items-center ml-24">
-                            <input
-                                type="checkbox"
-                                checked={isSelected1}
-                                onChange={() => setIsSelected1(!isSelected1)}
-                                className="form-checkbox"
-                            />
-                            <label className="ml-2">Monthwise</label>
-
-                            <input
-                                type="checkbox"
-                                checked={isSelected2}
-                                onChange={() => setIsSelected2(!isSelected2)}
-                                className="form-checkbox"
-                            />
-                            <label className="ml-2">Show All</label>
-
-                            <span>पुरुष :</span>
-                        <span>स्त्री :</span>
-                        <span>एकूण :</span>
-                        </div> */}
+                   
                 </Card>
             </div >
             <Card>
-                <CommonTable />
+            <CommonTable  Props={allVoter} voterCount={voterCount}   
+   onPageChange={handlePageChange}/>
             </Card>
         </div >
     );

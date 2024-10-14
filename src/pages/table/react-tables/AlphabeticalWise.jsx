@@ -64,7 +64,7 @@ const AlphabeticalWise = () => {
     axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
     .then((resp)=>{
         const boothNo=resp.data.booths.map((item)=>({
-            label:item.boothNo , value:item._id
+            label:item.boothNo , value:item.boothNo
         }))
         setBoothOption(boothNo)
 
@@ -107,8 +107,11 @@ useEffect(()=>{
     <div>
       <div className="mb-4">
         <Card>
-          <div className="mb-2">
+          <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-orange-400">अल्फाबेटिकल यादी </h6>
+            <p className=" flex">
+              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
+              </p>
           </div>
           <hr className="py-2" />
           <p>

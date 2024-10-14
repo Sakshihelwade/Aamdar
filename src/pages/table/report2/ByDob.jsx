@@ -1,93 +1,174 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonTable from "../react-tables/CommonTable";
 import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
 import Select from "@/components/ui/Select";
+import { date } from "yup";
+import axios from "axios";
+import { base_url } from "../../../config/base_url";
 
 const NameWiseList = () => {
-    const [village, setVillage] = useState('')
-    const [boothNo, setBoothNo] = useState('')
-    const [srNo, setSrNo] = useState('')
-    const [voterName, setVoterName] = useState('')
-    const [cardNo, setCardNo] = useState('')
-    const [relative, setRelative] = useState('')
-    const [relativeName, setReltiveName] = useState('')
-    const [isSelected1, setIsSelected1] = useState(false);  // checkbox state 1
-    const [isSelected2, setIsSelected2] = useState(false);  // checkbox state 2
+  const [month, setMonth] = useState('');
+  const [villageId, setVillageId] = useState("");
+  const [villageName, setVillageName] = useState("");
+  const [boothNo, setBoothNo] = useState("");
+  const [allVoter,setAllVoter]=useState('')
+  const [voterCount,setVoterCount]=useState()
+const [currentPage, setCurrentPage] = useState(1);
+const [villageOption, setVillageOption] = useState([]);
+const [boothOption,setBoothOption]=useState([])
 
-    return (
-        <div>
-            <div className=" mb-4">
-                <Card>
-                    <p>
 
-                        <span className="font-bold">विधानसभा</span>{" "}
-                        <span className="font-bold text-lg">199</span>
-                    </p>
-                    <div className=" grid grid-cols-4 gap-2">
-                        <InputGroup
-                            type="date"
-                            label="जन्मतारीख"
-                            id="ps-1"
-                            placeholder="जन्मतारीख"
-                        />
-                        <div className="col-span-1 flex mt-8 gap-2 items-center ml-24">
-                            <input
-                                type="checkbox"
-                                checked={isSelected1}
-                                onChange={() => setIsSelected1(!isSelected1)}
-                                className="form-checkbox"
-                            />
-                            <label className="ml-2">Monthwise</label></div>
+const handleVillageChange = (e) => {
+  const selectedOption = villageOption.find(option => option.value === e.target.value);
+  setVillageId(e.target.value); 
+  setVillageName(selectedOption?.label || ""); 
+};
 
-                        <div className="col-span-2 flex mt-8 items-center">
-                            <input
-                                type="checkbox"
-                                checked={isSelected2}
-                                onChange={() => setIsSelected2(!isSelected2)}
-                                className="form-checkbox"
-                            />
-                            <label className="ml-2">Show All</label>
-                        </div>
+const getVillageOption = () => {
+  axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+    .then((resp) => {
+      const villageoption = resp.data.village.map((item) => ({
+        label: item.name,
+        value: item._id
+      }));
+      setVillageOption(villageoption);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
-                        <div className="col-span-1 flex mt-8 items-center"><span>पुरुष : 12345</span></div>
-                        <div className="col-span-1 flex mt-8 items-center"><span>स्त्री : 123456</span></div>
-                        <div className="col-span-1 flex mt-8 items-center"><span>एकूण : 123456</span></div>
+const getBoothNo=()=>{
+  axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
+  .then((resp)=>{
+      const boothNo=resp.data.booths.map((item)=>({
+          label:item.boothNo , value:item.boothNo
+      }))
+      setBoothOption(boothNo)
 
-                        <div className=" flex justify-end items-center mt-6">
-                            <button className=" bg-orange-400 text-white px-5 h-10 rounded-md ">
-                            Export
-                            </button>
-                        </div>
-                    </div>
-                    {/* <div className="col-span-2 flex mt-8 gap-2 items-center ml-24">
-                            <input
-                                type="checkbox"
-                                checked={isSelected1}
-                                onChange={() => setIsSelected1(!isSelected1)}
-                                className="form-checkbox"
-                            />
-                            <label className="ml-2">Monthwise</label>
+  })
+  .catch((error)=>{
+      console.log(error)
+  })
+}
 
-                            <input
-                                type="checkbox"
-                                checked={isSelected2}
-                                onChange={() => setIsSelected2(!isSelected2)}
-                                className="form-checkbox"
-                            />
-                            <label className="ml-2">Show All</label>
+const getAllVoters = () => {
+    axios.get(`${base_url}/api/surve/searchVotter?name=true&village=${villageName}&boothNo=${boothNo}&page=${currentPage}`)
+      .then((resp) => {
+        setAllVoter(resp.data.voters);
+        setVoterCount(resp.data);
+        toast.success('Filter Sucessfully')
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.warning('No results found for the provided search criteria')
+      });
+  };
 
-                            <span>पुरुष :</span>
-                        <span>स्त्री :</span>
-                        <span>एकूण :</span>
-                        </div> */}
-                </Card>
-            </div >
-            <Card>
-                <CommonTable />
-            </Card>
-        </div >
-    );
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+
+  useEffect(()=>{
+    getVillageOption()
+   },[])
+
+  useEffect(()=>{
+    getBoothNo()
+  },[villageId])
+
+useEffect(()=>{
+getAllVoters()
+},[currentPage])
+
+const monthOption=[
+  {label:"आज",value:"आज"},
+  {label:"जानेवारी",value:"जानेवारी"},
+  {label:"फेब्रुवारी",value:"फेब्रुवारी"},
+  {label:"मार्च",value:"मार्च"},
+  {label:"एप्रिल",value:"एप्रिल"},
+  {label:"मे",value:"मे"},
+  {label:"जून",value:"जून"},
+  {label:"जुलै",value:"जुलै"},
+  {label:"ऑगस्ट",value:"ऑगस्ट"},
+  {label:"सप्टेंबर",value:"सप्टेंबर"},
+  {label:"ऑक्टोबर",value:"ऑक्टोबर"},
+  {label:"नोव्हेंबर",value:"नोव्हेंबर"},
+  {label:"डिसेंबर",value:"डिसेंबर"},
+
+]
+
+
+  return (
+    <div>
+      <div className=" mb-4">
+        <Card>
+          <div className="mb-2 flex justify-between">
+            <h6 className="font-bold text-orange-400">जन्मतारखेनुसार </h6>
+            <p className=" flex">
+              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
+              </p>
+          </div>
+          <hr className="py-2" />
+          <p>
+            <span className="font-bold">विधानसभा</span>{" "}
+            <span className="font-bold text-lg">199</span>
+          </p>
+          <div className=" grid grid-cols-4 gap-2">
+          <Select
+              label="गाव"
+              className="w-full"
+              placeholder="गाव"
+              value={villageId}
+              options={villageOption}
+              onChange={handleVillageChange} 
+            />
+            <Select
+              label="भाग/बूथ नं"
+              className="w-full"
+              placeholder="भाग/बूथ नं"
+              options={boothOption}
+              onChange={(e) =>setBoothNo(e.target.value)}
+              value={boothNo}
+            />
+          <Select
+              label="महिना निवडा"
+              className="w-full"
+              placeholder="महिना निवडा"
+              options={monthOption}
+              onChange={(e) =>setMonth(e.target.value)}
+              value={month}
+            />
+{/* <div></div>
+<div className=" flex  gap-7 ">
+            <div className="col-span-1 flex mt-8 items-center">
+              <span className=" font-semibold"> पुरुष : 12345</span>
+            </div>
+            <div className="col-span-1 flex mt-8 items-center">
+              <span className=" font-semibold">स्त्री : 123456</span>
+            </div>
+          
+            </div>
+            <div className="col-span-1 flex mt-8 items-center">
+              <span className=" font-semibold">एकूण : {voterCount?.total}</span>
+            </div> */}
+            
+          </div>
+          <div className=" flex justify-end items-center mt-6">
+              <button className=" bg-orange-400 text-white px-5 h-10 rounded-md " onClick={getAllVoters}>
+              शोधा
+              </button>
+            </div>
+        </Card>
+      </div>
+      <Card>
+      <CommonTable  Props={allVoter} voterCount={voterCount}   
+   onPageChange={handlePageChange}/>
+      </Card>
+    </div>
+  );
 };
 
 export default NameWiseList;

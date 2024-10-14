@@ -70,7 +70,7 @@ const AgeWise = () => {
     axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
     .then((resp)=>{
         const boothNo=resp.data.booths.map((item)=>({
-            label:item.boothNo , value:item._id
+            label:item.boothNo , value:item.boothNo
         }))
         setBoothOption(boothNo)
 
@@ -112,8 +112,11 @@ useEffect(()=>{
     <div>
       <div className="mb-4">
         <Card>
-          <div className="mb-2">
+          <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-orange-400">वयानुसार यादी</h6>
+            <p className=" flex">
+              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
+              </p>
           </div>
           <hr className="py-2" />
           <p>
@@ -179,11 +182,7 @@ useEffect(()=>{
             />
            
             <div className="flex justify-end items-center mt-6">
-              <button className="bg-orange-400 text-white px-5 h-10 rounded-md" onClick={(e)=>{handleClear()
-                getAllVoters()
-              }
-                
-              }>
+              <button className="bg-orange-400 text-white px-5 h-10 rounded-md" onClick={getAllVoters}>
                 शोधा
               </button>
             </div>
