@@ -3,99 +3,103 @@ import Textinput from "@/components/ui/Textinput";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Checkbox from "@/components/ui/Checkbox";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { handleLogin } from "./store";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { base_url } from "../../../config/base_url";
+
+// Validation schema using Yup
 const schema = yup
   .object({
-    email: yup.string().email("Invalid email").required("Email is Required"),
-    password: yup.string().required("Password is Required"),
+    userName: yup.string().email("Invalid username (must be an email)").required("Username is required"),
+    password: yup.string().required("Password is required"),
   })
   .required();
+
 const LoginForm = () => {
   const dispatch = useDispatch();
-  // const { users } = useSelector((state) => state.auth);
-  const [email,setEmail] = useState("")
-  const [password,setPassword] = useState("")
+  const navigate = useNavigate();
+  const [checked, setChecked] = useState(false);
+
+  // React Hook Form for managing the form and validations
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setValue, // To manually set form values
   } = useForm({
     resolver: yupResolver(schema),
-    //
     mode: "all",
   });
-  const navigate = useNavigate();
-  const onSubmit = (data) => {
-    // const user = users.find(
-    //   (user) => user.email === "admin@gmail.com" && user.password === "admin@123"
-    // );
-    if (email === "admin@gmail.com" && password === "admin@123") {
-      dispatch(handleLogin(true));
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1500);
-    } else {
-      toast.error("Invalid credentials", {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+
+  const onSubmit = async (data) => {
+    try {
+      const payload = {
+        userName: data.userName,
+        password: data.password,
+      };
+
+      const response = await axios.post(`${base_url}/api/Login`, payload);
+
+      if (response.status === 200) {
+        toast.success("Login successful!");
+        dispatch(handleLogin(response.data)); // Assuming handleLogin manages login state
+        navigate("/"); // Redirect after login
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Login failed. Please check your credentials.");
     }
   };
 
-  const [checked, setChecked] = useState(false);
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Username Input */}
       <Textinput
-        name="email"
-        label="email"
-        // defaultValue={users[0].email}
-        placeholder="Enter your email address"
-        type="email"
+        name="userName"
+        label="Username"
+        placeholder="Enter your email as username"
+        type="email" // Use "email" type for email validation
         register={register}
-        error={errors.email}
+        error={errors.userName}
         className="h-[48px]"
-        value={email}
-        onChange={(e)=>setEmail(e.target.value)}
       />
+
+      {/* Password Input */}
       <Textinput
         name="password"
-        label="passwrod"
+        label="Password"
         type="password"
-        // defaultValue={users[0].password}
         placeholder="Enter your password"
         register={register}
         error={errors.password}
         className="h-[48px]"
-        value={password}
-        onChange={(e) =>setPassword(e.target.value)}
       />
+
       <div className="flex justify-between">
+        {/* Checkbox for 'Keep me signed in' */}
         <Checkbox
           value={checked}
           onChange={() => setChecked(!checked)}
           label="Keep me signed in"
         />
+
+        {/* Forgot Password Link */}
         <Link
           to="/forgot-password"
           className="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium"
         >
-          Forgot Password?{" "}
+          Forgot Password?
         </Link>
       </div>
 
-      <button className="btn btn-dark block w-full text-center">Sign in</button>
+      {/* Submit Button */}
+      <button className="btn btn-dark block w-full text-center" type="submit">
+        Sign in
+      </button>
     </form>
   );
 };

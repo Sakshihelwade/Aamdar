@@ -16,10 +16,10 @@ const NameWiseList = () => {
   const [cardNo, setCardNo] = useState("");
   const [relative, setRelative] = useState("");
   const [relativeName, setRelativeName] = useState("");
-  const [allVoter,setAllVoter]=useState([])
-  const [voterCount,setVoterCount]=useState()
+  const [allVoter, setAllVoter] = useState([])
+  const [voterCount, setVoterCount] = useState()
   const [villageOption, setVillageOption] = useState([]);
-  const [boothOption,setBoothOption]=useState([])
+  const [boothOption, setBoothOption] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
 
   console.log(voterCount)
@@ -42,15 +42,15 @@ const NameWiseList = () => {
     setRelative("");
     setRelativeName("");
   };
-  
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   const handleVillageChange = (e) => {
     const selectedOption = villageOption.find(option => option.value === e.target.value);
-    setVillageId(e.target.value); 
-    setVillageName(selectedOption?.label || ""); 
+    setVillageId(e.target.value);
+    setVillageName(selectedOption?.label || "");
   };
 
   const getVillageOption = () => {
@@ -67,18 +67,19 @@ const NameWiseList = () => {
       });
   };
 
-  const getBoothNo=()=>{
+  const getBoothNo = () => {
     axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
+
     .then((resp)=>{
         const boothNo=resp.data.booths.map((item)=>({
             label:item.boothNo , value:item.boothNo
         }))
         setBoothOption(boothNo)
 
-    })
-    .catch((error)=>{
+      })
+      .catch((error) => {
         console.log(error)
-    })
+      })
   }
 
   const getAllVoters = () => {
@@ -94,20 +95,22 @@ const NameWiseList = () => {
         toast.warning('No results found for the provided search criteria')
       });
   };
- 
+
 
   useEffect(() => {
     getVillageOption();
     
     }, []);
 
- useEffect(()=>{
+  }, []);
+
+  useEffect(() => {
     getBoothNo()
  },[villageId])
 
-useEffect(()=>{
-  getAllVoters()
-},[currentPage])
+  useEffect(() => {
+    getAllVoters()
+  }, [currentPage])
 
   return (
     <div>
@@ -131,14 +134,14 @@ useEffect(()=>{
               placeholder="गाव"
               value={villageId}
               options={villageOption}
-              onChange={handleVillageChange} 
+              onChange={handleVillageChange}
             />
             <Select
               label="भाग/बूथ नं"
               className="w-full"
               placeholder="भाग/बूथ नं"
               options={boothOption}
-              onChange={(e) =>setBoothNo(e.target.value)}
+              onChange={(e) => setBoothNo(e.target.value)}
               value={boothNo}
             />
             <InputGroup
@@ -186,7 +189,7 @@ useEffect(()=>{
               <button className="bg-orange-400 text-white px-5 h-10 rounded-md" onClick={(e)=>{handleClear()
                 getAllVoters()
               }
-                
+
               }>
                 शोधा
               </button>
@@ -195,8 +198,8 @@ useEffect(()=>{
         </Card>
       </div>
       <Card>
-        <CommonTable Props={allVoter} voterCount={voterCount}  currentPage={currentPage} 
-  setCurrentPage={setCurrentPage} onPageChange={handlePageChange} />
+        <CommonTable Props={allVoter} voterCount={voterCount} currentPage={currentPage}
+          setCurrentPage={setCurrentPage} onPageChange={handlePageChange} />
       </Card>
     </div>
   );

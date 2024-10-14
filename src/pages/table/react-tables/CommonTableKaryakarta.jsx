@@ -1,10 +1,7 @@
-
-
-
-    import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 // import EditModal from './EditModal';
 
-const CommonTable = ({ Props, onPageChange, voterCount }) => {
+const CommonTableKaryakarta = ({ Props, onPageChange, voterCount }) => {
   console.log(Props, "//")
   // console.log(voterCount.total)
   const [activeModal, setActiveModal] = useState(false);
@@ -158,4 +155,4 @@ const CommonTable = ({ Props, onPageChange, voterCount }) => {
   );
 };
 
-export default CommonTable;
+export default CommonTableKaryakarta;
