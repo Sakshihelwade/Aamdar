@@ -45,13 +45,13 @@ const Profile = () => {
         navigate("/profile");
       },
     },
-    // {
-    //   label: "Chat",
-    //   icon: "heroicons-outline:chat",
-    //   action: () => {
-    //     navigate("/chat");
-    //   },
-    // },
+    {
+      label: "Register",
+      icon: "heroicons-outline:credit-card",
+      action: () => {
+        navigate("/register");
+      },
+    },
     // {
     //   label: "Email",
     //   icon: "heroicons-outline:mail",

@@ -46,12 +46,7 @@ const SurveyResult = () => {
             //   onChange={handleChange}
             //   value={value}
             />
-            <InputGroup
-              type="text"
-              label="यादी नं."
-              id="ps-1"
-              placeholder="यादी नं."
-            />
+            
             एकूण मतदार : 111111
             <span></span>
             <span></span>
