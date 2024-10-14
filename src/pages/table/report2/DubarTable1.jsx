@@ -14,14 +14,14 @@ import GlobalFilter from "../react-tables/GlobalFilter";
 const COLUMNS = [
     {
         Header: "नाव",
-        accessor: "der",
+        accessor: "name",
         Cell: (row) => {
             return <span>{row?.cell?.value}</span>;
         },
     },
     {
         Header: "संख्या",
-        accessor: "demr",
+        accessor: "count",
         Cell: (row) => {
             return <span>{row?.cell?.value}</span>;
         }
@@ -51,10 +51,11 @@ const IndeterminateCheckbox = React.forwardRef(
     }
 );
 
-const DubarTable1 = ({ title = "दुबार" }) => {
+const DubarTable1 = ({ title = "दुबार", Props,voterCount}) => {
+    console.log(Props,voterCount,"props voter")
     const columns = useMemo(() => COLUMNS, []);
-    const data = useMemo(() => advancedTable, []);
-
+    const data = useMemo(() => Props, []);
+console.log(data,"data./////./////.///")
     const tableInstance = useTable(
         {
             columns,

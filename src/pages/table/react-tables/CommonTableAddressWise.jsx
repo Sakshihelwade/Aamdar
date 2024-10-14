@@ -9,7 +9,7 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
   const [inputPage, setInputPage] = useState(); 
   const data = Props?.length > 0 ? Props : [];
   const totalPages = Math.ceil(voterCount?.total / rowsPerPage);
-
+  console.log(totalPages,voterCount,"///")
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   let currentRows = data;
