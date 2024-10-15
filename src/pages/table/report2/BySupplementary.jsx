@@ -20,7 +20,7 @@ const BySupplementary = () => {
   const [villageOption, setVillageOption] = useState([]);
   const [boothOption,setBoothOption]=useState([])
   const [currentPage, setCurrentPage] = useState(1);
-
+console.log(voterCount,"voterCount")
 const handlePageChange = (page) => {
   setCurrentPage(page);
 };
@@ -98,8 +98,11 @@ useEffect(()=>{
     <div>
         <div className=" mb-4">
       <Card>
-      <div className="mb-2">
+      <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-orange-400">पुरवणी संक्षिप्त मतदार </h6>
+            <p className=" flex">
+              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
+              </p>
           </div>
           <hr className="py-2" />
         <p>

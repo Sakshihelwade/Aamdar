@@ -176,30 +176,31 @@ const GroupChart1 = () => {
     {
       name: shapeLine1,
       title: "Male Voters",
-      count: totalMale,  // Use state directly
+      count: totalMale,  
       bg: "bg-[#E5F9FF] dark:bg-slate-900",
     },
     {
       name: shapeLine2,
       title: "Female Voters",
-      count: totalFemale,  // Use state directly
+      count: totalFemale,  
       bg: "bg-[#FFEDE5] dark:bg-slate-900",
     },
     {
       name: shapeLine3,
       title: "Total Voters",
-      count: totalMaleFemale,  // Use state directly
+      count: totalMaleFemale,  
       bg: "bg-[#EAE5FF] dark:bg-slate-900",
     },
     {
       name: shapeLine3,
       title: "Total Users",
-      count: userCount,  // Static count
+      count: userCount,  
       bg: "bg-[#EAE5FF] dark:bg-slate-900",
     },
   ];
 
   function calculateTotals(data) {
+    
     let totalMale = 0;
     let totalFemale = 0;
     let totalMaleFemale = 0;
@@ -218,6 +219,7 @@ const GroupChart1 = () => {
   const getVoterCount = () => {
     axios.get(`${base_url}/api/surve/getAddressMaleFemaleCount`)
       .then((resp) => {
+      
         calculateTotals(resp.data.data);
       })
       .catch((error) => {

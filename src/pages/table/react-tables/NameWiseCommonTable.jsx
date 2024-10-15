@@ -1,15 +1,19 @@
+
 import React, { useState, useEffect } from 'react';
+import EditModal from './EditModal';
 // import EditModal from './EditModal';
 
-const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
- console.log(Props,"///props")
-
+const NameWiseCommonTable = ({ Props, onPageChange, voterCount }) => {
+  console.log(Props, "//")
+  // console.log(voterCount.total)
+  const [activeModal, setActiveModal] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [inputPage, setInputPage] = useState(); 
-  const data = Props?.length > 0 ? Props : [];
-  const totalPages = Math.ceil(voterCount?.total / rowsPerPage);
-  console.log(totalPages,voterCount,"///")
+  const [inputPage, setInputPage] = useState();
+
+  const data = Props?.length > 0 ? Props : [];  
+  const totalPages = Math.ceil(voterCount?.total / 25);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   let currentRows = data;
@@ -17,6 +21,8 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
   const ActiveDiactiveModal = (value) => {
     setActiveModal(value);
   };
+
+  console.log(selectedRowData,"selectedRowData")
 
   useEffect(() => {
     if (onPageChange) {
@@ -26,18 +32,18 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
 
   const handlePrevious = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
-    setInputPage(currentPage - 1); 
+    setInputPage(currentPage - 1);
   };
 
   const handleNext = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-    setInputPage(currentPage + 1); 
+    setInputPage(currentPage + 1);
   };
 
   const handleRowsPerPageChange = (e) => {
     setRowsPerPage(Number(e.target.value));
     setCurrentPage(1);
-    setInputPage(1); 
+    setInputPage(1);
   };
 
   const handleRowClick = (row) => {
@@ -48,13 +54,13 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
   const handlePageInputChange = (e) => {
     const page = Number(e.target.value);
     if (page > 0 && page <= totalPages) {
-      setInputPage(page); 
+      setInputPage(page);
     }
   };
 
   const handlePageJump = () => {
     if (inputPage > 0 && inputPage <= totalPages) {
-      setCurrentPage(inputPage); 
+      setCurrentPage(inputPage);
       setInputPage('')
     }
   };
@@ -64,7 +70,7 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
       <div className="overflow-x-auto">
         <table className="w-full bg-white border border-gray-200">
           <thead>
-            <tr className="bg-gray-200 text-gray-600 text-sm leading-normal">
+            <tr className="bg-gray-300 text-gray-600 text-sm leading-normal">
               {/* Table Headers */}
               <th className="px-1 py-2 border border-gray-300">भाग/बूथ नं</th>
               <th className="px-1 py-2 border border-gray-300">अ.नं.</th>
@@ -73,17 +79,20 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
               <th className="px-1 py-2 border border-gray-300">लिंग </th>
               <th className="px-1 py-2 border border-gray-300">मोबाईल नं</th>
               <th className="px-1 py-2 border border-gray-300">नवीन पत्ता</th>
-            
+              <th className="px-1 py-2 border border-gray-300">घर नं</th>
               <th className="px-1 py-2 border border-gray-300">पत्ता</th>
-             
+              <th className="px-1 py-2 border border-gray-300">कार्ड नं</th>
+              <th className="px-1 py-2 border border-gray-300">मुळगाव</th>
+              <th className="px-1 py-2 border border-gray-300">स्टेटस</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
             {currentRows.map((row, index) => (
               <tr
                 key={index}
-                className="border-b border-gray-200 hover:bg-gray-100"
-                onClick={() => handleRowClick(row)}
+                className={`odd:bg-gray-100 even:bg-white`}
+                // className="border-b border-gray-200 hover:bg-gray-100"
+                onDoubleClick={() => handleRowClick(row)}
               >
                 {/* Table Data */}
                 <td className="px-1 py-2 border border-gray-300">{row.boothNo}</td>
@@ -93,9 +102,11 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
                 <td className="px-1 py-2 border border-gray-300">{row.gender}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.MOBILE_NO}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.NEW_ADDRESS}</td>
-               
+                <td className="px-1 py-2 border border-gray-300">{row.houseNo}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.address}</td>
-              
+                <td className="px-1 py-2 border border-gray-300">{row.cardNumber}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.NATIVE_VILLAGE}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.STATUS}</td>
               </tr>
             ))}
           </tbody>
@@ -112,20 +123,20 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
         </button>
 
         <div className="flex items-center">
-  <span>Page No</span>
-  <input
-    type="text"
-    value={inputPage}
-    onChange={handlePageInputChange}
-    className="border border-gray-300 text-center w-16 mx-2"
-  />
-  <button
-    onClick={handlePageJump}
-    className="bg-gray-200 text-gray-600 px-2 py-1 rounded-md"
-  >
-    Go
-  </button>
-</div>
+          <span>Page No</span>
+          <input
+            type="text"
+            value={inputPage}
+            onChange={handlePageInputChange}
+            className="border border-gray-300 text-center w-16 mx-2"
+          />
+          <button
+            onClick={handlePageJump}
+            className="bg-gray-200 text-gray-600 px-2 py-1 rounded-md"
+          >
+            Go
+          </button>
+        </div>
 
 
         <span>
@@ -141,9 +152,9 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
         </button>
       </div>
 
-    
+<EditModal ActiveDiactiveModal={ActiveDiactiveModal} activeModal={activeModal} selectedRowData={selectedRowData}/>
     </div>
   );
 };
 
-export default CommonTableAddressWise;
+export default NameWiseCommonTable;

@@ -14,14 +14,15 @@ const Dubar = () => {
     const [voterCount,setVoterCount]=useState()
   const [currentPage, setCurrentPage] = useState(1);
   const [dubarVoter,setDubarVoter]=useState([])
-  const [dubarVoterCount,setDubarVoterCount]=useState()
+  const [dubarVoterCount,setDubarVoterCount]=useState([])
+const [selectedDubar,setSelectedDubar]=useState()
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
     const getAllVoters = () => {
-        axios.get(`${base_url}/api/surve/searchVotter?name=true&page=${currentPage}`)
+        axios.get(`${base_url}/api/surve/searchVotter?name=true&page=${currentPage}&nameFilter=${selectedDubar?.name}`)
           .then((resp) => {
             setAllVoter(resp.data.voters);
             setVoterCount(resp.data);
@@ -42,11 +43,15 @@ const Dubar = () => {
     .catch((error)=>{
         console.log(error)
     })
-   }   
+   } 
+   
+   const handleDubarVoter=(voter)=>{
+    setSelectedDubar(voter)
+   }
 
 useEffect(()=>{
     getAllVoters()
-},[currentPage])
+},[currentPage,selectedDubar])
 
 useEffect(()=>{
     getDubarVoter()
@@ -56,8 +61,11 @@ useEffect(()=>{
         <div>
             <div className=" mb-4">
                 <Card>
-                <div className="mb-2">
+                <div className="mb-2 flex  justify-between">
             <h6 className="font-bold text-orange-400">दुबार </h6>
+            <p className=" flex">
+              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {dubarVoterCount?.totalDuplicateNames}</h6>
+              </p>
           </div>
           <hr className="py-2" />
                     <p>
@@ -65,15 +73,13 @@ useEffect(()=>{
                         <span className="font-bold">विधानसभा</span>{" "}
                         <span className="font-bold text-lg">199</span>
                     </p>
-                    <div className=" grid grid-cols-4 gap-2">
-                        एकूण दुबार :
-                    </div>
+                    
                 </Card>
             </div>
             <Card>
                 <div className=" grid grid-cols-12">
                     <div className="col-span-4 m-2">
-                        <DubarTable1 Props={dubarVoter} voterCount={dubarVoterCount}/>
+                        <DubarTable1 Props={dubarVoter} voterCount={dubarVoterCount} handleDubarVoter={handleDubarVoter}/>
                         </div>
                     <div className="col-span-8 m-2">
                         <CommonTable  Props={allVoter} voterCount={voterCount}   

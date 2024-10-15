@@ -96,14 +96,14 @@ const CommonTable = ({ Props, onPageChange, voterCount }) => {
                 onClick={() => handleRowClick(row)}
               >
                 {/* Table Data */}
-                <td className="px-1 py-2 border border-gray-300">{row.PART_NO}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.boothNo}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.serialNo}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.name}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.age}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.gender}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.MOBILE_NO}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.NEW_ADDRESS}</td>
-                <td className="px-1 py-2 border border-gray-300">{row.C_HOUSE_NO}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.houseNo}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.address}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.cardNumber}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.NATIVE_VILLAGE}</td>

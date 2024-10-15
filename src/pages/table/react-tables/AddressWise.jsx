@@ -178,7 +178,7 @@ useEffect(()=>{
 
   <AddressWiseTable Props={addressWise} handleAddressSelect={handleAddressSelect}/>
 
-  <CommonTableAddressWise  Props={allVoter} voterCount={voterCount}  currentPage={currentPage} 
+  <CommonTable  Props={allVoter} voterCount={voterCount}  currentPage={currentPage} 
   setCurrentPage={setCurrentPage} onPageChange={handlePageChange}/>
       </Card>
     </div>
