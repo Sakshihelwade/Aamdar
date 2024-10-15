@@ -6,7 +6,9 @@ import Select from "@/components/ui/Select";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
 import { toast } from "react-toastify";
+
 import NameWiseCommonTable from "./NameWiseCommonTable";
+
 
 const NameWiseList = () => {
   const [villageId, setVillageId] = useState("");
@@ -103,7 +105,6 @@ const NameWiseList = () => {
     
     }, []);
 
-  
 
   useEffect(() => {
     getBoothNo()
@@ -202,6 +203,7 @@ const NameWiseList = () => {
         <NameWiseCommonTable Props={allVoter} voterCount={voterCount} currentPage={currentPage}
           setCurrentPage={setCurrentPage} onPageChange={handlePageChange} />
       </Card>
+      <AddNewVoter/>
     </div>
   );
 };

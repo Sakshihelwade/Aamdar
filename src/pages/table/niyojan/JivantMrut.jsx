@@ -98,6 +98,13 @@ const JivantMrut = () => {
     <div>
       <div className="mb-4">
         <Card>
+        <div className="mb-2 flex justify-between">
+            <h6 className="font-bold text-orange-400">जिवंत / मृत  </h6>
+            <p className=" flex">
+              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
+              </p>
+          </div>
+          <hr className="mb-3"/>
           <p>
             <span className="font-bold">विधानसभा</span>{" "}
             <span className="font-bold text-lg">199</span>

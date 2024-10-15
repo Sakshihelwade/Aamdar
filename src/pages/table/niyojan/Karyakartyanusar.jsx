@@ -16,14 +16,15 @@ const Karyakartyanusar = () => {
   const [karyakartaName, setKaryakartaName] = useState("");
   const [maleCount, setMaleCount] = useState(12345); // Example counts
   const [femaleCount, setFemaleCount] = useState(123456); // Example counts
-const [allVoter,setAllVoter]=useState([])
+  const [allVoter, setAllVoter] = useState([])
   const [villageId, setVillageId] = useState(""); // State for selected village ID
   const [villageOption, setVillageOption] = useState([]); // State for village dropdown options
   const [boothOption, setBoothOption] = useState([]); // State for booth dropdown options
   const [minBoothNo, setMinBoothNo] = useState(""); // State for minimum booth number
   const [maxBoothNo, setMaxBoothNo] = useState(""); // State for maximum booth number
   const [currentPage, setCurrentPage] = useState(1);
-console.log(boothOption,"///")
+  const [users , setUsers] =useState([])
+  console.log(boothOption, "///")
 
   const handleVillageChange = (e) => {
     const selectedOption = villageOption.find(option => option.value === e.target.value);
@@ -46,7 +47,7 @@ console.log(boothOption,"///")
     setter(e.target.value);
   };
 
- 
+
   const getVillageOption = () => {
     axios.get(`${base_url}/api/surve/getAllVoterVillages`)
       .then((resp) => {
@@ -61,11 +62,11 @@ console.log(boothOption,"///")
       });
   };
 
-  
+
   const getBoothNo = () => {
     axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
       .then((resp) => {
-        console.log(resp.data,"{{{{{{{")
+        console.log(resp.data, "{{{{{{{")
         const boothOptions = resp.data.booths?.map((item) => ({
           label: item.boothNo,
           value: item.boothNo
@@ -81,25 +82,33 @@ console.log(boothOption,"///")
     try {
       const response = await axios.get(`${base_url}/api/getAllUser`);
       console.log(response.data, "responseeeeeeeeee");
+      setUsers(response.data.users)
     } catch (error) {
       console.log(error);
     }
   };
 
 
-  useEffect(()=>{
+  useEffect(() => {
     getAllData()
 
-  },[currentPage])
+  }, [currentPage])
 
-  useEffect(()=>{
+  useEffect(() => {
     getBoothNo()
-  },[villageId])
+  }, [villageId])
 
   return (
     <div>
       <div className="mb-4">
         <Card>
+        <div className="mb-2 flex justify-between">
+            <h6 className="font-bold text-orange-400">कार्यकर्त्यानुसार  </h6>
+            <p className=" flex">
+              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
+              </p>
+          </div>
+          <hr className="mb-3"/>
           <p>
             <span className="font-bold">विधानसभा</span>{" "}
             <span className="font-bold text-lg">199</span>
@@ -154,7 +163,7 @@ console.log(boothOption,"///")
               value={karyakartaName} // Connect state
               onChange={handleInputChange(setKaryakartaName)} // Update state
             />
-            
+
 
             {/* Display counts */}
             {/* <div className="col-span-1 flex mt-8 items-center">
@@ -178,9 +187,9 @@ console.log(boothOption,"///")
       </div>
 
       <Card>
-      <CommonTableKaryakarta Props={allVoter} voterCount={voterCount} 
-         onPageChange={handlePageChange} />  
-          </Card>
+        <CommonTableKaryakarta Props={users} 
+          onPageChange={handlePageChange} />
+      </Card>
     </div>
   );
 };

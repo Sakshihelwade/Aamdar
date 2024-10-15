@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Textinput from "@/components/ui/Textinput";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,11 +10,15 @@ import { handleLogin } from "./store";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
+import { v1 as uuidv1 } from 'uuid';
+
+
+
 
 // Validation schema using Yup
 const schema = yup
   .object({
-    userName: yup.string().email("Invalid username (must be an email)").required("Username is required"),
+    userName: yup.string().required("Username is required"),
     password: yup.string().required("Password is required"),
   })
   .required();
@@ -23,8 +27,9 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [checked, setChecked] = useState(false);
-
+  const [deviceId, setDeviceID] = useState("")
   // React Hook Form for managing the form and validations
+  // console.log(deviceId,"idddddddddd")
   const {
     register,
     formState: { errors },
@@ -34,20 +39,32 @@ const LoginForm = () => {
     resolver: yupResolver(schema),
     mode: "all",
   });
+  useEffect(() => {
+    // Check if a device ID is already stored in local storage
+    let storedDeviceId = localStorage.getItem("deviceId");
+    if (!storedDeviceId) {
+      storedDeviceId = uuidv1(); // Generate a new UUID if none exists
+      localStorage.setItem("deviceId", storedDeviceId); // Store it in local storage
+    }
+    setDeviceID(storedDeviceId); // Set the device ID in state
+  }, []); // Run only once when the component mounts
 
   const onSubmit = async (data) => {
     try {
       const payload = {
         userName: data.userName,
         password: data.password,
+        deviceId: deviceId,
       };
-
       const response = await axios.post(`${base_url}/api/Login`, payload);
-
+      const {token} = response.data.data
+      localStorage.setItem('token',token)
+      // console.log(token, "token")
+      // console.log(response.data,"resp")
       if (response.status === 200) {
         toast.success("Login successful!");
-        dispatch(handleLogin(response.data)); // Assuming handleLogin manages login state
-        navigate("/"); // Redirect after login
+        dispatch(handleLogin(response.data));
+        navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);
@@ -62,7 +79,7 @@ const LoginForm = () => {
         name="userName"
         label="Username"
         placeholder="Enter your email as username"
-        type="email" // Use "email" type for email validation
+        type="text"
         register={register}
         error={errors.userName}
         className="h-[48px]"

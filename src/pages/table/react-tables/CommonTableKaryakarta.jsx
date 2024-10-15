@@ -71,7 +71,7 @@ const CommonTableKaryakarta = ({ Props, onPageChange, voterCount }) => {
             <tr className="bg-gray-300 text-gray-600 text-sm leading-normal">
               {/* Table Headers */}
               <th className="px-1 py-2 border border-gray-300">भाग/बूथ नं</th>
-              <th className="px-1 py-2 border border-gray-300">अ.नं.</th>
+              <th className="px-1 py-2 border border-gray-300">अ.क्र.</th>
               <th className="px-1 py-2 border border-gray-300">नाव</th>
               <th className="px-1 py-2 border border-gray-300">वय </th>
               <th className="px-1 py-2 border border-gray-300">लिंग </th>
@@ -95,15 +95,15 @@ const CommonTableKaryakarta = ({ Props, onPageChange, voterCount }) => {
                 {/* Table Data */}
                 <td className="px-1 py-2 border border-gray-300">{row.PART_NO}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.serialNo}</td>
-                <td className="px-1 py-2 border border-gray-300">{row.name}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.fullName}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.age}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.gender}</td>
-                <td className="px-1 py-2 border border-gray-300">{row.MOBILE_NO}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.mobileNumber}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.NEW_ADDRESS}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.C_HOUSE_NO}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.address}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.cardNumber}</td>
-                <td className="px-1 py-2 border border-gray-300">{row.NATIVE_VILLAGE}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.villageName}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.STATUS}</td>
               </tr>
             ))}
