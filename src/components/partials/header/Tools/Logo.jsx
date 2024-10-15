@@ -7,7 +7,8 @@ import MainLogo from "@/assets/images/logo/logo.svg";
 import LogoWhite from "@/assets/images/logo/logo-white.svg";
 import MobileLogo from "@/assets/images/logo/logo-c.svg";
 import MobileLogoWhite from "@/assets/images/logo/logo-c-white.svg";
-import DMANDLOGO from "@/assets/images/logo/DMAND-logo.jpg";
+// import DMANDLOGO from "@/assets/images/logo/DMAND-logo.jpg";
+import Logos from '../../../../assets/images/logo/Logo.jpg'
 
 const Logo = () => {
   const [isDark] = useDarkMode();
@@ -17,9 +18,9 @@ const Logo = () => {
     <div>
       <Link to="/dashboard">
         {width >= breakpoints.xl ? (
-          <img src={DMANDLOGO} alt="" />
+          <img src={Logos} alt="" />
         ) : (
-          <img src={DMANDLOGO} alt="" style={{width:"150px"}}/>
+          <img src={Logos} alt="" style={{width:"150px"}}/>
         )}
       </Link>
     </div>
