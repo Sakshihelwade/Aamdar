@@ -15,6 +15,7 @@ import MobileLogo from "@/assets/images/logo/logo-c.svg";
 import MobileLogoWhite from "@/assets/images/logo/logo-c-white.svg";
 import svgRabitImage from "@/assets/images/svg/rabit.svg";
 import DMANDLOGO from "@/assets/images/logo/DMAND-logo.jpg";
+import Logos from '../../../assets/images/logo/Logo.jpg'
 
 
 const MobileMenu = ({ className = "custom-class" }) => {
@@ -45,9 +46,9 @@ const MobileMenu = ({ className = "custom-class" }) => {
           <div className="flex items-center space-x-4">
             <div className="logo-icon">
               {!isDark && !isSemiDark ? (
-                <img src={DMANDLOGO} alt="" />
+                <img src={Logos} alt="" />
               ) : (
-                <img src={DMANDLOGO} alt="" />
+                <img src={Logos} alt="" />
               )}
             </div>
             <div>

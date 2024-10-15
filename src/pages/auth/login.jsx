@@ -11,6 +11,7 @@ import Logo from "@/assets/images/logo/logo.svg";
 import TABLETLOGIN from "@/assets/images/auth/Tablet-login.gif";
 import DMANDLOGO2 from "@/assets/images/logo/DMAND_logo-2.png";
 import DMANDLOGO from "@/assets/images/logo/DMAND-logo.jpg";
+import Logos from '../../assets/images/logo/Logo.jpg'
 
 
 const login = () => {
@@ -23,7 +24,7 @@ const login = () => {
           <div className="left-column relative z-[1]">
             <div className="max-w-[520px] pt-10 ltr:pl-20 rtl:pr-20 flex justify-center items-center">
               <Link to="/">
-                <img src={DMANDLOGO2} alt="" className="mb-10 w-[200px]" />
+                <img src={Logos} alt="" className="mb-10 w-[200px]" />
               </Link>
               {/* <h4>
                 Unlock your Project
@@ -46,7 +47,7 @@ const login = () => {
                 <div className="mobile-logo text-center mb-6 lg:hidden block">
                   <Link to="/">
                     <img
-                      src={DMANDLOGO}
+                      src={Logos}
                       alt=""
                       className="mx-auto"
                     />

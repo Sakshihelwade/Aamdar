@@ -9,7 +9,8 @@ import useSkin from "@/hooks/useSkin";
 // import images
 import MobileLogo from "@/assets/images/logo/logo-c.svg";
 import MobileLogoWhite from "@/assets/images/logo/logo-c-white.svg";
-import DMANDLOGO from "@/assets/images/logo/DMAND-logo.jpg";
+// import DMANDLOGO from "@/assets/images/logo/DMAND-logo.jpg";
+import Logos from '../../../assets/images/logo/Logo.jpg'
 
 const SidebarLogo = ({ menuHover }) => {
   const [isDark] = useDarkMode();
@@ -34,9 +35,9 @@ const SidebarLogo = ({ menuHover }) => {
         <div className="flex items-center space-x-4">
           <div className="logo-icon">
             {!isDark && !isSemiDark ? (
-              <img src={DMANDLOGO} alt="" />
+              <img src={Logos} alt="" />
             ) : (
-              <img src={DMANDLOGO} alt="" />
+              <img src={Logos} alt="" />
             )}
           </div>
 
