@@ -8,6 +8,7 @@ import { base_url } from "../../../config/base_url";
 import { toast } from "react-toastify";
 
 import NameWiseCommonTable from "./NameWiseCommonTable";
+import AddNewVoter from "./AddNewVoter";
 
 
 const NameWiseList = () => {
@@ -203,7 +204,7 @@ const NameWiseList = () => {
         <NameWiseCommonTable Props={allVoter} voterCount={voterCount} currentPage={currentPage}
           setCurrentPage={setCurrentPage} onPageChange={handlePageChange} />
       </Card>
-      <AddNewVoter/>
+      {/* <AddNewVoter/> */}
     </div>
   );
 };
