@@ -71,7 +71,7 @@ const login = () => {
                 </div> */}
               </div>
               <div className="auth-footer text-center">
-                Copyright 2023, Demand To Karo All Rights Reserved.
+                Copyright 2024, Aamdar All Rights Reserved.
               </div>
             </div>
           </div>

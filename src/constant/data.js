@@ -96,10 +96,10 @@ export const menuItems = [
         childtitle: "रेड / ग्रीन मतदार",
         childlink: "red-green-voter",
       },
-      {
-        childtitle: "यादी कमिटी ",
-        childlink: "yadi-committee",
-      },
+      // {
+      //   childtitle: "यादी कमिटी ",
+      //   childlink: "yadi-committee",
+      // },
       {
         childtitle: "कार्यकर्त्यानुसार",
         childlink: "karyakartyanusar",
@@ -108,10 +108,10 @@ export const menuItems = [
         childtitle: "जिवंत / मृत",
         childlink: "jivant-mrut",
       },
-      {
-        childtitle: "सर्वे निकाल",
-        childlink: "survey-result",
-      },
+      // {
+      //   childtitle: "सर्वे निकाल",
+      //   childlink: "survey-result",
+      // },
     ],
   },
   {
@@ -151,13 +151,7 @@ export const menuItems = [
       },
     ],
   },
-  {
-    title: "Bookings",
-    icon: "heroicons-outline:table",
-    link: "bookings",
-    isOpen: true,
-    isHide: true,
-  },
+
 
 ];
 
