@@ -60,6 +60,7 @@ const NameWiseList = () => {
   const getVillageOption = () => {
     axios.get(`${base_url}/api/surve/getAllVoterVillages`)
       .then((resp) => {
+       
         const villageoption = resp.data.village.map((item) => ({
           label: item.name,
           value: item._id
