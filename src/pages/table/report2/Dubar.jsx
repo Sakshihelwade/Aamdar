@@ -22,7 +22,7 @@ const [selectedDubar,setSelectedDubar]=useState()
     setCurrentPage(page);
   };
     const getAllVoters = () => {
-        axios.get(`${base_url}/api/surve/searchVotter?name=true&page=${currentPage}&nameFilter=${selectedDubar?.name}`)
+        axios.get(`${base_url}/api/surve/searchVotter?name=true&dubar=true&page=${currentPage}&nameFilter=${selectedDubar?.name}`)
           .then((resp) => {
             setAllVoter(resp.data.voters);
             setVoterCount(resp.data);

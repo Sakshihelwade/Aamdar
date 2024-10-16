@@ -1,5 +1,3 @@
-
-
 import React, { useState, useMemo, useEffect } from "react";
 import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
@@ -13,7 +11,7 @@ const COLUMNS = [
   { Header: "एकून", accessor: "totalCount" },
 ];
 
-const AddressWiseTable = ({ title = "", Props,handleAddressSelect  }) => {
+const AddressWiseTable = ({ title = "", Props, handleAddressSelect }) => {
   const columns = useMemo(() => COLUMNS, []);
   const [data, setData] = useState(Props);
 
@@ -49,9 +47,14 @@ const AddressWiseTable = ({ title = "", Props,handleAddressSelect  }) => {
 
   const { globalFilter, pageIndex, pageSize } = state;
 
-  // Limit the number of page buttons displayed
+  // Pagination button rendering with active page highlighted in gray
   const renderPageNumbers = () => {
     const visiblePages = 5;
+
+    if (pageOptions.length === 0) {
+      return null; // No pages available, don't render pagination
+    }
+
     const pageButtons = [];
     let startPage = Math.max(pageIndex - 2, 0);
     let endPage = Math.min(pageIndex + 2, pageOptions.length - 1);
@@ -62,6 +65,10 @@ const AddressWiseTable = ({ title = "", Props,handleAddressSelect  }) => {
     if (pageIndex >= pageOptions.length - 3) {
       startPage = pageOptions.length - visiblePages;
     }
+
+    // Ensure startPage and endPage are within bounds
+    if (startPage < 0) startPage = 0;
+    if (endPage >= pageOptions.length) endPage = pageOptions.length - 1;
 
     if (startPage > 0) {
       pageButtons.push(
@@ -77,7 +84,7 @@ const AddressWiseTable = ({ title = "", Props,handleAddressSelect  }) => {
         <button
           key={i}
           onClick={() => gotoPage(i)}
-          className={`pagination-button ${pageIndex === i ? "active" : ""}`}
+          className={`pagination-button px-2 ${pageIndex === i ? "bg-gray-500 text-white" : ""}`}
         >
           {i + 1}
         </button>
@@ -103,10 +110,10 @@ const AddressWiseTable = ({ title = "", Props,handleAddressSelect  }) => {
   return (
     <>
       <Card>
-        <div className="md:flex justify-between items-center mb-6">
+        {/* <div className="md:flex justify-between items-center mb-6">
           <h4 className="card-title">{title}</h4>
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-        </div>
+        </div> */}
         <div className="overflow-x-auto -mx-6">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden">
@@ -127,7 +134,7 @@ const AddressWiseTable = ({ title = "", Props,handleAddressSelect  }) => {
                   {page.map(row => {
                     prepareRow(row);
                     return (
-                      <tr {...row.getRowProps()} className="cursor-pointer" onClick={()=>handleAddressSelect(row.original.address)}>
+                      <tr {...row.getRowProps()} className="cursor-pointer" onClick={() => handleAddressSelect(row.original.address)}>
                         {row.cells.map(cell => (
                           <td {...cell.getCellProps()} className="table-td">
                             {cell.render("Cell")}

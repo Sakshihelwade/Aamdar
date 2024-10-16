@@ -49,7 +49,7 @@ const Navmenu = ({ menus }) => {
 
   return (
     <>
-      <ul>
+      <ul >
         {menus.map((item, i) => (
           <li
             key={i}
