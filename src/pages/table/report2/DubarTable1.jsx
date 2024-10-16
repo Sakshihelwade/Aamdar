@@ -387,18 +387,18 @@ const DubarTable1 = ({ title = "", Props, voterCount, handleDubarVoter }) => {
     };
 
     return (
-        <Card>
-            <div className="md:flex justify-between items-center mb-6">
+        <>
+            {/* <div className="md:flex justify-between items-center mb-6">
                 <h4 className="card-title">{title}</h4>
-            </div>
-            <div className="overflow-x-auto -mx-6">
+            </div> */}
+            <div className="overflow-x-auto -mx-6 mt-1">
                 <div className="inline-block min-w-full align-middle">
                     <div className="overflow-hidden">
                         <table
                             className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700"
                             {...getTableProps()}
                         >
-                            <thead className="bg-slate-200 dark:bg-slate-700">
+                            <thead className="bg-gray-300 dark:bg-slate-700">
                                 {headerGroups.map((headerGroup) => (
                                     <tr {...headerGroup.getHeaderGroupProps()}>
                                         {headerGroup.headers.map((column) => (
@@ -508,7 +508,7 @@ const DubarTable1 = ({ title = "", Props, voterCount, handleDubarVoter }) => {
                     </li>
                 </ul>
             </div>
-        </Card>
+        </>
     );
 };
 

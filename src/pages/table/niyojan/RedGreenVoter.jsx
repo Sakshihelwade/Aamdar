@@ -29,8 +29,9 @@ const RedGreenVoter = () => {
   }, [villageId]);
 
   useEffect(() => {
-    getAllData()
-  }, [currentPage])
+    getAllData();
+  }, [currentPage, villageId, boothNo, minBoothNo, maxBoothNo, voterName, color]); // Automatically fetch on any state change
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -48,8 +49,9 @@ const RedGreenVoter = () => {
   const handleVillageChange = (e) => {
     const selectedOption = villageOption.find(option => option.value === e.target.value);
     setVillageId(e.target.value);
-    setVillageName(selectedOption?.label || "");
+    setVillageName(selectedOption?.label);
   };
+
 
   const options = [
     { label: 'red', value: '1' },
@@ -59,11 +61,12 @@ const RedGreenVoter = () => {
   const getVillageOption = () => {
     axios.get(`${base_url}/api/surve/getAllVoterVillages`)
       .then((resp) => {
+        console.log(resp.data.village, "/./.")
         const villageOptions = resp.data.village?.map((item) => ({
-          label: item.name,
-          value: item._id
+          label: item?.name,
+          value: item?._id
         }));
-        setVillageOption(villageOptions || []);
+        setVillageOption(villageOptions);
       })
       .catch((error) => {
         console.log(error);
@@ -75,9 +78,9 @@ const RedGreenVoter = () => {
       .then((resp) => {
         const boothOptions = resp.data.booths?.map((item) => ({
           label: item.boothNo,
-          value: item._id
+          value: item.boothNo
         }));
-        setBoothOption(boothOptions || []);
+        setBoothOption(boothOptions);
       })
       .catch((error) => {
         console.log(error);
@@ -95,14 +98,28 @@ const RedGreenVoter = () => {
     }
   };
 
+  const clearFields = () => {
+    setVillageId("");
+    setVillageName("");
+    setBoothNo("");
+    setMinBoothNo = useState("");
+    setMaxBoothNo("");
+    setVoterName("");
+    setColor("");
+    setBoothNo("");
+    getAllData(); // Fetch all data with no parameters
+  };
+
   return (
     <div>
       <div className="mb-4">
         <Card>
           <div className="mb-2 flex justify-between">
-            <h6 className="font-bold text-orange-400"> रेड / ग्रीन मतदार </h6>
-            <p className=" flex">
-              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
+            <h6 className="font-bold text-[#b91c1c]"> रेड / ग्रीन मतदार </h6>
+            <p className=" flex gap-6">
+              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
             </p>
           </div>
           <hr className="mb-3" />
@@ -123,9 +140,9 @@ const RedGreenVoter = () => {
               label="भाग/बूथ नं"
               className="w-full"
               placeholder="भाग/बूथ नं"
-              options={boothOption} // Ensure options are passed correctly
+              options={boothOption}
               onChange={(e) => setBoothNo(e.target.value)}
-              value={boothNo} // Bind the selected booth number
+              value={boothNo}
             />
             <InputGroup
               type="text"
@@ -162,13 +179,16 @@ const RedGreenVoter = () => {
               onChange={handleSelectChange} // Set the state on change
               options={options}
             />
-
-            <span className="mt-10">एकूण मतदार: {voterCount?.total}</span>
-          </div>
-          <div className="flex justify-end items-center mt-6">
-            <button className="bg-orange-400 text-white px-5 h-10 rounded-md" onClick={getAllData}>
+            <span></span>
+            {/* <span className="mt-10">एकूण मतदार: {voterCount?.total}</span> */}
+            <div className="flex justify-end gap-4 items-center mt-6">
+              {/* <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={getAllData}>
               शोधा
-            </button>
+            </button> */}
+              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
+                क्लियर करा
+              </button>
+            </div>
           </div>
         </Card>
       </div>
