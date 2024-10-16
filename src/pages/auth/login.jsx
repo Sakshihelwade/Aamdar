@@ -11,6 +11,7 @@ import Logo from "@/assets/images/logo/logo.svg";
 import TABLETLOGIN from "@/assets/images/auth/Tablet-login.gif";
 // import DMANDLOGO2 from "@/assets/images/logo/DMAND_logo-2.png";
 // import DMANDLOGO from "@/assets/images/logo/DMAND-logo.jpg";
+
 import Logos from '../../assets/images/logo/Logo.jpg'
 
 

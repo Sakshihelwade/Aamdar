@@ -5,7 +5,6 @@ import InputGroup from "@/components/ui/InputGroup";
 import Select from "@/components/ui/Select"; // Assuming Select is a dropdown component
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
-import CommonTableKaryakarta from "../react-tables/CommonTableKaryakarta";
 
 const Karyakartyanusar = () => {
   // State management
@@ -23,7 +22,7 @@ const Karyakartyanusar = () => {
   const [minBoothNo, setMinBoothNo] = useState(""); // State for minimum booth number
   const [maxBoothNo, setMaxBoothNo] = useState(""); // State for maximum booth number
   const [currentPage, setCurrentPage] = useState(1);
-  const [users , setUsers] =useState([])
+  const [users, setUsers] = useState([])
   console.log(boothOption, "///")
 
   const handleVillageChange = (e) => {
@@ -81,34 +80,59 @@ const Karyakartyanusar = () => {
   const getAllData = async () => {
     try {
       const response = await axios.get(`${base_url}/api/getAllUser`);
-      console.log(response.data, "responseeeeeeeeee");
-      setUsers(response.data.users)
+      console.log(response.data.users, "responseeeeeeeeee");
+      const karyakarta = response.data.users?.map((item) => ({
+        label: item?.fullName,
+        value: item?._id,
+      }));
+      setUsers(karyakarta)
     } catch (error) {
       console.log(error);
     }
   };
 
+  const getAllVotersList = async () => {
+    try {
+      const response = await axios.get(`${base_url}/api/surve/searchVotter?name=true&village=${villageName}&boothNo=${boothNo}&page=${currentPage}`)
+      // console.log(response.data,'llllllllllllllll')
+      setAllVoter(response.data.voters)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   useEffect(() => {
     getAllData()
-
   }, [currentPage])
+
+  useEffect(() => {
+    getAllVotersList()
+  }, [currentPage, villageName, boothNo])
 
   useEffect(() => {
     getBoothNo()
   }, [villageId])
 
+  const clearFields = () => {
+    setVillageId('');
+    setVillageName('');
+    setKaryakartaName('');
+    setBoothNo('');
+  }
   return (
     <div>
       <div className="mb-4">
         <Card>
-        <div className="mb-2 flex justify-between">
-            <h6 className="font-bold text-orange-400">कार्यकर्त्यानुसार  </h6>
-            <p className=" flex">
-              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
-              </p>
+          <div className="mb-2 flex justify-between">
+            <h6 className="font-bold text-[#b91c1c]">कार्यकर्त्यानुसार  </h6>
+            <p className=" flex gap-6">
+              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+            </p>
           </div>
-          <hr className="mb-3"/>
+          <hr className="mb-3" />
           <p>
             <span className="font-bold">विधानसभा</span>{" "}
             <span className="font-bold text-lg">199</span>
@@ -119,8 +143,8 @@ const Karyakartyanusar = () => {
               label="गाव"
               className="w-full"
               placeholder="गाव"
-              value={villageId} // Use villageId as value
-              options={villageOption} // Ensure options are passed correctly
+              value={villageId}
+              options={villageOption}
               onChange={handleVillageChange}
             />
 
@@ -129,9 +153,9 @@ const Karyakartyanusar = () => {
               label="भाग/बूथ नं"
               className="w-full"
               placeholder="भाग/बूथ नं"
-              value={boothNo} // Bind the selected booth number
-              options={boothOption} // Ensure options are passed correctly
-              onChange={(e) => setBoothNo(e.target.value)} // Set booth number
+              value={boothNo}
+              options={boothOption}
+              onChange={(e) => setBoothNo(e.target.value)}
             />
 
             {/* यादी नं. पासून (List No. From) */}
@@ -155,13 +179,13 @@ const Karyakartyanusar = () => {
             /> */}
 
             {/* कार्यकर्त्याचे नाव (Karyakarta Name) */}
-            <InputGroup
-              type="text"
+            <Select
               label="कार्यकर्त्याचे नाव"
-              id="karyakarta-name"
+              className="w-full"
               placeholder="कार्यकर्त्याचे नाव"
-              value={karyakartaName} // Connect state
-              onChange={handleInputChange(setKaryakartaName)} // Update state
+              value={karyakartaName}
+              options={users}
+              onChange={(e) => setKaryakartaName(e.target.value)}
             />
 
 
@@ -178,8 +202,8 @@ const Karyakartyanusar = () => {
 
             {/* Search button */}
             <div className="flex justify-end items-center mt-6">
-              <button className="bg-orange-400 text-white px-5 h-10 rounded-md" onClick={getAllData}>
-                शोधा
+              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
+                क्लियर करा
               </button>
             </div>
           </div>
@@ -187,7 +211,7 @@ const Karyakartyanusar = () => {
       </div>
 
       <Card>
-        <CommonTableKaryakarta Props={users} 
+        <CommonTable Props={allVoter}
           onPageChange={handlePageChange} />
       </Card>
     </div>

@@ -4,9 +4,10 @@ import axios from 'axios';
 import { base_url } from '../../../config/base_url';
 import { toast } from 'react-toastify';
 
-const AddNewVoter = () => {
+const AddNewVoter = ({handleActiveModal, modal}) => {
+    console.log(handleActiveModal,modal,"hhhhh")
     const token = localStorage.getItem('token');
-    const [activeModal, setActiveModal] = useState(true);
+    // const [activeModal, setActiveModal] = useState(true);
     const [villageOptions, setVillageOption] = useState([])
     // State management for input fields
     useEffect(() => {
@@ -45,9 +46,9 @@ const AddNewVoter = () => {
         });
     };
 
-    const handleCloseModal = () => {
-        setActiveModal(false);
-    };
+    // const handleCloseModal = () => {
+    //     setActiveModal(false);
+    // };
 
 
     const handleSave = async (e) => {
@@ -70,7 +71,7 @@ const AddNewVoter = () => {
             })
             if(response.status===201 ){
                 toast.success("Voter Created Successfully!")
-                setActiveModal(false);
+                handleActiveModal(false);
             }
             console.log(response.data)
         } catch (error) {
@@ -83,9 +84,9 @@ const AddNewVoter = () => {
         <div>
             <Modal
                 title="New Voter"
-                activeModal={activeModal}
+                activeModal={modal}
                 themeClass="bg-blue-500 blue:bg-blue-500 blue:border-b blue:border-blue-700"
-                onClose={handleCloseModal}
+                onClose={()=>handleActiveModal(false)}
             >
                 <form className="space-y-4" onSubmit={handleSave}>
                     <div>
@@ -197,7 +198,7 @@ const AddNewVoter = () => {
                     <div className="flex justify-end space-x-4 mt-6">
                         <button
                             type="button"
-                            onClick={handleCloseModal}
+                            onClick={()=>handleActiveModal(false)}
                             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-gray-600"
                         >
                             Close

@@ -9,82 +9,163 @@ import axios from "axios";
 import { base_url } from "../../../config/base_url";
 
 const Dubar = () => {
-  
-    const [allVoter,setAllVoter]=useState('')
-    const [voterCount,setVoterCount]=useState()
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dubarVoter,setDubarVoter]=useState([])
-  const [dubarVoterCount,setDubarVoterCount]=useState([])
-const [selectedDubar,setSelectedDubar]=useState()
 
+    const [allVoter, setAllVoter] = useState('')
+    const [voterCount, setVoterCount] = useState()
+    const [currentPage, setCurrentPage] = useState(1);
+    const [dubarVoter, setDubarVoter] = useState([])
+    const [dubarVoterCount, setDubarVoterCount] = useState([])
+    const [selectedDubar, setSelectedDubar] = useState()
+    const [boothNo, setBoothNo] = useState("")
+    const [villageName, setVillageName] = useState("")
+    const [villageId, setVillageId] = useState("")
+    const [boothOptions, setBoothOptions] = useState([])
+    const [villageOptions, setVillageOptions] = useState([])
+    console.log(boothOptions, "opppppppp")
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+    useEffect(() => {
+        getAllVillages()
+    }, [])
+
+    useEffect(() => {
+        getAllBooth()
+    }, [villageId])
+
     const getAllVoters = () => {
-        axios.get(`${base_url}/api/surve/searchVotter?name=true&dubar=true&page=${currentPage}&nameFilter=${selectedDubar?.name}`)
-          .then((resp) => {
-            setAllVoter(resp.data.voters);
-            setVoterCount(resp.data);
-            toast.success('Filter Sucessfully')
-          })
-          .catch((error) => {
+        axios.get(`${base_url}/api/surve/searchVotter/?nameDuplicate=${selectedDubar?.name}`)
+            .then((resp) => {
+                setAllVoter(resp.data.voters);
+                setVoterCount(resp.data);
+                toast.success('Filter Sucessfully')
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.warning('No results found for the provided search criteria')
+            });
+    };
+
+    const getDubarVoter = () => {
+        axios.get(`${base_url}/api/surve/searchVotter?duplicateNamesWeb=true&page=${currentPage}`)
+            .then((resp) => {
+                setDubarVoter(resp.data.duplicates)
+                setDubarVoterCount(resp.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    const getAllVillages = async () => {
+        try {
+            const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages`);
+            console.log(response.data, "villages response"); // Log the entire response
+            const villages = response.data.village?.map((item) => ({
+                label: item.name,
+                value: item._id,
+            }));
+            setVillageOptions(villages);
+        } catch (error) {
             console.log(error);
-            toast.warning('No results found for the provided search criteria')
-          });
-      };
+        }
+    };
 
-   const getDubarVoter=()=>{
-    axios.get(`${base_url}/api/surve/searchVotter?duplicateNamesWeb=true&page=${currentPage}`)
-    .then((resp)=>{
-        setDubarVoter(resp.data.duplicates)
-        setDubarVoterCount(resp.data)
-    })
-    .catch((error)=>{
-        console.log(error)
-    })
-   } 
-   
-   const handleDubarVoter=(voter)=>{
-    setSelectedDubar(voter)
-   }
 
-useEffect(()=>{
-    getAllVoters()
-},[currentPage,selectedDubar])
+    const getAllBooth = async () => {
+        try {
+            const resp = await axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`);
+            console.log(resp.data, "boothno");
+            const booths = resp.data.booths?.map((item) => ({
+                label: item.boothNo,
+                value: item.boothNo,
+            }));
+            setBoothOptions(booths);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-useEffect(()=>{
-    getDubarVoter()
-},[])
 
+    const handleDubarVoter = (voter) => {
+        setSelectedDubar(voter)
+    }
+
+    const handleVillageChange = (e) => {
+        const selectedOption = villageOptions.find(option => option.value === e.target.value);
+        setVillageId(e.target.value);
+        setVillageName(selectedOption?.label || "");
+    };
+
+    useEffect(() => {
+        getAllVoters()
+    }, [currentPage, selectedDubar])
+
+    useEffect(() => {
+        getDubarVoter()
+    }, [])
+
+    const clearFields =()=>{
+        setBoothNo('');
+        setVillageId('');
+        setVillageName('');
+        getDubarVoter();
+    }
     return (
         <div>
             <div className=" mb-4">
                 <Card>
-                <div className="mb-2 flex  justify-between">
-            <h6 className="font-bold text-orange-400">दुबार </h6>
-            <p className=" flex">
-              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {dubarVoterCount?.totalDuplicateNames}</h6>
-              </p>
-          </div>
-          <hr className="py-2" />
+                    <div className="mb-2 flex  justify-between">
+                        <h6 className="font-bold text-[#b91c1c]">दुबार </h6>
+                        <p className=" flex gap-6">
+                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
+                    </div>
+                    <hr className="py-2" />
                     <p>
-
                         <span className="font-bold">विधानसभा</span>{" "}
                         <span className="font-bold text-lg">199</span>
                     </p>
-                    
+                    {/* <div className="grid grid-cols-4 gap-2">
+                        <Select
+                            label="गाव"
+                            className="w-full"
+                            placeholder="गाव"
+                            value={villageId}
+                            options={villageOptions}
+                            onChange={handleVillageChange}
+                        />
+
+                        <Select
+                            label="भाग/बूथ नं"
+                            className="w-full"
+                            placeholder="भाग/बूथ नं"
+                            value={boothNo}
+                            options={boothOptions}
+                            onChange={(e) => setBoothNo(e.target.value)} 
+                        />
+                        <span></span>
+                       
+                    </div> */}
+                    {/* <div className="flex justify-end gap-4 items-center mt-6">
+                            <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
+                                क्लियर करा
+                            </button>
+                        </div> */}
                 </Card>
             </div>
             <Card>
                 <div className=" grid grid-cols-12">
-                    <div className="col-span-4 m-2">
-                        <DubarTable1 Props={dubarVoter} voterCount={dubarVoterCount} handleDubarVoter={handleDubarVoter}/>
-                        </div>
-                    <div className="col-span-8 m-2">
-                        <CommonTable  Props={allVoter} voterCount={voterCount}   
-   onPageChange={handlePageChange}/>
-   </div>
+                    <div className="col-span-4 mx-4">
+                        <DubarTable1 Props={dubarVoter} voterCount={dubarVoterCount} handleDubarVoter={handleDubarVoter} />
+                    </div>
+                    <div className="col-span-8 mx-4">
+                        <CommonTable Props={allVoter} voterCount={voterCount}
+                            onPageChange={handlePageChange} />
+                    </div>
                 </div>
             </Card>
         </div>

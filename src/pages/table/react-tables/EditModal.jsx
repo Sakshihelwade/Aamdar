@@ -5,11 +5,12 @@ import Select from "@/components/ui/Select";
 import Flatpickr from "react-flatpickr";
 import { base_url } from '../../../config/base_url';
 import axios from 'axios';
+import AddNewVoter from './AddNewVoter';
 
 const EditModal = ({ ActiveDiactiveModal, activeModal, selectedRowData }) => {
   const FamilyMember = selectedRowData?.namesOfMembers || [];
   const token=localStorage.getItem('token')
-  
+  const [modal, setModal] = useState(false);
   const [formData, setFormData] = useState({
     houseNo: '',
     landmark: '',
@@ -29,6 +30,10 @@ const EditModal = ({ ActiveDiactiveModal, activeModal, selectedRowData }) => {
     dateOfBirth: '',
     sandharbha:''
   });
+
+  const handleActiveModal =(value)=>{
+    setModal(value)
+  }
 
   const [villageOptions, setVillageOptions] = useState([]);
 
@@ -336,7 +341,7 @@ const EditModal = ({ ActiveDiactiveModal, activeModal, selectedRowData }) => {
             {/* Third Column */}
             <div className='col-span-1 space-y-4'>
               <div className='grid grid-cols-2 gap-5'>
-                <button className="bg-blue-500 text-white rounded-md py-1">New</button>
+                <button className="bg-blue-500 text-white rounded-md py-1" onClick={()=>setModal(true)}>New</button>
                 <button className="bg-blue-500 text-white rounded-md py-1">Select Family</button>
               </div>
               <div className="mt-5 border h-[47rem] overflow-y-auto overflow-x-auto">
@@ -373,6 +378,7 @@ const EditModal = ({ ActiveDiactiveModal, activeModal, selectedRowData }) => {
           </div>
         </div>
       </Modal>
+      <AddNewVoter handleActiveModal={handleActiveModal} modal={modal}/>
     </div>
   );
 };

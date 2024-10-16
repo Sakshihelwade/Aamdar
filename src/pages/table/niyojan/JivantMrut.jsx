@@ -20,10 +20,9 @@ const JivantMrut = () => {
   const [voterCount, setVoterCount] = useState(0); // Assuming voter count is a number
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleSearch = () => {
-    getAllData();
-  };
-
+  // const handleSearch = () => {
+  //   getAllData();
+  // };
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -75,7 +74,7 @@ const JivantMrut = () => {
     try {
       const response = await axios.get(`${base_url}/api/surve/searchVotter?name=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${minBoothNo}&maxBooth=${maxBoothNo}&aliveOrDead=${status}&nameFilter=${voterName}`);
       setAllVoters(response.data.voters);
-      setVoterCount(response.data || 0); 
+      setVoterCount(response.data || 0);
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -84,27 +83,41 @@ const JivantMrut = () => {
 
   useEffect(() => {
     getAllData();
-  }, [currentPage]);
+  }, [currentPage, boothNo, villageId, minBoothNo, maxBoothNo, voterName, status]);
 
   useEffect(() => {
-      getBoothNo();
+    getBoothNo();
   }, [villageId]);
 
   useEffect(() => {
     getVillageOptions();
   }, []);
 
+  const clearFields = () => {
+    setVillageId('');  
+    setVillageName(''); 
+    setBoothNo(''); 
+    setMinBoothNo(''); 
+    setMaxBoothNo('');  
+    setStatus('');  
+    setVoterName('');  
+    getAllData();  
+  }
+
+
   return (
     <div>
       <div className="mb-4">
         <Card>
-        <div className="mb-2 flex justify-between">
-            <h6 className="font-bold text-orange-400">जिवंत / मृत  </h6>
-            <p className=" flex">
-              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
-              </p>
+          <div className="mb-2 flex justify-between">
+            <h6 className="font-bold text-[#b91c1c]">जिवंत / मृत  </h6>
+            <p className=" flex gap-6">
+              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+            </p>
           </div>
-          <hr className="mb-3"/>
+          <hr className="mb-3" />
           <p>
             <span className="font-bold">विधानसभा</span>{" "}
             <span className="font-bold text-lg">199</span>
@@ -124,7 +137,7 @@ const JivantMrut = () => {
               label="भाग/बूथ नं"
               className="w-full"
               placeholder="भाग/बूथ नं"
-              value={boothNo} // Bind the selected booth number
+              value={boothNo} 
               options={boothOptions} // Ensure options are passed correctly
               onChange={(e) => setBoothNo(e.target.value)} // Set booth number
             />
@@ -134,7 +147,7 @@ const JivantMrut = () => {
               label="यादी नं. पासून"
               id="ps-1"
               placeholder="यादी नं. पासून"
-              value={minBoothNo}
+              value={minBoothNo || ''}  // Ensure it doesn't show any value if cleared
               onChange={(e) => setMinBoothNo(e.target.value)}
             />
 
@@ -143,7 +156,7 @@ const JivantMrut = () => {
               label="यादी नं. पर्यंत"
               id="ps-2"
               placeholder="यादी नं. पर्यंत"
-              value={maxBoothNo}
+              value={maxBoothNo || ''}  // Ensure it doesn't show any value if cleared
               onChange={(e) => setMaxBoothNo(e.target.value)}
             />
 
@@ -165,22 +178,25 @@ const JivantMrut = () => {
               onChange={(e) => setVoterName(e.target.value)}
             />
 
-            <span className="mt-10">एकूण : {voterCount?.total}</span>
-
+            {/* <span className="mt-10">एकूण : {voterCount?.total}</span> */}
+            <span></span>
             <div className="flex justify-end items-center mt-6">
-              <button
-                className="bg-orange-400 text-white px-5 h-10 rounded-md"
+              {/* <button
+                className="bg-[#b91c1c] text-white px-5 h-10 rounded-md"
                 onClick={handleSearch}
               >
                 शोधा
+              </button> */}
+              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
+                क्लियर करा
               </button>
             </div>
           </div>
         </Card>
       </div>
       <Card>
-      <CommonTable Props={allVoters} voterCount={voterCount} 
-         onPageChange={handlePageChange} />  
+        <CommonTable Props={allVoters} voterCount={voterCount}
+          onPageChange={handlePageChange} />
       </Card>
     </div>
   );

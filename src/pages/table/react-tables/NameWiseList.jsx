@@ -10,6 +10,7 @@ import { base_url } from "../../../config/base_url";
 import { toast } from "react-toastify";
 
 import NameWiseCommonTable from "./NameWiseCommonTable";
+import AddNewVoter from "./AddNewVoter";
 
 
 const NameWiseList = () => {

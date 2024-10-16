@@ -90,18 +90,26 @@ const getBoothNo=()=>{
 
 useEffect(()=>{
   getAllVoters()
-},[currentPage])
+},[currentPage,boothNo,fromList,toList,type,villageName])
 
-
+const clearFields =()=>{
+  setVillageName('');
+  setVillageId('');
+  setBoothNo('');
+  setFromList('');
+  setToList('');
+  setType('');
+  getAllVoters();
+}
 
   return (
     <div>
         <div className=" mb-4">
       <Card>
       <div className="mb-2 flex justify-between">
-            <h6 className="font-bold text-orange-400">पुरवणी संक्षिप्त मतदार </h6>
+            <h6 className="font-bold text-[#b91c1c]">पुरवणी संक्षिप्त मतदार </h6>
             <p className=" flex">
-              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">Total : </h6>  <h6 className="font-bold text-[#b91c1c] text-lg"> {voterCount?.total}</h6>
               </p>
           </div>
           <hr className="py-2" />
@@ -161,11 +169,16 @@ useEffect(()=>{
               onChange={(e)=>setType(e.target.value)}
               value={type}
           />
-        </div>
+       <span></span>
+       <span></span>
         <div className=" flex justify-end items-center mt-6">
-            <button className=" bg-orange-400 text-white px-5 h-10 rounded-md " onClick={getAllVoters}>
+            {/* <button className=" bg-[#b91c1c] text-white px-5 h-10 rounded-md " onClick={getAllVoters}>
               शोधा
+            </button> */}
+             <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
+              क्लियर करा
             </button>
+          </div>
           </div>
       </Card>
       </div>
