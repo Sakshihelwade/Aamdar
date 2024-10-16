@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import CommonTable from "./CommonTable";
 import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
-// import Select from "@/components/ui/Select";
-import Select, { components } from "react-select";
+import Select from "@/components/ui/Select";
+// import Select, { components } from "react-select";
 
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
@@ -57,8 +57,9 @@ const NameWiseList = () => {
     setCurrentPage(page);
   };
 
-  const handleVillageChange = (selectedOption) => {
-    setVillageId(selectedOption?.value || ""); 
+  const handleVillageChange = (e) => {
+    const selectedOption = villageOption.find(option => option.value === e.target.value);
+    setVillageId(e.target.value); 
     setVillageName(selectedOption?.label || ""); 
   };
   
@@ -140,15 +141,15 @@ const NameWiseList = () => {
             <span className="font-bold text-lg">199</span>
           </p>
           <div className="grid grid-cols-4 gap-2">
-            {/* <Select
+            <Select
               label="गाव"
               className="w-full"
               placeholder="गाव"
               value={villageId}
               options={villageOption}
               onChange={handleVillageChange}
-            /> */}
-              <div>
+            />
+              {/* <div>
         <label className="form-label" htmlFor="mul_1">
         गाव
         </label>
@@ -162,9 +163,9 @@ const NameWiseList = () => {
   className="react-select"
   classNamePrefix="select"
 />
-</div>
+</div> */}
 
-<div>
+{/* <div>
   <label className="form-label" htmlFor="mul_1">
     भाग/बूथ नं
   </label>
@@ -178,7 +179,16 @@ const NameWiseList = () => {
     className="react-select"
     classNamePrefix="select"
   />
-</div>
+</div> */}
+
+<Select
+              label="भाग/बूथ नं"
+              className="w-full"
+              placeholder="भाग/बूथ नं"
+              value={boothNo}
+              options={boothOption}
+              onChange={(e)=>setBoothNo(e.target.value)}
+            />
 
             <InputGroup
               type="text"

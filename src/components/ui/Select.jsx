@@ -47,7 +47,7 @@ const Select = ({
         {name && (
           <select
             onChange={onChange}
-            {...register(name)}
+            // {...register(name)}
             {...rest}
             className={`${
               error ? " has-error" : " "
