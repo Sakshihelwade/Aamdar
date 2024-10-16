@@ -31,6 +31,7 @@ const village =selectedAddress || villageName
     setVillageName("");
     setBoothNo("");
     setBuildingAreaName('')
+    getAllVoters()
   };
   
 
@@ -118,20 +119,22 @@ const village =selectedAddress || villageName
 
 useEffect(()=>{
   getAllVoters()
-},[currentPage,selectedAddress])
+},[currentPage,selectedAddress,village,boothNo,addressWise])
 
   return (
     <div>
       <div className="mb-4">
         <Card>
           <div className="mb-2 flex justify-between">
-            <h6 className="font-bold text-orange-400">पत्त्यानुसार  यादी</h6>
-            <p className=" flex">
-              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
-              </p>
+            <h6 className="font-bold text-[#b91c1c]">पत्त्यानुसार  यादी</h6>
+             <p className=" flex gap-6">
+              <h6 className="font-semibold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+              <h6 className="font-semibold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+              <h6 className="font-semibold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+            </p>
           </div>
           <hr className="py-2" />
-          <p>
+          <p className=" text-[#b91c1c]">
             <span className="font-bold">विधानसभा</span> :
             <span className="font-bold text-lg">199</span>
           </p>
@@ -162,12 +165,8 @@ useEffect(()=>{
             />
             
             <div className="flex justify-end items-center mt-6">
-              <button className="bg-orange-400 text-white px-5 h-10 rounded-md" onClick={(e)=>{handleClear()
-                getAllVoters()
-              }
-                
-              }>
-                शोधा
+              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={handleClear}>
+                Clear
               </button>
             </div>
           </div>

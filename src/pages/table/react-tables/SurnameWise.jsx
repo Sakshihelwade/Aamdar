@@ -34,6 +34,7 @@ console.log(selectedSurname,"selectedSurname")
     setToList('')
     setSurName('')
     setSelectedSurname('')
+    getAllVoters()
   };
   
 
@@ -83,7 +84,6 @@ console.log(selectedSurname,"selectedSurname")
     axios
       .get(`${base_url}/api/surve/searchVotter?lastName=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${fromList}&maxBooth=${toList}&lastNameFilter=${Surname}`)
       .then((resp) => {
-        console.log(resp.data.voters,"resp.data.voters")
         setAllVoter(resp.data.voters);
         setVoterCount(resp.data);
       })
@@ -117,20 +117,22 @@ console.log(selectedSurname,"selectedSurname")
 
 useEffect(()=>{
   getAllVoters()
-},[currentPage,selectedSurname])
+},[currentPage,selectedSurname,villageName,boothNo,fromList,toList,surname,Surname])
 
   return (
     <div>
       <div className="mb-4">
         <Card>
           <div className="mb-2 flex justify-between">
-            <h6 className="font-bold text-orange-400">आडनावानुसार यादी</h6>
-            <p className=" flex">
-              <h6 className="font-bold text-orange-400 text-lg">Total : </h6>  <h6 className="font-bold text-orange-400 text-lg"> {voterCount?.total}</h6>
-              </p>
+            <h6 className="font-bold text-[#b91c1c]">आडनावानुसार यादी</h6>
+            <p className=" flex gap-6">
+              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+            </p>
           </div>
           <hr className="py-2" />
-          <p>
+          <p className=" text-[#b91c1c]">
             <span className="font-bold">विधानसभा</span> :
             <span className="font-bold text-lg">199</span>
           </p>
@@ -177,12 +179,8 @@ useEffect(()=>{
             />
            
             <div className="flex justify-end items-center mt-6">
-              <button className="bg-orange-400 text-white px-5 h-10 rounded-md" onClick={(e)=>{handleClear()
-                getAllVoters()
-              }
-                
-              }>
-                शोधा
+              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={handleClear}>
+                Clear
               </button>
             </div>
           </div>
