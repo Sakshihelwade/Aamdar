@@ -1,9 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import useDarkMode from "@/hooks/useDarkMode";
 import useRtl from "@/hooks/useRtl";
+import axios from "axios";
+import { base_url } from "../../../../config/base_url";
 
 const RevenueBarChart = ({ height = 400 }) => {
+  const [address,setAddress]=useState([])
+const [maleCount,setMaleCount]=useState([])
+const [femaleCount,setFemaleCount]=useState([])
+const [totalMaleFemale,setTotalMaleFemale]=useState([])
+  const getVillageWiseCount= () =>{
+    axios.get(`${base_url}/api/surve/getAddressMaleFemaleCount`)
+    .then((resp)=>{
+      setAddress(resp.data.data.address)
+      setMaleCount(resp.data.data.maleCount)
+      setFemaleCount(resp.data.data.femaleCount)
+      setTotalMaleFemale(resp.data.data.totalCount)
+
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  }
+
+useEffect(()=>{
+  getVillageWiseCount()
+},[])
+
   const [isDark] = useDarkMode();
   const [isRtl] = useRtl();
   const series = [
