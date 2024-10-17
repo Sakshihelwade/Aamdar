@@ -36,7 +36,7 @@ const schema = yup.object({
 
 const RegForm = () => {
   const token = localStorage.getItem('token');
-// console.log(token, 'Auth Token');
+  // console.log(token, 'Auth Token');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -78,8 +78,23 @@ const RegForm = () => {
 
 
   const onSubmit = async () => {
-    const selectedVillageIds = villages.map(v => v._id).join(", ");
+    // const selectedVillageIds = villages.map(v => v._id).join(", ");
     const selectedVillageNames = villages.map(v => v.name).join(", ");
+    // const payload = {
+    //   cardNumber: voterId,
+    //   email: email,
+    //   userName: userId,
+    //   mobileNumber: mobile,
+    //   password: password,
+    //   role: role,
+    //   fullName: name,
+    //   villageName: selectedVillageNames,
+    //   villageId: selectedVillageIds,
+    // }
+    const selectedVillagesData = villages.map(v => ({
+      id: v._id
+    }));
+
     const payload = {
       cardNumber: voterId,
       email: email,
@@ -88,9 +103,10 @@ const RegForm = () => {
       password: password,
       role: role,
       fullName: name,
-      villageName: selectedVillageNames,
-      villageId: selectedVillageIds,
-    }
+      villageName: selectedVillagesData.map(v => v.name).join(", "),
+      villageId: selectedVillagesData,
+    };
+
     // console.log(payload, "payyyyload")
     try {
       const response = await axios.post(`${base_url}/api/addUser`, payload, {
