@@ -117,10 +117,11 @@ const RedGreenVoter = () => {
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]"> रेड / ग्रीन मतदार </h6>
             <p className=" flex gap-6">
-              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-            </p>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
           </div>
           <hr className="mb-3" />
           <p>
@@ -171,14 +172,15 @@ const RedGreenVoter = () => {
               onChange={handleInputChange(setVoterName)} // Set the state on change
             />
 
-            <Select
+            {/* <Select
               label="रंग"
               className="w-full"
               placeholder="सर्व"
               value={color} // Link the state
               onChange={handleSelectChange} // Set the state on change
               options={options}
-            />
+            /> */}
+            <span></span>
             <span></span>
             {/* <span className="mt-10">एकूण मतदार: {voterCount?.total}</span> */}
             <div className="flex justify-end gap-4 items-center mt-6">

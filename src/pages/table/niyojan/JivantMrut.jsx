@@ -35,8 +35,8 @@ const JivantMrut = () => {
 
   // Options for the "जिवंत / मृत" select dropdown
   const statusOptions = [
-    { label: 'जिवंत', value: '1' },
-    { label: 'मृत', value: '2' },
+    { label: 'जिवंत', value: 'Alive' },
+    { label: 'मृत', value: 'Dead' },
   ];
 
   // Fetch village options from API
@@ -94,14 +94,14 @@ const JivantMrut = () => {
   }, []);
 
   const clearFields = () => {
-    setVillageId('');  
-    setVillageName(''); 
-    setBoothNo(''); 
-    setMinBoothNo(''); 
-    setMaxBoothNo('');  
-    setStatus('');  
-    setVoterName('');  
-    getAllData();  
+    setVillageId('');
+    setVillageName('');
+    setBoothNo('');
+    setMinBoothNo('');
+    setMaxBoothNo('');
+    setStatus('');
+    setVoterName('');
+    getAllData();
   }
 
 
@@ -114,6 +114,7 @@ const JivantMrut = () => {
             <p className=" flex gap-6">
               <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
               <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
               <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
             </p>
           </div>
@@ -137,7 +138,7 @@ const JivantMrut = () => {
               label="भाग/बूथ नं"
               className="w-full"
               placeholder="भाग/बूथ नं"
-              value={boothNo} 
+              value={boothNo}
               options={boothOptions} // Ensure options are passed correctly
               onChange={(e) => setBoothNo(e.target.value)} // Set booth number
             />
@@ -165,7 +166,7 @@ const JivantMrut = () => {
               className="w-full"
               placeholder="Select"
               value={status}
-              onChange={(e) => setStatus(e)}
+              onChange={(e) => setStatus(e.target.value)} // Get the value from the event
               options={statusOptions}
             />
 

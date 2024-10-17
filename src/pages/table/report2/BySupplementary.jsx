@@ -108,9 +108,12 @@ const clearFields =()=>{
       <Card>
       <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">पुरवणी संक्षिप्त मतदार </h6>
-            <p className=" flex">
-              <h6 className="font-bold text-[#b91c1c] text-lg">Total : </h6>  <h6 className="font-bold text-[#b91c1c] text-lg"> {voterCount?.total}</h6>
-              </p>
+            <p className=" flex gap-6">
+                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
           </div>
           <hr className="py-2" />
         <p>
@@ -161,14 +164,15 @@ const clearFields =()=>{
             onChange={(e)=>setListNo(e.target.value)}
           /> */}
 
-          <Select
+          {/* <Select
             label="प्रकार"
             className="w-full"
             placeholder="सर्व"
               options={TypeOption}
               onChange={(e)=>setType(e.target.value)}
               value={type}
-          />
+          /> */}
+       <span></span>
        <span></span>
        <span></span>
         <div className=" flex justify-end items-center mt-6">

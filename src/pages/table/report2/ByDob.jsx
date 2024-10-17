@@ -112,9 +112,12 @@ const clearFields =()=>{
         <Card>
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">जन्मतारखेनुसार </h6>
-            <p className=" flex">
-              <h6 className="font-bold text-[#b91c1c] text-lg">Total : </h6>  <h6 className="font-bold text-[#b91c1c] text-lg"> {voterCount?.total}</h6>
-            </p>
+            <p className=" flex gap-6">
+                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
           </div>
           <hr className="py-2" />
           <p>
@@ -138,14 +141,14 @@ const clearFields =()=>{
               onChange={(e) => setBoothNo(e.target.value)}
               value={boothNo}
             />
-            <Select
+            {/* <Select
               label="महिना निवडा"
               className="w-full"
               placeholder="महिना निवडा"
               options={monthOption}
               onChange={(e) => setMonth(e.target.value)}
               value={month}
-            />
+            /> */}
             {/* <div></div>
 <div className=" flex  gap-7 ">
             <div className="col-span-1 flex mt-8 items-center">
@@ -159,12 +162,7 @@ const clearFields =()=>{
             <div className="col-span-1 flex mt-8 items-center">
               <span className=" font-semibold">एकूण : {voterCount?.total}</span>
             </div> */}
-
-          
-          <div className=" flex justify-end items-center mt-6">
-            {/* <button className=" bg-[#b91c1c] text-white px-5 h-10 rounded-md " onClick={getAllVoters}>
-              शोधा
-              </button> */}
+            <div className=" flex justify-start items-center mt-6">
             <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
               क्लियर करा
             </button>
