@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Router } from "react-router-dom";
 
 // home pages  & dashboard
 //import Dashboard from "./pages/dashboard";
@@ -136,6 +136,9 @@ import SurnameWise from "./pages/table/react-tables/SurnameWise";
 import AgeWise from "./pages/table/react-tables/AgeWise";
 import FamilyWise from "./pages/table/react-tables/FamilyWise";
 import CastWise from "./pages/table/react-tables/CastWise";
+import CommonTable from "./pages/table/react-tables/CommonTable";
+import AddressWiseTable2 from "./pages/table/react-tables/AddressWiseTable2";
+import AddressWiseTable from "./pages/table/react-tables/AddressWiseTable";
 
 function App() {
   return (
@@ -255,6 +258,9 @@ function App() {
           <Route path="Agewise" element={<AgeWise />} />
           <Route path="Familywise" element={<FamilyWise />} />
           <Route path="Castwise" element={<CastWise />} />
+          <Route path="CommonTable" element={<CommonTable/>}/>
+          <Route path="AddressWiseTable" element={<AddressWiseTable/>}/>
+          <Route path="AddressWiseTable2" element={<AddressWiseTable2/>}/>
           {/* report2  */}
           <Route path="dubar" element={<Dubar />} />
           <Route path="by-dob-report2" element={<ByDob />} />

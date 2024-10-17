@@ -171,29 +171,37 @@ const GroupChart1 = () => {
   const [totalFemale, setTotalFemale] = useState('');
   const [totalMaleFemale, setTotalMaleFemale] = useState('');
   const [userCount,setUserCount]=useState('')
+  const malefemale=totalMale+totalFemale
+  const Ohter = totalMaleFemale-malefemale
 
   const statistics = [
     {
       name: shapeLine1,
-      title: "Male Voters",
+      title: "पुरुष मतदार",
       count: totalMale,  
       bg: "bg-[#E5F9FF] dark:bg-slate-900",
     },
     {
       name: shapeLine2,
-      title: "Female Voters",
+      title: "महिला मतदार",
       count: totalFemale,  
       bg: "bg-[#FFEDE5] dark:bg-slate-900",
     },
     {
+      name: shapeLine2,
+      title: "माहित नाही",
+      count: Ohter,  
+      bg: "bg-[#FFEDE5] dark:bg-slate-900",
+    },
+    {
       name: shapeLine3,
-      title: "Total Voters",
+      title: "एकून मतदार",
       count: totalMaleFemale,  
       bg: "bg-[#EAE5FF] dark:bg-slate-900",
     },
     {
       name: shapeLine3,
-      title: "Total Users",
+      title: "एकून वापरकर्ते",
       count: userCount,  
       bg: "bg-[#EAE5FF] dark:bg-slate-900",
     },
