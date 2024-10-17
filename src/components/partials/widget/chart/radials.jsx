@@ -54,7 +54,6 @@ const calculateTotals = (data) => {
   const { width, breakpoints } = useWidth();
 
   const series = [malePercentage, femalePercentage, otherPercentage];
-
   const options = {
     chart: {
       toolbar: {
@@ -74,8 +73,9 @@ const calculateTotals = (data) => {
           },
           total: {
             show: true,
-            label: "एकून मतदार",
+            label: "एकून मतदार" ,
             color: isDark ? "#CBD5E1" : "#475569",
+            value: totalMaleFemale,
             formatter: function () {
               return totalMaleFemale;
             },
