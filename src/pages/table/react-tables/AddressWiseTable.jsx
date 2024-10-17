@@ -3,6 +3,7 @@ import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
 import { useTable, useRowSelect, useSortBy, useGlobalFilter, usePagination } from "react-table";
 import GlobalFilter from "./GlobalFilter";
+import { useNavigate } from "react-router-dom";
 
 const COLUMNS = [
   { Header: "पत्ता", accessor: "address" },
@@ -14,6 +15,8 @@ const COLUMNS = [
 const AddressWiseTable = ({ title = "", Props, handleAddressSelect }) => {
   const columns = useMemo(() => COLUMNS, []);
   const [data, setData] = useState(Props);
+
+  const navigate=useNavigate()
 
   useEffect(() => {
     setData(Props);
@@ -134,7 +137,10 @@ const AddressWiseTable = ({ title = "", Props, handleAddressSelect }) => {
                   {page.map(row => {
                     prepareRow(row);
                     return (
-                      <tr {...row.getRowProps()} className="cursor-pointer" onClick={() => handleAddressSelect(row.original.address)}>
+                      <tr {...row.getRowProps()} className="cursor-pointer" onClick={() =>{ handleAddressSelect(row.original.address)
+                        navigate('/AddressWiseTable2' , { state: { address: row.original.address } })
+                       
+                      }}>
                         {row.cells.map(cell => (
                           <td {...cell.getCellProps()} className="table-td">
                             {cell.render("Cell")}

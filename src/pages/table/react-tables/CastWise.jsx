@@ -15,9 +15,11 @@ const CastWise = () => {
   const [fromList, setFromList] = useState("");
   const [toList, setToList] = useState("");
   const [gender, setGender] = useState("");
+  const [caste,setCaste]=useState('')
   const [allVoter,setAllVoter]=useState([])
   const [voterCount,setVoterCount]=useState()
   const [villageOption, setVillageOption] = useState([]);
+  const [casteOption,setCasteOption]=useState([])
   const [boothOption,setBoothOption]=useState([])
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -35,6 +37,7 @@ const CastWise = () => {
     setFromList('')
     setToList('')
     setGender('')
+    setCaste('')
     getAllVoters()
   };
   
@@ -76,9 +79,26 @@ const CastWise = () => {
     })
   }
 
+  const getCasteOption=()=>{
+    axios.get(`${base_url}/getCastMeta`)
+    .then((resp)=>{
+      const casteOption = resp.data.data.map((item) => ({
+        label: item.castname,
+        value: item._id,
+      }));
+      setCasteOption(casteOption);
+     
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+
+  }
+
+
   const getAllVoters = () => {
     axios
-      .get(`${base_url}/api/surve/searchVotter?name=true&boothNo=${boothNo}&village=${villageName}&minBooth=${fromList}&maxBooth=${toList}&gender=${gender}&page=${currentPage}`)
+      .get(`${base_url}/api/surve/searchVotter?name=true&boothNo=${boothNo}&village=${villageName}&minBooth=${fromList}&maxBooth=${toList}&caste=${caste}&gender=${gender}&page=${currentPage}`)
       .then((resp) => {
         setAllVoter(resp.data.voters);
         setVoterCount(resp.data);
@@ -94,6 +114,7 @@ const CastWise = () => {
   useEffect(() => {
     getVillageOption();
     getBoothNo()
+    getCasteOption()
     }, []);
 
  useEffect(()=>{
@@ -102,7 +123,7 @@ const CastWise = () => {
 
 useEffect(()=>{
   getAllVoters()
-},[currentPage,villageName,boothNo,fromList,toList,gender])
+},[currentPage,villageName,boothNo,fromList,toList,gender.caste])
 
   return (
     <div>
@@ -111,10 +132,11 @@ useEffect(()=>{
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">जातीनुसार यादी</h6>
             <p className=" flex gap-6">
-              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-            </p>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
           </div>
           <hr className="py-2" />
           <p className="text-[#b91c1c]">
@@ -162,6 +184,15 @@ useEffect(()=>{
               options={SerachBy}
               value={gender}
               onChange={(e) => setGender(e.target.value)}
+            />
+
+<Select
+              label="जात"
+              className="w-full"
+              placeholder="जात"
+              options={casteOption}
+              value={caste}
+              onChange={(e) => setCaste(e.target.value)}
             />
            
             <div className="flex justify-end items-center mt-6">

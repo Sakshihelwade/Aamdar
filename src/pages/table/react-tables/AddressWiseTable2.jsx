@@ -1,38 +1,60 @@
 
-import React, { useState, useEffect } from 'react';
-import EditModal from './EditModal';
-// import EditModal from './EditModal';
 
-const NameWiseCommonTable = ({ Props, onPageChange, voterCount,handelEditModal }) => {
-  console.log(Props, "//")
-  // console.log(voterCount.total)
+
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { base_url } from '../../../config/base_url';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Card from '../../../components/ui/Card';
+import { IoMdArrowBack } from "react-icons/io";
+
+
+const AddressWiseTable2 = ({ }) => {
+    const navigate=useNavigate()
+//   console.log(Props, "//")
+const location = useLocation();
+const { address } = location.state || {};
+
   const [activeModal, setActiveModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [inputPage, setInputPage] = useState();
+  const [allVoter,setAllVoter]=useState([])
+  const [voterCount,setVoterCount]=useState()
+  const [village,setVillage]=useState('')
 
-  const data = Props?.length > 0 ? Props : [];  
+
+  const data = allVoter?.length > 0 ? allVoter : [];
   const totalPages = Math.ceil(voterCount?.total / 25);
+
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   let currentRows = data;
 
-  const ActiveDiactiveModal = (value) => {
-    setActiveModal(value);
+  const getAllVoters = () => {
+    axios
+      .get(`${base_url}/api/surve/searchVotter?address=true&&village=${address}&page=${currentPage}`)
+      .then((resp) => {
+   
+        setAllVoter(resp.data.voters);
+        setVoterCount(resp.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.warning('No results found for the provided search criteria')
+      });
   };
-
-
-  useEffect(()=>{
-    handelEditModal(activeModal)
-  },[activeModal])
-  console.log(selectedRowData,"selectedRowData")
-
   useEffect(() => {
-    if (onPageChange) {
-      onPageChange(currentPage);
-    }
-  }, [currentPage, onPageChange, currentRows]);
+    getAllVoters();
+  }, [currentPage, village, address]);  // Add any state that should trigger the call when changed
+  
+
+//   useEffect(() => {
+//     if (onPageChange) {
+//       onPageChange(currentPage);
+//     }
+//   }, [currentPage, onPageChange, currentRows]);
 
   const handlePrevious = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -70,7 +92,14 @@ const NameWiseCommonTable = ({ Props, onPageChange, voterCount,handelEditModal }
   };
 
   return (
+    <Card>
     <div className="p-1">
+        <p className=' flex gap-2 items-center pb-2'>
+            <button className=' bg-blue-300 px-1 flex justify-center items-center gap-1 rounded-sm py-0 text-white' onClick={()=>navigate('/Addresswise')}>
+            <IoMdArrowBack className=' h-6 w-8'/>Back
+            </button>
+       <p > <span className=' font-bold text-lg'> पत्ता : </span>  <span className=' font-semibold text-lg'> {address} </span> </p>
+        </p>
       <div className="overflow-x-auto">
         <table className="w-full bg-white border border-gray-200">
           <thead>
@@ -96,7 +125,7 @@ const NameWiseCommonTable = ({ Props, onPageChange, voterCount,handelEditModal }
                 key={index}
                 className={`odd:bg-gray-100 even:bg-white`}
                 // className="border-b border-gray-200 hover:bg-gray-100"
-                onDoubleClick={() => handleRowClick(row)}
+                onClick={() => handleRowClick(row)}
               >
                 {/* Table Data */}
                 <td className="px-1 py-2 border border-gray-300">{row.boothNo}</td>
@@ -156,9 +185,10 @@ const NameWiseCommonTable = ({ Props, onPageChange, voterCount,handelEditModal }
         </button>
       </div>
 
-<EditModal ActiveDiactiveModal={ActiveDiactiveModal} activeModal={activeModal} selectedRowData={selectedRowData}/>
+
     </div>
+    </Card>
   );
 };
 
-export default NameWiseCommonTable;
+export default AddressWiseTable2;

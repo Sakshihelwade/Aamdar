@@ -27,8 +27,13 @@ const NameWiseList = () => {
   const [villageOption, setVillageOption] = useState([]);
   const [boothOption, setBoothOption] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
+const [editModal,setEditModal]=useState()
 
   console.log(voterCount)
+
+const handelEditModal=(val)=>{
+  setEditModal(val)
+}
 
   const SerachBy = [
     { label: "आडनावानुसार", value: "आडनावानुसार" },
@@ -37,6 +42,8 @@ const NameWiseList = () => {
     { label: "पतीचे नाव", value: "पतीचे नाव" },
     { label: "इतर", value: "इतर" },
   ];
+
+  
 
   const handleClear = () => {
     setVillageId("");
@@ -47,10 +54,10 @@ const NameWiseList = () => {
     setCardNo("");
     setRelative("");
     setRelativeName("");
-    setCurrentPage(1); // Optionally reset to the first page
-    setAllVoter([]); // Optionally clear voter data
-    setVoterCount({}); // Optionally reset voter count
-    console.log("sakdggfdygygygd")
+    setCurrentPage(1); 
+    setAllVoter([]); 
+    setVoterCount({}); 
+    getAllVoters()
   };
 
   const handlePageChange = (page) => {
@@ -120,7 +127,7 @@ const NameWiseList = () => {
 
   useEffect(() => {
     getAllVoters()
-  }, [currentPage,villageName,boothNo,srNo,voterName,cardNo])
+  }, [currentPage,villageName,boothNo,srNo,voterName,cardNo,editModal])
   
 
   return (
@@ -130,10 +137,11 @@ const NameWiseList = () => {
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">नावानुसार यादी</h6>
             <p className=" flex gap-6">
-              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-            </p>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
           </div>
           <hr className="py-2" />
           <p className=" text-[#b91c1c]">
@@ -223,7 +231,7 @@ const NameWiseList = () => {
               value={relative}
               onChange={(e) => setRelative(e.target.value)}
             /> */}
-            <div>
+            {/* <div>
   <label className="form-label" htmlFor="mul_1">
   नातेसंबंधानुसार शोधा
   </label>
@@ -237,19 +245,19 @@ const NameWiseList = () => {
     className="react-select"
     classNamePrefix="select"
   />
-</div>
-            <InputGroup
+</div> */}
+            {/* <InputGroup
               type="text"
               label="नातेदराचे नाव"
               id="ps-1"
               placeholder="नातेदराचे नाव"
               value={relativeName}
               onChange={(e) => setRelativeName(e.target.value)}
-            />
+            /> */}
             <div className="flex justify-end items-center mt-6">
             
 
-             <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={()=>handleClear()}>
+             <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={handleClear}>
               Clear
               </button>
            
@@ -259,7 +267,7 @@ const NameWiseList = () => {
       </div>
       <Card>
         <NameWiseCommonTable Props={allVoter} voterCount={voterCount} currentPage={currentPage}
-          setCurrentPage={setCurrentPage} onPageChange={handlePageChange} />
+          setCurrentPage={setCurrentPage} onPageChange={handlePageChange} handelEditModal={handelEditModal}/>
       </Card>
       {/* <AddNewVoter/> */}
     </div>

@@ -35,6 +35,7 @@ const FamilyWise = () => {
     setFromList('')
     setToList('')
     setGender('')
+    getAllVoters()
   };
   
   const handlePageChange = (page) => {
@@ -110,10 +111,11 @@ useEffect(()=>{
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">कुटुंबानुसार यादी</h6>
             <p className=" flex gap-6">
-              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-            </p>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
           </div>
           <hr className="py-2" />
           <p className=" text-[#b91c1c]">

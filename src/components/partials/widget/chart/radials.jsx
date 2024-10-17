@@ -1,12 +1,60 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import useDarkMode from "@/hooks/useDarkMode";
 import useWidth from "@/hooks/useWidth";
+import axios from "axios";
+import { base_url } from "../../../../config/base_url";
 
 const RadialsChart = () => {
+  const [totalMale, setTotalMale] = useState(0);
+  const [totalFemale, setTotalFemale] = useState(0);
+  const [totalMaleFemale, setTotalMaleFemale] = useState(0);
+  const malefemale = totalMale + totalFemale;
+  const other = totalMaleFemale - malefemale;
+
+  const malePercentage = ((totalMale / totalMaleFemale) * 100).toFixed(2);
+  const femalePercentage = ((totalFemale / totalMaleFemale) * 100).toFixed(2);
+  const otherPercentage = ((other / totalMaleFemale) * 100).toFixed(2);
+
+console.log(totalMaleFemale)
+  
+const calculateTotals = (data) => {
+    let maleTotal = 0;
+    let femaleTotal = 0;
+    let maleFemaleTotal = 0;
+
+    data.forEach((item) => {
+      maleTotal += item.maleCount;
+      femaleTotal += item.femaleCount;
+      maleFemaleTotal += item.totalCount;
+    });
+
+    setTotalMale(maleTotal);
+    setTotalFemale(femaleTotal);
+    setTotalMaleFemale(maleFemaleTotal);
+  };
+
+  const getMaleFemaleCount = () => {
+    axios
+      .get(`${base_url}/api/surve/getAddressMaleFemaleCount`)
+      .then((resp) => {
+        calculateTotals(resp.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getMaleFemaleCount();
+    }, [totalMale,totalFemale,totalMaleFemale]);
+
   const [isDark] = useDarkMode();
   const { width, breakpoints } = useWidth();
-  const series = [44, 55, 67, 83];
+
+  const series = [malePercentage, femalePercentage, otherPercentage];
+
   const options = {
     chart: {
       toolbar: {
@@ -26,10 +74,10 @@ const RadialsChart = () => {
           },
           total: {
             show: true,
-            label: "Total",
+            label: "एकून मतदार",
             color: isDark ? "#CBD5E1" : "#475569",
             formatter: function () {
-              return 249;
+              return totalMaleFemale;
             },
           },
         },
@@ -39,8 +87,8 @@ const RadialsChart = () => {
         },
       },
     },
-    labels: ["A", "B", "C", "D"],
-    colors: ["#4669FA", "#FA916B", "#50C793", "#0CE7FA"],
+    labels: ["पुरुष ", "महिला ", "माहित नाही"],
+    colors: ["#4669FA", "#FA916B", "#50C793"],
   };
 
   return (

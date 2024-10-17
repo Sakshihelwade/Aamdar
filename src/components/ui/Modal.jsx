@@ -93,7 +93,7 @@ const Modal = ({
                         </button>
                       </div>
                       <div
-                        className={`px-6 py-8 ${
+                        className={`px-6 py-3 ${
                           scrollContent ? "overflow-y-auto max-h-[400px]" : ""
                         }`}
                       >
@@ -158,7 +158,7 @@ const Modal = ({
                       </button>
                     </div>
                     <div
-                      className={`px-6 py-8 ${
+                      className={`px-6 py-3 ${
                         scrollContent ? "overflow-y-auto max-h-[400px]" : ""
                       }`}
                     >

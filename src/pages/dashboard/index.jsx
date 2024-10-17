@@ -22,7 +22,7 @@ const Dashboard = () => {
         </div> */}
         <div className="2xl:col-span-9 lg:col-span-8 col-span-12 mb-5">
           <Card bodyClass="p-4">
-            <div className="grid md:grid-cols-4 col-span-1 gap-4">
+            <div className="grid md:grid-cols-5 col-span-1 gap-4">
               <GroupChart1 />
             </div>
           </Card>
@@ -37,7 +37,9 @@ const Dashboard = () => {
           </Card>
         </div>
         <div className="lg:col-span-4 col-span-12">
-          <Card title="Overview" headerslot={<SelectMonth />}>
+          <Card title="Overview"
+          //  headerslot={<SelectMonth />}
+           >
             <RadialsChart />
           </Card>
         </div>

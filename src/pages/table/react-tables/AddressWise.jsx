@@ -25,12 +25,12 @@ const [selectedAddress,setSelectedAddress]=useState('')
 const village =selectedAddress || villageName
 
 
-
   const handleClear = () => {
     setVillageId("");
     setVillageName("");
     setBoothNo("");
     setBuildingAreaName('')
+    setSelectedAddress('')
     getAllVoters()
   };
   
@@ -91,7 +91,7 @@ const village =selectedAddress || villageName
   const getAddressWise=()=>{
     axios.get(`${base_url}/api/surve/getAddressMaleFemaleCount`)
     .then((resp)=>{
-        console.log(resp.data.data)
+     
         setAddressWise(resp.data.data)
     })
     .catch((error)=>{
@@ -127,11 +127,12 @@ useEffect(()=>{
         <Card>
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">पत्त्यानुसार  यादी</h6>
-             <p className=" flex gap-6">
-              <h6 className="font-semibold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-              <h6 className="font-semibold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-              <h6 className="font-semibold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-            </p>
+            <p className=" flex gap-6">
+                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
           </div>
           <hr className="py-2" />
           <p className=" text-[#b91c1c]">
@@ -155,14 +156,14 @@ useEffect(()=>{
               onChange={(e) =>setBoothNo(e.target.value)}
               value={boothNo}
             />
-            <InputGroup
+            {/* <InputGroup
               type="text"
               label="बिल्डिंग / भागाचे नाव भरा"
               id="ps-1"
               placeholder="बिल्डिंग / भागाचे नाव भरा"
               value={buildingAreaName}
               onChange={(e) => setBuildingAreaName(e.target.value)}
-            />
+            /> */}
             
             <div className="flex justify-end items-center mt-6">
               <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={handleClear}>
@@ -177,8 +178,8 @@ useEffect(()=>{
 
   <AddressWiseTable Props={addressWise} handleAddressSelect={handleAddressSelect}/>
 
-  <CommonTable  Props={allVoter} voterCount={voterCount}  currentPage={currentPage} 
-  setCurrentPage={setCurrentPage} onPageChange={handlePageChange}/>
+  {/* <CommonTable  Props={allVoter} voterCount={voterCount}  currentPage={currentPage} 
+  setCurrentPage={setCurrentPage} onPageChange={handlePageChange}/> */}
       </Card>
     </div>
   );

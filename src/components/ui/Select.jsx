@@ -29,7 +29,7 @@ const Select = ({
   // console.log(options)
   return (
     <div
-      className={`fromGroup  ${error ? "has-error" : ""}  ${
+      className={`fromGroup w-full  ${error ? "has-error" : ""}  ${
         horizontal ? "flex" : ""
       }  ${validate ? "is-valid" : ""} `}
     >
