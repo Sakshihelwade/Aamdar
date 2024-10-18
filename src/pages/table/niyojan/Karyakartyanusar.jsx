@@ -8,6 +8,7 @@ import { base_url } from "../../../config/base_url";
 
 const Karyakartyanusar = () => {
   // State management
+  const id = localStorage.getItem('_id')
   const [boothNo, setBoothNo] = useState("")
   const [villageName, setVillageName] = useState("");
   const [endListNo, setEndListNo] = useState("");
@@ -23,7 +24,9 @@ const Karyakartyanusar = () => {
   const [maxBoothNo, setMaxBoothNo] = useState(""); // State for maximum booth number
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([])
-  console.log(boothOption, "///")
+  // console.log(boothOption, "///")
+  const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
+  const other=voterCount?.total - totalmalefemale || 0
 
   const handleVillageChange = (e) => {
     const selectedOption = villageOption.find(option => option.value === e.target.value);
@@ -48,7 +51,7 @@ const Karyakartyanusar = () => {
 
 
   const getVillageOption = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       .then((resp) => {
         const villageOptions = resp.data.village?.map((item) => ({
           label: item.name,
@@ -63,7 +66,7 @@ const Karyakartyanusar = () => {
 
 
   const getBoothNo = () => {
-    axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
+    axios.get(`${base_url}/api/surve/getSortBooth/${id}?villageId=${villageId}`)
       .then((resp) => {
         console.log(resp.data, "{{{{{{{")
         const boothOptions = resp.data.booths?.map((item) => ({
@@ -93,7 +96,7 @@ const Karyakartyanusar = () => {
 
   const getAllVotersList = async () => {
     try {
-      const response = await axios.get(`${base_url}/api/surve/searchVotter?name=true&village=${villageName}&boothNo=${boothNo}&page=${currentPage}`)
+      const response = await axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&village=${villageName}&boothNo=${boothNo}&page=${currentPage}`)
       // console.log(response.data,'llllllllllllllll')
       setAllVoter(response.data.voters)
     } catch (error) {
@@ -127,11 +130,11 @@ const Karyakartyanusar = () => {
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">कार्यकर्त्यानुसार  </h6>
             <p className=" flex gap-6">
-              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-            </p>
+                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+                            <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
           </div>
           <hr className="mb-3" />
           <p>

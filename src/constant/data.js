@@ -114,42 +114,50 @@ export const menuItems = [
       // },
     ],
   },
+  // {
+  //   title: "सर्वे ",
+  //   icon: "heroicons-outline:table",
+  //   link: "vendo-list",
+  //   isOpen: true,
+  //   isHide: true,
+  //   child: [
+  //     {
+  //       childtitle: "मास्टर मोबाईल",
+  //       childlink: "master-mobile",
+  //     },
+  //     {
+  //       childtitle: "सर्वे रजिस्ट्रेशन",
+  //       childlink: "survey-registration",
+  //     },
+  //     {
+  //       childtitle: "फोटो सिंक्रोनाईज",
+  //       childlink: "photo-synchronize",
+  //     },
+  //     {
+  //       childtitle: "सर्वे डेटा पाहणे",
+  //       childlink: "view-survey-data",
+  //     },
+  //     {
+  //       childtitle: "लोकेशन असणारे",
+  //       childlink: "with-location",
+  //     },
+  //     {
+  //       childtitle: "सर्वे झालेले न झालेले",
+  //       childlink: "surveyed-or-unsurveyed",
+  //     },
+  //     {
+  //       childtitle: "नवीन मतदार",
+  //       childlink: "new-voters",
+  //     },
+  //   ],
+  // },
+
   {
-    title: "सर्वे ",
+    title: "Export PDF",
     icon: "heroicons-outline:table",
-    link: "vendo-list",
+    link: "export-pdf",
     isOpen: true,
     isHide: true,
-    child: [
-      {
-        childtitle: "मास्टर मोबाईल",
-        childlink: "master-mobile",
-      },
-      {
-        childtitle: "सर्वे रजिस्ट्रेशन",
-        childlink: "survey-registration",
-      },
-      {
-        childtitle: "फोटो सिंक्रोनाईज",
-        childlink: "photo-synchronize",
-      },
-      {
-        childtitle: "सर्वे डेटा पाहणे",
-        childlink: "view-survey-data",
-      },
-      {
-        childtitle: "लोकेशन असणारे",
-        childlink: "with-location",
-      },
-      {
-        childtitle: "सर्वे झालेले न झालेले",
-        childlink: "surveyed-or-unsurveyed",
-      },
-      {
-        childtitle: "नवीन मतदार",
-        childlink: "new-voters",
-      },
-    ],
   },
 
 

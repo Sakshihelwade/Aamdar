@@ -7,6 +7,7 @@ import Select from "@/components/ui/Select";
 import { base_url } from "../../../config/base_url";
 
 const JivantMrut = () => {
+  const id = localStorage.getItem('_id')
   const [minBoothNo, setMinBoothNo] = useState('');
   const [maxBoothNo, setMaxBoothNo] = useState('');
   const [status, setStatus] = useState('');
@@ -20,6 +21,9 @@ const JivantMrut = () => {
   const [voterCount, setVoterCount] = useState(0); // Assuming voter count is a number
   const [currentPage, setCurrentPage] = useState(1);
 
+  const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
+  const other=voterCount?.total - totalmalefemale || 0
+  
   // const handleSearch = () => {
   //   getAllData();
   // };
@@ -41,7 +45,7 @@ const JivantMrut = () => {
 
   // Fetch village options from API
   const getVillageOptions = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       .then((resp) => {
         const villageOptions = resp.data.village?.map((item) => ({
           label: item.name,
@@ -56,7 +60,7 @@ const JivantMrut = () => {
 
   // Fetch booth numbers based on selected village
   const getBoothNo = () => {
-    axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
+    axios.get(`${base_url}/api/surve/getSortBooth/${id}?villageId=${villageId}`)
       .then((resp) => {
         const boothOptions = resp.data.booths?.map((item) => ({
           label: item.boothNo,
@@ -72,7 +76,7 @@ const JivantMrut = () => {
   // Fetch voter data from API
   const getAllData = async () => {
     try {
-      const response = await axios.get(`${base_url}/api/surve/searchVotter?name=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${minBoothNo}&maxBooth=${maxBoothNo}&aliveOrDead=${status}&nameFilter=${voterName}`);
+      const response = await axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${minBoothNo}&maxBooth=${maxBoothNo}&aliveOrDead=${status}&nameFilter=${voterName}`);
       setAllVoters(response.data.voters);
       setVoterCount(response.data || 0);
       console.log(response.data);
@@ -112,11 +116,11 @@ const JivantMrut = () => {
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">जिवंत / मृत  </h6>
             <p className=" flex gap-6">
-              <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
-              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-            </p>
+                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+                            <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
           </div>
           <hr className="mb-3" />
           <p>

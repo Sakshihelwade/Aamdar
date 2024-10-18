@@ -61,7 +61,7 @@ const LoginForm = () => {
       localStorage.setItem('token',token)
       const { _id } = response.data.data;  
       localStorage.setItem('_id', _id);  
-      console.log(_id, "_id"); 
+      // console.log(_id, "_id"); 
       // console.log(response.data,"resp")
       if (response.status === 200) {
         toast.success("Login successful!");

@@ -36,6 +36,7 @@ const schema = yup.object({
 
 const RegForm = () => {
   const token = localStorage.getItem('token');
+  const id = localStorage.getItem('_id');
   // console.log(token, 'Auth Token');
 
   const dispatch = useDispatch();
@@ -78,8 +79,10 @@ const RegForm = () => {
 
 
   const onSubmit = async () => {
-    // const selectedVillageIds = villages.map(v => v._id).join(", ");
-    const selectedVillageNames = village.map(v => v.name).join(", ");
+    const selectedVillages = village.map(v => ({
+      id: v._id,
+      villageName: v.name,
+    }));
     // const payload = {
     //   cardNumber: voterId,
     //   email: email,
@@ -91,7 +94,7 @@ const RegForm = () => {
     //   villageName: selectedVillageNames,
     //   villageId: selectedVillageIds,
     // }
-    const selectedVillageIds = village.map(v => v._id); // Array of village IDs
+    // const selectedVillageIds = village.map(v => v._id); // Array of village IDs
     // const selectedVillageNames = villages.map(v => v.name).join(", "); // Comma-separated village names
 
     const payload = {
@@ -102,8 +105,7 @@ const RegForm = () => {
       password: password,
       role: role,
       fullName: name,
-      villageName: selectedVillageNames,  // Comma-separated village names
-      villages: selectedVillageIds        // Array of village IDs
+      villages:selectedVillages,
     };
 
 
@@ -138,8 +140,9 @@ const RegForm = () => {
 
   const getAllVillages = async () => {
     try {
-      const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+      const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       setVillageOptions(response.data.village)
+      console.log(response.data.village,"kkkkkkkkkkkkkkkkkkk")
     } catch (error) {
       console.log(error);
     }
@@ -211,7 +214,7 @@ const RegForm = () => {
 
         <Textinput
           name="userId"
-          label="User ID / वापरकर्ता"
+          label="UserName / वापरकर्ता"
           type="text"
           placeholder="Enter your User ID"
           value={userId}

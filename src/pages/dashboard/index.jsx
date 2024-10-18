@@ -17,15 +17,15 @@ const Dashboard = () => {
     <div>
       <HomeBredCurbs title="Dashboard" />
       {/* <div className="grid grid-cols-12 gap-5 mb-5"> */}
-        {/* <div className="2xl:col-span-3 lg:col-span-4 col-span-12">
+      {/* <div className="2xl:col-span-3 lg:col-span-4 col-span-12">
           <ImageBlock1 />
         </div> */}
-        <div className="2xl:col-span-9 lg:col-span-8 col-span-12 mb-5">
-          <Card bodyClass="p-4">
-            <div className="grid md:grid-cols-5 col-span-1 gap-4">
-              <GroupChart1 />
-            </div>
-          </Card>
+      <div className="2xl:col-span-9 lg:col-span-8 col-span-12 mb-5">
+        <Card bodyClass="p-4">
+          <div className="grid md:grid-cols-5 col-span-1 gap-4">
+            <GroupChart1 />
+          </div>
+        </Card>
         {/* </div> */}
       </div>
       <div className="grid grid-cols-12 gap-5">
@@ -39,7 +39,7 @@ const Dashboard = () => {
         <div className="lg:col-span-4 col-span-12">
           <Card title="सारांश"
           //  headerslot={<SelectMonth />}
-           >
+          >
             <RadialsChart />
           </Card>
         </div>
@@ -54,18 +54,17 @@ const Dashboard = () => {
             <RecentActivity />
           </Card>
         </div> */}
-        <div className="lg:col-span-8 col-span-12">
+        {/* <div className="lg:col-span-8 col-span-12">
           <Card
             title="Most Sales"
             headerslot={
               <div className="border border-slate-200 dark:border-slate-700 dark:bg-slate-900 rounded p-1 flex items-center">
                 <span
                   className={` flex-1 text-sm font-normal px-3 py-1 transition-all duration-150 rounded cursor-pointer
-                ${
-                  filterMap === "global"
-                    ? "bg-slate-900 text-white dark:bg-slate-700 dark:text-slate-300"
-                    : "dark:text-slate-300"
-                }  
+                ${filterMap === "global"
+                      ? "bg-slate-900 text-white dark:bg-slate-700 dark:text-slate-300"
+                      : "dark:text-slate-300"
+                    }  
                 `}
                   onClick={() => setFilterMap("global")}
                 >
@@ -73,11 +72,10 @@ const Dashboard = () => {
                 </span>
                 <span
                   className={` flex-1 text-sm font-normal px-3 py-1 rounded transition-all duration-150 cursor-pointer
-                  ${
-                    filterMap === "usa"
+                  ${filterMap === "usa"
                       ? "bg-slate-900 text-white dark:bg-slate-700 dark:text-slate-300"
                       : "dark:text-slate-300"
-                  }
+                    }
               `}
                   onClick={() => setFilterMap("usa")}
                 >
@@ -88,8 +86,8 @@ const Dashboard = () => {
           >
             <MostSales filterMap={filterMap} />
           </Card>
-        </div>
-        <div className="lg:col-span-4 col-span-12">
+        </div> */}
+        {/* <div className="lg:col-span-4 col-span-12">
           <Card title="Overview" headerslot={<SelectMonth />}>
             <RadarChart />
             <div className="bg-slate-50 dark:bg-slate-900 rounded p-4 mt-8 flex justify-between flex-wrap">
@@ -124,7 +122,7 @@ const Dashboard = () => {
               </div>
             </div>
           </Card>
-        </div>
+        </div> */}
       </div>
     </div>
   );

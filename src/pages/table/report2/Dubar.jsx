@@ -9,7 +9,7 @@ import axios from "axios";
 import { base_url } from "../../../config/base_url";
 
 const Dubar = () => {
-
+    const id = localStorage.getItem('_id');
     const [allVoter, setAllVoter] = useState('')
     const [voterCount, setVoterCount] = useState()
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +21,10 @@ const Dubar = () => {
     const [villageId, setVillageId] = useState("")
     const [boothOptions, setBoothOptions] = useState([])
     const [villageOptions, setVillageOptions] = useState([])
+    
+    const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
+  const other=voterCount?.total - totalmalefemale || 0
+  
     console.log(boothOptions, "opppppppp")
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -35,7 +39,7 @@ const Dubar = () => {
     }, [villageId])
 
     const getAllVoters = () => {
-        axios.get(`${base_url}/api/surve/searchVotter/?nameDuplicate=${selectedDubar?.name}`)
+        axios.get(`${base_url}/api/surve/searchVotter/${id}?nameDuplicate=${selectedDubar?.name}`)
             .then((resp) => {
                 setAllVoter(resp.data.voters);
                 setVoterCount(resp.data);
@@ -48,7 +52,7 @@ const Dubar = () => {
     };
 
     const getDubarVoter = () => {
-        axios.get(`${base_url}/api/surve/searchVotter?duplicateNamesWeb=true&page=${currentPage}`)
+        axios.get(`${base_url}/api/surve/searchVotter/${id}?duplicateNamesWeb=true&page=${currentPage}`)
             .then((resp) => {
                 setDubarVoter(resp.data.duplicates)
                 setDubarVoterCount(resp.data)
@@ -60,7 +64,7 @@ const Dubar = () => {
 
     const getAllVillages = async () => {
         try {
-            const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages`);
+            const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`);
             console.log(response.data, "villages response"); // Log the entire response
             const villages = response.data.village?.map((item) => ({
                 label: item.name,
@@ -75,7 +79,7 @@ const Dubar = () => {
 
     const getAllBooth = async () => {
         try {
-            const resp = await axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`);
+            const resp = await axios.get(`${base_url}/api/surve/getSortBooth/${id}?villageId=${villageId}`);
             console.log(resp.data, "boothno");
             const booths = resp.data.booths?.map((item) => ({
                 label: item.boothNo,
@@ -119,9 +123,9 @@ const Dubar = () => {
                     <div className="mb-2 flex  justify-between">
                         <h6 className="font-bold text-[#b91c1c]">दुबार </h6>
                         <p className=" flex gap-6">
-                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+                            <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
                             <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
                         </p>
                     </div>
