@@ -17,7 +17,6 @@ const RadialsChart = () => {
   const femalePercentage = ((totalFemale / totalMaleFemale) * 100).toFixed(2);
   const otherPercentage = ((other / totalMaleFemale) * 100).toFixed(2);
 
-console.log(totalMaleFemale)
   
 const calculateTotals = (data) => {
     let maleTotal = 0;
@@ -88,7 +87,7 @@ const calculateTotals = (data) => {
       },
     },
     labels: ["पुरुष ", "महिला ", "माहित नाही"],
-    colors: ["#4669FA", "#FA916B", "#50C793"],
+    colors: ["#22c55e", "#fb923c", "#3b82f6"],
   };
 
   return (

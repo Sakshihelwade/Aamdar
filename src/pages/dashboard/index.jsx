@@ -30,14 +30,14 @@ const Dashboard = () => {
       </div>
       <div className="grid grid-cols-12 gap-5">
         <div className="lg:col-span-8 col-span-12">
-          <Card>
+          <Card title='जास्त मतदार असलेले दहा गाव'>
             <div className="legend-ring">
               <RevenueBarChart />
             </div>
           </Card>
         </div>
         <div className="lg:col-span-4 col-span-12">
-          <Card title="Overview"
+          <Card title="सारांश"
           //  headerslot={<SelectMonth />}
           >
             <RadialsChart />

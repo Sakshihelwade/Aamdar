@@ -10,29 +10,29 @@ import { toast } from "react-toastify";
 import AddFamilyMember from "./AddFamilyMember";
 
 const EditModal = ({ ActiveDiactiveModal, activeModal, selectedRowData }) => {
-   const FamilyMember = selectedRowData?.namesOfMembers || [];
+  //  const FamilyMember = selectedRowData?.namesOfMembers || [];
    const [selectedFamily,setSelectedFamily]=useState([])
-  // const FamilyMember = [...(selectedRowData?.namesOfMembers || []), ...selectedFamily];
-console.log(FamilyMember,"./././././")
   const token = localStorage.getItem("token");
   const [modal, setModal] = useState(false);
   const [addFamilyModal,setAddFamilyModal]=useState(false)
   const [businessOption,setBusinessOption]=useState([])
   const [casteOption,setCasteOption]=useState([])
   const [karyakartaOption,setKaryakartaOption]=useState([])
+  const [colourOption,setColourOption]=useState([])
   const [data,setData]=useState([])
+const id=localStorage.getItem('_id')
+const FamilyMember = [...(selectedRowData?.namesOfMembers || []), ...data];
+console.log(selectedFamily)
 
-// console.log(selectedFamily,"dtyutyyuttyuftyf")
-// console.log(data,"datadatadatadata")
-useEffect(()=>{
-  const data = selectedFamily.map((item) => ({
+
+useEffect(() => {
+  const data = selectedFamily?.map((item) => ({
     name: item.name,
     id: item._id,
-  }));
-  setData(data)
-},[])
+  })) || []; 
+  setData(data);
+}, [selectedFamily]);
 
-// console.log(data,"/////")
 
   const [formData, setFormData] = useState({
     houseNo: "",
@@ -108,7 +108,7 @@ const handleFamilyModal = (val) => {
   const getVillageOptions = async () => {
     try {
       const response = await axios.get(
-        `${base_url}/api/surve/getAllVoterVillages`
+        `${base_url}/api/surve/getAllVoterVillages/${id}`
       );
       const options = response.data.village.map((item) => ({
         label: item.name,
@@ -128,6 +128,21 @@ const handleFamilyModal = (val) => {
         value: item._id,
       }));
       setBusinessOption(businessoption);
+     
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  }
+
+  const getColourOption= ()=>{
+    axios.get(`${base_url}/get-colour`)
+    .then((resp)=>{
+      const colouroption = resp.data.data.map((item) => ({
+        label: item.color,
+        value: item._id,
+      }));
+      setColourOption(colouroption);
      
     })
     .catch((error)=>{
@@ -170,6 +185,7 @@ const handleFamilyModal = (val) => {
     getVillageOptions();
     getBusinessOption()
     getCasteOption()
+    getColourOption()
     getKaryakartaOption()
   }, []);
   
@@ -518,10 +534,7 @@ const handleFamilyModal = (val) => {
                   placeholder="रंग"
                   value={formData.color}
                   onChange={(value) => handleSelectChange("color", value)}
-                  options={[
-                    { label: "लाल", value: "red" },
-                    { label: "हिरवा", value: "green" },
-                  ]}
+                  options={colourOption}
                 />
               </div>
 
@@ -622,7 +635,7 @@ const handleFamilyModal = (val) => {
         </div>
       </Modal>
       <AddNewVoter handleActiveModal={handleActiveModal} modal={modal} />
-      <AddFamilyMember handleFamilyModal={handleFamilyModal} addFamilyModal={addFamilyModal} handelSelectedFamily={handelSelectedFamily}/>
+      <AddFamilyMember handleFamilyModal={handleFamilyModal} addFamilyModal={addFamilyModal} handelSelectedFamily={handelSelectedFamily} familyMember={selectedRowData?.namesOfMembers}/>
     </div>
   );
 };

@@ -24,7 +24,9 @@ const [surnameWiseVoter,setSurnmeWiseVoter]=useState([])
   const [currentPage, setCurrentPage] = useState(1);
 const [selectedSurname,setSelectedSurname]=useState('')
 const Surname=surname || selectedSurname
-console.log(selectedSurname,"selectedSurname")
+const id=localStorage.getItem('_id')
+const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
+const other=voterCount?.total - totalmalefemale || 0
 
   const handleClear = () => {
     setVillageId("");
@@ -53,7 +55,7 @@ console.log(selectedSurname,"selectedSurname")
   };
 
   const getVillageOption = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       .then((resp) => {
         const villageoption = resp.data.village.map((item) => ({
           label: item.name,
@@ -67,7 +69,7 @@ console.log(selectedSurname,"selectedSurname")
   };
 
   const getBoothNo=()=>{
-    axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
+    axios.get(`${base_url}/api/surve/getSortBooth/${id}?villageId=${villageId}`)
     .then((resp)=>{
         const boothNo=resp.data.booths.map((item)=>({
             label:item.boothNo , value:item.boothNo
@@ -82,7 +84,7 @@ console.log(selectedSurname,"selectedSurname")
 
   const getAllVoters = () => {
     axios
-      .get(`${base_url}/api/surve/searchVotter?lastName=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${fromList}&maxBooth=${toList}&lastNameFilter=${Surname}`)
+      .get(`${base_url}/api/surve/searchVotter/${id}?lastName=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${fromList}&maxBooth=${toList}&lastNameFilter=${Surname}`)
       .then((resp) => {
         setAllVoter(resp.data.voters);
         setVoterCount(resp.data);
@@ -126,9 +128,9 @@ useEffect(()=>{
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">आडनावानुसार यादी</h6>
             <p className=" flex gap-6">
-                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+                            <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
                             <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
                         </p>
           </div>

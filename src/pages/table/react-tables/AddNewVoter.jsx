@@ -5,8 +5,8 @@ import { base_url } from '../../../config/base_url';
 import { toast } from 'react-toastify';
 
 const AddNewVoter = ({handleActiveModal, modal}) => {
-    console.log(handleActiveModal,modal,"hhhhh")
     const token = localStorage.getItem('token');
+    const id = localStorage.getItem('_id')
     // const [activeModal, setActiveModal] = useState(true);
     const [villageOptions, setVillageOption] = useState([])
     // State management for input fields
@@ -15,7 +15,7 @@ const AddNewVoter = ({handleActiveModal, modal}) => {
     }, [])
     const getAllVillages = async () => {
         try {
-            const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+            const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
             // console.log(response.data, "iiiiii")
             setVillageOption(response.data.village)
         } catch (error) {
