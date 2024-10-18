@@ -139,6 +139,7 @@ import CastWise from "./pages/table/react-tables/CastWise";
 import CommonTable from "./pages/table/react-tables/CommonTable";
 import AddressWiseTable2 from "./pages/table/react-tables/AddressWiseTable2";
 import AddressWiseTable from "./pages/table/react-tables/AddressWiseTable";
+import ExportData from "./pages/table/Pdf/ExportData";
 
 function App() {
   return (
@@ -258,9 +259,9 @@ function App() {
           <Route path="Agewise" element={<AgeWise />} />
           <Route path="Familywise" element={<FamilyWise />} />
           <Route path="Castwise" element={<CastWise />} />
-          <Route path="CommonTable" element={<CommonTable/>}/>
-          <Route path="AddressWiseTable" element={<AddressWiseTable/>}/>
-          <Route path="AddressWiseTable2" element={<AddressWiseTable2/>}/>
+          <Route path="CommonTable" element={<CommonTable />} />
+          <Route path="AddressWiseTable" element={<AddressWiseTable />} />
+          <Route path="AddressWiseTable2" element={<AddressWiseTable2 />} />
           {/* report2  */}
           <Route path="dubar" element={<Dubar />} />
           <Route path="by-dob-report2" element={<ByDob />} />
@@ -283,7 +284,8 @@ function App() {
           <Route path="with-location" element={<WithLocation />} />
           <Route path="surveyed-or-unsurveyed" element={<SurveyedOrUnsurveyed />} />
           <Route path="new-voters" element={<NewVoters />} />
-
+          {/* export pdf  */}
+          <Route path="export-pdf" element={<ExportData/>}/>
           {/* App pages */}
           <Route path="todo" element={<TodoPage />} />
           <Route path="email" element={<EmailPage />} />

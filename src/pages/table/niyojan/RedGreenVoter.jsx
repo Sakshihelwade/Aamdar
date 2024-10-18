@@ -7,6 +7,7 @@ import axios from "axios";
 import { base_url } from "../../../config/base_url";
 
 const RedGreenVoter = () => {
+  const id = localStorage.getItem('_id')
   const [villageId, setVillageId] = useState("");
   const [villageName, setVillageName] = useState("");
   const [boothOption, setBoothOption] = useState([]); // Ensure it's an array
@@ -19,6 +20,9 @@ const RedGreenVoter = () => {
   const [allVoter, setAllVoter] = useState([])
   const [voterCount, setVoterCount] = useState(0)
   const [boothNo, setBoothNo] = useState("")
+
+  const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
+  const other=voterCount?.total - totalmalefemale || 0
 
   useEffect(() => {
     getVillageOption();
@@ -59,7 +63,7 @@ const RedGreenVoter = () => {
   ];
 
   const getVillageOption = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       .then((resp) => {
         console.log(resp.data.village, "/./.")
         const villageOptions = resp.data.village?.map((item) => ({
@@ -74,7 +78,7 @@ const RedGreenVoter = () => {
   };
 
   const getBoothNo = () => {
-    axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
+    axios.get(`${base_url}/api/surve/getSortBooth/${id}?villageId=${villageId}`)
       .then((resp) => {
         const boothOptions = resp.data.booths?.map((item) => ({
           label: item.boothNo,
@@ -89,7 +93,7 @@ const RedGreenVoter = () => {
 
   const getAllData = async () => {
     try {
-      const response = await axios.get(`${base_url}/api/surve/searchVotter?name=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${minBoothNo}&maxBooth=${maxBoothNo}&nameFilter=${voterName}&colour=${color}`);
+      const response = await axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${minBoothNo}&maxBooth=${maxBoothNo}&nameFilter=${voterName}&colour=${color}`);
       console.log(response.data);
       setAllVoter(response.data.voters)
       setVoterCount(response.data)
@@ -116,12 +120,12 @@ const RedGreenVoter = () => {
         <Card>
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]"> रेड / ग्रीन मतदार </h6>
-            <p className=" flex gap-6">
-                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-                        </p>
+            <div className=" flex gap-6">
+              <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+              <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+              <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+            </div>
           </div>
           <hr className="mb-3" />
           <p>
@@ -189,6 +193,9 @@ const RedGreenVoter = () => {
             </button> */}
               <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
                 क्लियर करा
+              </button>
+              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" >
+                Export
               </button>
             </div>
           </div>

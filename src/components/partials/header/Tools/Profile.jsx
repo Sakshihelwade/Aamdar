@@ -37,14 +37,14 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   const ProfileMenu = [
-    {
-      label: "Profile",
-      icon: "heroicons-outline:user",
+    // {
+    //   label: "Profile",
+    //   icon: "heroicons-outline:user",
 
-      action: () => {
-        navigate("/profile");
-      },
-    },
+    //   action: () => {
+    //     navigate("/profile");
+    //   },
+    // },
     {
       label: "Register",
       icon: "heroicons-outline:credit-card",
