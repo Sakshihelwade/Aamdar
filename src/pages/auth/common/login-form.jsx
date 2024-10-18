@@ -66,7 +66,7 @@ const LoginForm = () => {
       if (response.status === 200) {
         toast.success("Login successful!");
         dispatch(handleLogin(response.data));
-        // navigate("/dashboard");
+        navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);

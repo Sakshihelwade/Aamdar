@@ -3,7 +3,7 @@ import Modal from '../../../components/ui/Modal'
 import CommonTable from './CommonTable'
 import SeleteFamilyMemberTable from './SelcteFamilyMemberTable'
 
-const AddFamilyMember = ({addFamilyModal,handleFamilyModal,handelSelectedFamily}) => {
+const AddFamilyMember = ({addFamilyModal,handleFamilyModal,handelSelectedFamily,familyMember}) => {
 
     const [familyData,setFamilyData]=useState()
 //    console.log(familyData)
@@ -25,7 +25,7 @@ const AddFamilyMember = ({addFamilyModal,handleFamilyModal,handelSelectedFamily}
                 themeClass="bg-blue-500 blue:bg-blue-500 blue:border-b blue:border-blue-700"
                 onClose={()=>handleFamilyModal(false)}
             >
-<SeleteFamilyMemberTable  handelSetData={handelSetData} handleFamilyModal={handleFamilyModal} />
+<SeleteFamilyMemberTable  handelSetData={handelSetData} handleFamilyModal={handleFamilyModal} familyMember={familyMember} />
                 </Modal>
     </div>
   )

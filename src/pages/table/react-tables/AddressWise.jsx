@@ -23,7 +23,9 @@ const [buildingAreaName,setBuildingAreaName]=useState('')
 const [addressWise,setAddressWise]=useState([])
 const [selectedAddress,setSelectedAddress]=useState('')
 const village =selectedAddress || villageName
-
+const id =localStorage.getItem('_id')
+const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
+const other=voterCount?.total - totalmalefemale || 0
 
   const handleClear = () => {
     setVillageId("");
@@ -46,7 +48,7 @@ const village =selectedAddress || villageName
   };
 
   const getVillageOption = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       .then((resp) => {
         const villageoption = resp.data.village.map((item) => ({
           label: item.name,
@@ -60,7 +62,7 @@ const village =selectedAddress || villageName
   };
 
   const getBoothNo=()=>{
-    axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
+    axios.get(`${base_url}/api/surve/getSortBooth/${id}?villageId=${villageId}`)
     .then((resp)=>{
         const boothNo=resp.data.booths.map((item)=>({
             label:item.boothNo , value:item.boothNo
@@ -75,7 +77,7 @@ const village =selectedAddress || villageName
 
   const getAllVoters = () => {
     axios
-      .get(`${base_url}/api/surve/searchVotter?address=true&boothNo=${boothNo}&village=${village}&page=${currentPage}`)
+      .get(`${base_url}/api/surve/searchVotter/${id}?address=true&boothNo=${boothNo}&village=${village}&page=${currentPage}`)
       .then((resp) => {
    
         setAllVoter(resp.data.voters);
@@ -128,9 +130,9 @@ useEffect(()=>{
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">पत्त्यानुसार  यादी</h6>
             <p className=" flex gap-6">
-                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+                            <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
                             <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
                         </p>
           </div>
@@ -139,7 +141,7 @@ useEffect(()=>{
             <span className="font-bold">विधानसभा</span> :
             <span className="font-bold text-lg">199</span>
           </p>
-          <div className="grid grid-cols-4 gap-2">
+          {/* <div className="grid grid-cols-4 gap-2">
             <Select
               label="गाव"
               className="w-full"
@@ -156,21 +158,21 @@ useEffect(()=>{
               onChange={(e) =>setBoothNo(e.target.value)}
               value={boothNo}
             />
-            {/* <InputGroup
+            <InputGroup
               type="text"
               label="बिल्डिंग / भागाचे नाव भरा"
               id="ps-1"
               placeholder="बिल्डिंग / भागाचे नाव भरा"
               value={buildingAreaName}
               onChange={(e) => setBuildingAreaName(e.target.value)}
-            /> */}
+            />
             
             <div className="flex justify-end items-center mt-6">
               <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={handleClear}>
                 Clear
               </button>
             </div>
-          </div>
+          </div> */}
         </Card>
       </div>
       <Card>

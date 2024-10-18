@@ -3,6 +3,7 @@ import CommonTable from "./CommonTable";
 import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
 import Select from "@/components/ui/Select";
+
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
 import { toast } from "react-toastify";
@@ -20,9 +21,9 @@ const AlphabeticalWise = () => {
   const [villageOption, setVillageOption] = useState([]);
   const [boothOption,setBoothOption]=useState([])
   const [currentPage, setCurrentPage] = useState(1);
-
-  console.log(currentPage)
-  
+const id=localStorage.getItem('_id')
+  const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
+  const other=voterCount?.total - totalmalefemale || 0
 
 
   const handleClear = () => {
@@ -46,7 +47,7 @@ const AlphabeticalWise = () => {
   };
 
   const getVillageOption = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       .then((resp) => {
         const villageoption = resp.data.village.map((item) => ({
           label: item.name,
@@ -60,7 +61,7 @@ const AlphabeticalWise = () => {
   };
 
   const getBoothNo=()=>{
-    axios.get(`${base_url}/api/surve/getSortBooth?villageId=${villageId}`)
+    axios.get(`${base_url}/api/surve/getSortBooth/${id}?villageId=${villageId}`)
     .then((resp)=>{
         const boothNo=resp.data.booths.map((item)=>({
             label:item.boothNo , value:item.boothNo
@@ -75,7 +76,7 @@ const AlphabeticalWise = () => {
 
   const getAllVoters = () => {
     axios
-      .get(`${base_url}/api/surve/searchVotter?alphabet=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${fromList}&maxBooth=${toList}`)
+      .get(`${base_url}/api/surve/searchVotter/${id}?alphabet=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${fromList}&maxBooth=${toList}`)
       .then((resp) => {
         setAllVoter(resp.data.voters);
         setVoterCount(resp.data);
@@ -109,9 +110,9 @@ useEffect(()=>{
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">अल्फाबेटिकल यादी </h6>
             <p className=" flex gap-6">
-                            <h6 className="font-bold text-[#b91c1c] text-lg">महिला  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">पुरुष  :  {voterCount?.total}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">माहित नाही  :  {voterCount?.total}</h6>
+                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+                            <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
                             <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
                         </p>
           </div>

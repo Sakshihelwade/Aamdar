@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 // import EditModal from './EditModal';
 
 const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
- console.log(Props,"///props")
 
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [inputPage, setInputPage] = useState(); 
   const data = Props?.length > 0 ? Props : [];
   const totalPages = Math.ceil(voterCount?.total / rowsPerPage);
-  console.log(totalPages,voterCount,"///")
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   let currentRows = data;

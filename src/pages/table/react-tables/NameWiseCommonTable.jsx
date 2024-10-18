@@ -1,16 +1,19 @@
 
 import React, { useState, useEffect } from 'react';
 import EditModal from './EditModal';
-// import EditModal from './EditModal';
+import Tooltip from "@/components/ui/Tooltip";
+import Icon from "@/components/ui/Icon";
+import Modal from '../../../components/ui/Modal';
+
 
 const NameWiseCommonTable = ({ Props, onPageChange, voterCount,handelEditModal }) => {
-  console.log(Props, "//")
-  // console.log(voterCount.total)
   const [activeModal, setActiveModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [inputPage, setInputPage] = useState();
+  const [selectedRow,setSelectedRow]=useState()
+  const [activeViewModal,setActiveViewModal]=useState(false)
 
   const data = Props?.length > 0 ? Props : [];  
   const totalPages = Math.ceil(voterCount?.total / 25);
@@ -22,11 +25,10 @@ const NameWiseCommonTable = ({ Props, onPageChange, voterCount,handelEditModal }
     setActiveModal(value);
   };
 
-
+console.log(selectedRow)
   useEffect(()=>{
     handelEditModal(activeModal)
   },[activeModal])
-  console.log(selectedRowData,"selectedRowData")
 
   useEffect(() => {
     if (onPageChange) {
@@ -87,7 +89,7 @@ const NameWiseCommonTable = ({ Props, onPageChange, voterCount,handelEditModal }
               <th className="px-1 py-2 border border-gray-300">पत्ता</th>
               <th className="px-1 py-2 border border-gray-300">कार्ड नं</th>
               <th className="px-1 py-2 border border-gray-300">मुळगाव</th>
-              <th className="px-1 py-2 border border-gray-300">स्टेटस</th>
+              <th className="px-1 py-2 border border-gray-300">क्रिया</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
@@ -110,7 +112,21 @@ const NameWiseCommonTable = ({ Props, onPageChange, voterCount,handelEditModal }
                 <td className="px-1 py-2 border border-gray-300">{row.address}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.cardNumber}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.NATIVE_VILLAGE}</td>
-                <td className="px-1 py-2 border border-gray-300">{row.STATUS}</td>
+                <td className="px-1 py-2 border border-gray-300 flex justify-center items-center gap-1">
+                  {/* {row.STATUS} */}
+                  <Tooltip content="View" placement="top" arrow animation="shift-away">
+            <button className="action-btn" type="button" onClick={()=>{setSelectedRow(row)
+              setActiveViewModal(true)
+            }}>
+              <Icon icon="heroicons:eye" />
+            </button>
+          </Tooltip>
+          {/* <Tooltip content="Edit" placement="top" arrow animation="shift-away">
+            <button className="action-btn" type="button" onClick={()=>setActiveModal(true)}> 
+              <Icon icon="heroicons:pencil-square" />
+            </button>
+          </Tooltip> */}
+                  </td>
               </tr>
             ))}
           </tbody>
@@ -154,6 +170,44 @@ const NameWiseCommonTable = ({ Props, onPageChange, voterCount,handelEditModal }
         >
           Next
         </button>
+        <Modal
+         title="View Voter Details"
+         activeModal={activeViewModal}
+         className="max-w-md"
+         themeClass="bg-blue-500 blue:bg-blue-500 blue:border-b blue:border-blue-700"
+         onClose={() => setActiveViewModal(false)}
+        >
+ 
+ <h6 className=' bg-blue-200 py-1 px-2 rounded-sm'>
+  <span className='w-32 inline-block'> नाव </span>: {selectedRow?.name}
+</h6>
+<p> 
+  <span className='w-32 inline-block'> वय </span> <span>: {selectedRow?.age}</span>
+</p>
+<p> 
+  <span className='w-32 inline-block'> आडनाव </span>: {selectedRow?.lastName}
+</p>
+<p> 
+  <span className='w-32 inline-block'> पत्ता </span>: {selectedRow?.address}
+</p>
+<p> 
+  <span className='w-32 inline-block'>घर क्र</span>: {selectedRow?.houseNo}
+</p>
+<p> 
+  <span className='w-32 inline-block'> लिंग </span>: {selectedRow?.gender}
+</p>
+<p> 
+  <span className='w-32 inline-block'> अ क्र </span>: {selectedRow?.serialNo}
+</p>
+<p> 
+  <span className='w-32 inline-block'>	कार्ड नं </span>: {selectedRow?.cardNumber}
+</p>
+<p> 
+  <span className='w-32 inline-block'> बूथ नं </span>: {selectedRow?.boothNo}
+</p>
+
+
+        </Modal>
       </div>
 
 <EditModal ActiveDiactiveModal={ActiveDiactiveModal} activeModal={activeModal} selectedRowData={selectedRowData}/>

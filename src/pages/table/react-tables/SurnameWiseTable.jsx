@@ -107,10 +107,10 @@ const SurnameWiseTable = ({ title = "", Props, handleAddressSelect }) => {
   return (
     <>
       <Card>
-        {/* <div className="md:flex justify-between items-center mb-6">
-          <h4 className="card-title">{title}</h4>
+        <div className="md:flex justify-between items-center mb-6">
+          {/* <h4 className="card-title">{title}</h4> */}
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-        </div> */}
+        </div>
         <div className="overflow-x-auto -mx-6">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden">

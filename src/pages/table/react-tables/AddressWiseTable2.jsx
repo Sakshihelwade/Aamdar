@@ -1,13 +1,12 @@
-
-
-
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { base_url } from '../../../config/base_url';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Card from '../../../components/ui/Card';
 import { IoMdArrowBack } from "react-icons/io";
-
+import Tooltip from "@/components/ui/Tooltip";
+import Icon from "@/components/ui/Icon";
+import Modal from '../../../components/ui/Modal';
 
 const AddressWiseTable2 = ({ }) => {
     const navigate=useNavigate()
@@ -23,8 +22,11 @@ const { address } = location.state || {};
   const [allVoter,setAllVoter]=useState([])
   const [voterCount,setVoterCount]=useState()
   const [village,setVillage]=useState('')
-
-
+  const id=localStorage.getItem('_id')
+  const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
+  const other=voterCount?.total - totalmalefemale || 0
+  const [selectedRow,setSelectedRow]=useState()
+  const [activeViewModal,setActiveViewModal]=useState(false)
   const data = allVoter?.length > 0 ? allVoter : [];
   const totalPages = Math.ceil(voterCount?.total / 25);
 
@@ -34,7 +36,7 @@ const { address } = location.state || {};
 
   const getAllVoters = () => {
     axios
-      .get(`${base_url}/api/surve/searchVotter?address=true&&village=${address}&page=${currentPage}`)
+      .get(`${base_url}/api/surve/searchVotter/${id}?address=true&village=${address}&page=${currentPage}`)
       .then((resp) => {
    
         setAllVoter(resp.data.voters);
@@ -94,12 +96,22 @@ const { address } = location.state || {};
   return (
     <Card>
     <div className="p-1">
+      <div className=' flex justify-between'>
         <p className=' flex gap-2 items-center pb-2'>
             <button className=' bg-blue-300 px-1 flex justify-center items-center gap-1 rounded-sm py-0 text-white' onClick={()=>navigate('/Addresswise')}>
             <IoMdArrowBack className=' h-6 w-8'/>Back
             </button>
        <p > <span className=' font-bold text-lg'> पत्ता : </span>  <span className=' font-semibold text-lg'> {address} </span> </p>
         </p>
+        <div>
+        <p className=" flex gap-6">
+                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+                            <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
+                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+                        </p>
+        </div>
+        </div>
       <div className="overflow-x-auto">
         <table className="w-full bg-white border border-gray-200">
           <thead>
@@ -116,7 +128,7 @@ const { address } = location.state || {};
               <th className="px-1 py-2 border border-gray-300">पत्ता</th>
               <th className="px-1 py-2 border border-gray-300">कार्ड नं</th>
               <th className="px-1 py-2 border border-gray-300">मुळगाव</th>
-              <th className="px-1 py-2 border border-gray-300">स्टेटस</th>
+              <th className="px-1 py-2 border border-gray-300">क्रिया</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
@@ -139,7 +151,16 @@ const { address } = location.state || {};
                 <td className="px-1 py-2 border border-gray-300">{row.address}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.cardNumber}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.NATIVE_VILLAGE}</td>
-                <td className="px-1 py-2 border border-gray-300">{row.STATUS}</td>
+                <td className="px-1 py-2 border border-gray-300 flex justify-center items-center">
+                <Tooltip content="View" placement="top" arrow animation="shift-away">
+            <button className="action-btn" type="button" onClick={()=>{setSelectedRow(row)
+              setActiveViewModal(true)
+            }}>
+              <Icon icon="heroicons:eye" />
+            </button>
+          </Tooltip>
+
+                </td>
               </tr>
             ))}
           </tbody>
@@ -184,7 +205,44 @@ const { address } = location.state || {};
           Next
         </button>
       </div>
+      <Modal
+         title="View Voter Details"
+         activeModal={activeViewModal}
+         className="max-w-md"
+         themeClass="bg-blue-500 blue:bg-blue-500 blue:border-b blue:border-blue-700"
+         onClose={() => setActiveViewModal(false)}
+        >
+ 
+ <h6 className=' bg-blue-200 py-1 px-2 rounded-sm'>
+  <span className='w-32 inline-block'> नाव </span>: {selectedRow?.name}
+</h6>
+<p> 
+  <span className='w-32 inline-block'> वय </span> <span>: {selectedRow?.age}</span>
+</p>
+<p> 
+  <span className='w-32 inline-block'> आडनाव </span>: {selectedRow?.lastName}
+</p>
+<p> 
+  <span className='w-32 inline-block'> पत्ता </span>: {selectedRow?.address}
+</p>
+<p> 
+  <span className='w-32 inline-block'>घर क्र</span>: {selectedRow?.houseNo}
+</p>
+<p> 
+  <span className='w-32 inline-block'> लिंग </span>: {selectedRow?.gender}
+</p>
+<p> 
+  <span className='w-32 inline-block'> अ क्र </span>: {selectedRow?.serialNo}
+</p>
+<p> 
+  <span className='w-32 inline-block'>	कार्ड नं </span>: {selectedRow?.cardNumber}
+</p>
+<p> 
+  <span className='w-32 inline-block'> बूथ नं </span>: {selectedRow?.boothNo}
+</p>
 
+
+        </Modal>
 
     </div>
     </Card>
