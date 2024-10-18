@@ -94,6 +94,7 @@
 //   console.log("village", village);
 //   console.log("village option", villageOptions);
 
+
 //   useEffect(() => {
 //     getAllData();
 //     getAllVillages();
@@ -114,7 +115,6 @@
 //     try {
 //       const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages/${idd}`)
 //       setVillageOptions(response.data.village)
-
 //     } catch (error) {
 //       console.log(error);
 //     }
@@ -156,6 +156,8 @@
 //         setVillage([...village, data]);
 //     }
 // };
+
+
 
 //   const tableInstance = useTable(
 //     {
@@ -339,7 +341,6 @@
 //               type="submit"
 //               className="btn btn-primary block text-center"
 //               onClick={() => updateData}
-
 //             >
 //               Update
 //             </button>
@@ -381,7 +382,24 @@ import InputGroup from "../../ui/Inputgroup";
 const CompanyTable = () => {
 
   const COLUMNS = [
-
+    {
+      Header: "नाव",
+      accessor: "fullName",
+      Cell: (row) => {
+        return (
+          <span className="flex items-center">
+            <div className="flex-1 text-start">
+              <h4 className="text-sm font-medium text-slate-600 whitespace-nowrap">
+                {row?.cell?.value}
+              </h4>
+              {/* <div className="text-xs font-normal text-slate-600 dark:text-slate-400">
+                Biffco@example.com
+              </div> */}
+            </div>
+          </span>
+        );
+      },
+    },
     {
       Header: "",
       accessor: "_id",
@@ -394,6 +412,46 @@ const CompanyTable = () => {
       accessor: "role",
       Cell: (row) => {
         return <span>{row?.cell?.value}</span>;
+      },
+    },
+    {
+      Header: "कार्ड नं",
+      accessor: "cardNumber",
+      Cell: (row) => {
+        return <span>{row?.cell?.value}</span>;
+      },
+    },
+    {
+      Header: "मोबाईल नं.",
+      accessor: "mobileNumber",
+      Cell: (row) => {
+        return (
+          <div className="flex space-x-6 items-center rtl:space-x-reverse">
+            <span> {row?.cell?.value}</span>
+          </div>
+        );
+      },
+    },
+    {
+      Header: "ईमेल",
+      accessor: "email",
+      Cell: (row) => {
+        return (
+          <div className="flex space-x-6 items-center rtl:space-x-reverse">
+            <span> {row?.cell?.value}</span>
+          </div>
+        );
+      },
+    },
+    {
+      Header: "वापरकर्ता",
+      accessor: "userName",
+      Cell: (row) => {
+        return (
+          <div className="flex space-x-6 items-center rtl:space-x-reverse">
+            <span> {row?.cell?.value}</span>
+          </div>
+        );
       },
     },
     {
@@ -454,6 +512,14 @@ const CompanyTable = () => {
   // console.log(id,d"iiiiiiiiiiii")
   const [selectedUserId, setSelectedUserId] = useState('')
   const [selectedUser, setSelectedUser] = useState(null);
+  const [voterId, setVoterId] = useState('');
+  const [name, setName] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('');
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmpassword, setConfirmPassword] = useState('');
   const [checked, setChecked] = useState(false);
   const [village, setVillage] = useState([]);
   const [showVillageDropdown, setShowVillageDropdown] = useState(false);
@@ -472,11 +538,11 @@ const CompanyTable = () => {
     getAllVillages();
   }, [])
 
+
   const getAllData = async () => {
     try {
       const response = await axios.get(`${base_url}/api/getAllUser`);
       // console.log(response.data, "responseeeeeeeeee");
-
       setUsers(response.data.users)
     } catch (error) {
       console.log(error);
@@ -680,9 +746,59 @@ const CompanyTable = () => {
           <div className="grid grid-cols-2 gap-1">
 
             <div className="mx-2 my-1">
-              <label htmlFor="role" className="block text-gray-700">
-                Role / पद
-              </label>
+              <label htmlFor="voterId" className="block text-gray-700">Voter ID / ओळखपत्र क्र.</label>
+              <input
+                id="voterId"
+                name="voterId"
+                type="text"
+                placeholder="Enter your Voter ID"
+                value={voterId} // Assuming you have a state for voterId
+                onChange={(e) => setVoterId(e.target.value)} // Update state on change
+                className="w-full border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-[#FFB033]"
+              />
+            </div>
+
+            <div className="mx-2 my-1">
+              <label htmlFor="name" className="block text-gray-700">Name / नाव</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)} // Update name state on input change
+                className="w-full border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-[#FFB033]"
+              />
+            </div>
+
+            <div className="mx-2 my-1">
+              <label htmlFor="mobile" className="block text-gray-700">Mobile / मोबाइल</label>
+              <input
+                id="mobile"
+                name="mobile"
+                type="number"
+                placeholder="Enter your mobile"
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+                className="w-full border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-[#FFB033]"
+              />
+            </div>
+
+            <div className="mx-2 my-1">
+              <label htmlFor="email" className="block text-gray-700">Email / ईमेल</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-[#FFB033]"
+              />
+            </div>
+
+            <div className="mx-2 my-1">
+              <label htmlFor="role" className="block text-gray-700">Role / पद</label>
               <select
                 id="role"
                 name="role"
@@ -695,11 +811,24 @@ const CompanyTable = () => {
                     <><option value={role} onChange={(selectedRole) => setRole(selectedRole)}>{item.label}</option></>
                   )
                 })}
-
               </select>
             </div>
+
+            <div className="mx-2 my-1">
+              <label htmlFor="userName" className="block text-gray-700">UserName / वापरकर्ता</label>
+              <input
+                id="userName"
+                name="userName"
+                type="text"
+                placeholder="Enter your User ID"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                className="w-full border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-[#FFB033]"
+              />
+            </div>
+
           </div>
-{/* 
+
           <div>
             <label className="block text-gray-700">Select Villages / गाव</label>
             <div className="relative">
@@ -711,7 +840,7 @@ const CompanyTable = () => {
                   ? selectedUser.villages.map(v => v.villageName).join(", ")
                   : "Select villages"}
               </div>
-     
+
               {showVillageDropdown && (
                 <div className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
                   {villageOptions.map((villageOption, index) => (
@@ -733,40 +862,7 @@ const CompanyTable = () => {
             <p className="text-sm text-gray-600 mt-2">
               Selected: {village.length > 0 ? village.map(v => v.villageName).join(", ") : "None"}
             </p>
-          </div> */}
-            <div>
-    <label className="block text-gray-700">Select Villages / गाव</label>
-    <div className="relative">
-      <div
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB033] cursor-pointer"
-        onClick={toggleDropdown}
-      >
-        {selectedUser?.villages?.length > 0 ? selectedUser?.villages.map(v => v.villageName).join(", ") : "Select villages"}
-      </div>
-
-      {showVillageDropdown && (
-        <div className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
-          {villageOptions.map((village, index) => (
-            <div key={index} className="p-1">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={villages.some((v) => v._id === village._id)}
-                  onChange={() => handleVillageChange(village)}
-                  className="mr-2"
-                />
-                {village.name}
-              </label>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-    <p className="text-sm text-gray-600 mt-2">
-      Selected: {villages.length > 0 ? villages.map(v => v.name).join(", ") : "None"}
-    </p>
-  </div>
-
+          </div>
 
 
           <div className="flex gap-4 justify-end items-center">
