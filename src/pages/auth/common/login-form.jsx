@@ -59,12 +59,14 @@ const LoginForm = () => {
       const response = await axios.post(`${base_url}/api/Login`, payload);
       const {token} = response.data.data
       localStorage.setItem('token',token)
-      // console.log(token, "token")
+      const { _id } = response.data.data;  
+      localStorage.setItem('_id', _id);  
+      console.log(_id, "_id"); 
       // console.log(response.data,"resp")
       if (response.status === 200) {
         toast.success("Login successful!");
         dispatch(handleLogin(response.data));
-        navigate("/dashboard");
+        // navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);

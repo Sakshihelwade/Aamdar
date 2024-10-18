@@ -52,16 +52,16 @@ const RegForm = () => {
   const [role, setRole] = useState("");
   const [checked, setChecked] = useState(false);
   const [showVillageDropdown, setShowVillageDropdown] = useState(false);
-  const [villages, setVillages] = useState([]);
+  const [village, setVillage] = useState([]);
   const [villageOptions, setVillageOptions] = useState([])
 
   const toggleDropdown = () => setShowVillageDropdown(!showVillageDropdown);
 
-  const handleVillageChange = (village) => {
-    if (villages.some(v => v._id === village._id)) {
-      setVillages(villages.filter((v) => v._id !== village._id));
+  const handleVillageChange = (villages) => {
+    if (village.some(v => v._id === village._id)) {
+      setVillage(village.filter((v) => v._id !== village._id));
     } else {
-      setVillages([...villages, village]);
+      setVillage([...village, villages]);
     }
   };
   // console.log(villageId, villageName, ".........")
@@ -79,7 +79,7 @@ const RegForm = () => {
 
   const onSubmit = async () => {
     // const selectedVillageIds = villages.map(v => v._id).join(", ");
-    const selectedVillageNames = villages.map(v => v.name).join(", ");
+    const selectedVillageNames = village.map(v => v.name).join(", ");
     // const payload = {
     //   cardNumber: voterId,
     //   email: email,
@@ -91,9 +91,8 @@ const RegForm = () => {
     //   villageName: selectedVillageNames,
     //   villageId: selectedVillageIds,
     // }
-    const selectedVillagesData = villages.map(v => ({
-      id: v._id
-    }));
+    const selectedVillageIds = village.map(v => v._id); // Array of village IDs
+    // const selectedVillageNames = villages.map(v => v.name).join(", "); // Comma-separated village names
 
     const payload = {
       cardNumber: voterId,
@@ -103,9 +102,10 @@ const RegForm = () => {
       password: password,
       role: role,
       fullName: name,
-      villageName: selectedVillagesData.map(v => v.name).join(", "),
-      villageId: selectedVillagesData,
+      villageName: selectedVillageNames,  // Comma-separated village names
+      villages: selectedVillageIds        // Array of village IDs
     };
+
 
     // console.log(payload, "payyyyload")
     try {
@@ -117,7 +117,7 @@ const RegForm = () => {
       if (response.status === 200) {
         toast.success("User Registered successfully!");
         dispatch(handleRegister(response.data));
-        navigate("/");
+        navigate("/dashboard");
       }
       // console.log(response.data, "hiiiiiiiiiiiiiii");
     } catch (error) {
@@ -138,8 +138,8 @@ const RegForm = () => {
 
   const getAllVillages = async () => {
     try {
-      const response = await axios.get(`${base_url}/getVillages`)
-      setVillageOptions(response.data.villages)
+      const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages`)
+      setVillageOptions(response.data.village)
     } catch (error) {
       console.log(error);
     }
@@ -252,16 +252,16 @@ const RegForm = () => {
 
           {showVillageDropdown && (
             <div className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
-              {villageOptions.map((village, index) => (
+              {villageOptions.map((villageOption, index) => (
                 <div key={index} className="p-2">
                   <label className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={villages.some(v => v._id === village._id)}
-                      onChange={() => handleVillageChange(village)}
+                      checked={village.some(v => v._id === villageOption._id)}  // Use villageOption here
+                      onChange={() => handleVillageChange(villageOption)}       // Use villageOption here
                       className="mr-2"
                     />
-                    {village.name}
+                    {villageOption.name}
                   </label>
                 </div>
               ))}
@@ -269,7 +269,7 @@ const RegForm = () => {
           )}
         </div>
         <p className="text-sm text-gray-600 mt-2">
-          Selected: {villages.map(v => v.name).join(", ") || "None"}
+          Selected: {village.map(v => v.name).join(", ") || "None"}
         </p>
       </div>
       <Checkbox
