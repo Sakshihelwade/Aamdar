@@ -13,16 +13,27 @@ const EditModal = ({ ActiveDiactiveModal, activeModal, selectedRowData }) => {
    const FamilyMember = selectedRowData?.namesOfMembers || [];
    const [selectedFamily,setSelectedFamily]=useState([])
   // const FamilyMember = [...(selectedRowData?.namesOfMembers || []), ...selectedFamily];
-
+console.log(FamilyMember,"./././././")
   const token = localStorage.getItem("token");
   const [modal, setModal] = useState(false);
   const [addFamilyModal,setAddFamilyModal]=useState(false)
   const [businessOption,setBusinessOption]=useState([])
   const [casteOption,setCasteOption]=useState([])
   const [karyakartaOption,setKaryakartaOption]=useState([])
+  const [data,setData]=useState([])
 
- 
-console.log(selectedFamily,"dtyutyyuttyuftyf")
+// console.log(selectedFamily,"dtyutyyuttyuftyf")
+// console.log(data,"datadatadatadata")
+useEffect(()=>{
+  const data = selectedFamily.map((item) => ({
+    name: item.name,
+    id: item._id,
+  }));
+  setData(data)
+},[])
+
+// console.log(data,"/////")
+
   const [formData, setFormData] = useState({
     houseNo: "",
     landmark: "",
@@ -204,7 +215,7 @@ const handleFamilyModal = (val) => {
       society: formData.society,
       village: formData.village,
       referenceFrom: formData.sandharbha,
-      namesOfMembers:selectedFamily
+      namesOfMembers:data
     };
     axios
       .post(
@@ -581,7 +592,7 @@ const handleFamilyModal = (val) => {
                     {FamilyMember.map((member, index) => (
                       <tr key={index}>
                         <td className="px-6 py-2 whitespace-nowrap">
-                          {member}
+                          {member.name}
                         </td>
                         <td className="px-6 py-2 whitespace-nowrap">
                           {member.MOBILE_NO}
