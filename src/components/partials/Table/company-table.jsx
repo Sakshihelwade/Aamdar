@@ -558,7 +558,8 @@ const CompanyTable = () => {
     }
   }
 
-  const updateData = async () => {
+  const updateData = async (e) => {
+    e.preventDefault()
     const selectedVillages = village.map(v => ({
       id: v.id,
       villageName: v.villageName,

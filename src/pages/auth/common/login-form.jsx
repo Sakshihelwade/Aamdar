@@ -60,7 +60,9 @@ const LoginForm = () => {
       const {token} = response.data.data
       localStorage.setItem('token',token)
       const { _id } = response.data.data;  
-      localStorage.setItem('_id', _id);  
+      localStorage.setItem('_id', _id); 
+      const {userName}= response.data.data
+      localStorage.setItem('userName',userName); 
       // console.log(_id, "_id"); 
       // console.log(response.data,"resp")
       if (response.status === 200) {

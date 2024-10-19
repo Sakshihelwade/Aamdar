@@ -79,14 +79,14 @@ export const authSlice = createSlice({
         theme: "light",
       });
     },
-    handleLogout: (state, action) => {
-      state.isAuth = action.payload;
-      // remove isAuth from local storage
-      window.localStorage.removeItem("isAuth");
-      toast.success("User logged out successfully", {
-        position: "top-right",
-      });
-    },
+    // handleLogout: (state, action) => {
+    //   state.isAuth = action.payload;
+    //   // remove isAuth from local storage
+    //   window.localStorage.removeItem("isAuth");
+    //   toast.success("User logged out successfully", {
+    //     position: "top-right",
+    //   });
+    // },
   },
 });
 

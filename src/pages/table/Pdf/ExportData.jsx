@@ -112,8 +112,7 @@
 
 
 import React, { useEffect, useRef, useState } from "react";
-import Card from "../../../components/ui/Card";
-import Select from "@/components/ui/Select";
+import Select from "../../../components/ui/Select";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
 import ExportDataTable from "./ExportDataTable"; // Assuming this is a different component
@@ -164,11 +163,12 @@ const ExportData = () => {
         setBoothNo("");
     };
 
+
     useEffect(() => {
         getVillageOption();
         getBoothNo()
     }, []);
-   
+
     return (
         <div>
             <div className="mb-4">
@@ -211,6 +211,7 @@ const ExportData = () => {
                     </div>
                 </Card>
             </div>
+
 
             <Card >
                 <ExportDataTable />
