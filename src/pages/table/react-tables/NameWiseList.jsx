@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import CommonTable from "./CommonTable";
 import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
-import Select from "@/components/ui/Select";
-// import Select, { components } from "react-select";
+// import Select from "@/components/ui/Select";
+import Select, { components } from "react-select";
 
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
@@ -37,7 +37,6 @@ const handelEditModal=(val)=>{
   setEditModal(val)
 }
 
-
   const SerachBy = [
     { label: "आडनावानुसार", value: "आडनावानुसार" },
     { label: "वडिलांचे नाव", value: "वडिलांचे नाव" },
@@ -66,13 +65,12 @@ const handelEditModal=(val)=>{
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
-  const handleVillageChange = (e) => {
-    const selectedOption = villageOption.find(option => option.value === e.target.value);
-    setVillageId(e.target.value); 
-    setVillageName(selectedOption?.label || ""); 
-  };
   
+  const handleVillageChange = (selectedOption) => {
+    setVillageId(selectedOption?.value || "");
+    setVillageName(selectedOption?.label || "");
+  };
+
   const getVillageOption = () => {
     axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       .then((resp) => {
@@ -90,8 +88,7 @@ const handelEditModal=(val)=>{
 
   const getBoothNo = () => {
     axios.get(`${base_url}/api/surve/getSortBooth/${id}?villageId=${villageId}`)
-
-    .then((resp)=>{
+       .then((resp)=>{
         const boothNo=resp.data.booths.map((item)=>({
             label:item.boothNo , value:item.boothNo
         }))
@@ -113,15 +110,14 @@ const handelEditModal=(val)=>{
       })
       .catch((error) => {
         console.log(error);
-        toast.warning('No results found for the provided search criteria')
+        // toast.warning('No results found for the provided search criteria')
       });
   };
 
 
   useEffect(() => {
     getVillageOption();
-    
-    }, []);
+   }, []);
 
 
   useEffect(() => {
@@ -151,55 +147,48 @@ const handelEditModal=(val)=>{
             <span className="font-bold">विधानसभा</span> :
             <span className="font-bold text-lg">199</span>
           </p>
-          <div className="grid grid-cols-4 gap-2">
-            <Select
-              label="गाव"
-              className="w-full"
-              placeholder="गाव"
-              value={villageId}
-              options={villageOption}
-              onChange={handleVillageChange}
-            />
-              {/* <div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          
+              <div>
         <label className="form-label" htmlFor="mul_1">
         गाव
         </label>
-        <Select
-  isClearable={true}
+  <Select
+  // isClearable={true}
   placeholder="गाव"
-  name="गाव"
-  value={villageOption.find(option => option.value === villageId || '')} 
+  name="गाव" 
+  value={villageOption.find(option => option.value === villageId) || null} 
   options={villageOption}
   onChange={handleVillageChange} 
   className="react-select"
   classNamePrefix="select"
 />
-</div> */}
+</div>
 
-{/* <div>
+<div>
   <label className="form-label" htmlFor="mul_1">
     भाग/बूथ नं
   </label>
   <Select
-    isClearable={true}
-    placeholder="भाग/बूथ नं"
-    name="भाग/बूथ नं"
-    value={boothOption.find(option => option.value === boothNo)} 
-    options={boothOption}
-    onChange={(selectedOption) => setBoothNo(selectedOption?.value || "")} 
-    className="react-select"
-    classNamePrefix="select"
-  />
-</div> */}
+  // isClearable={true}
+  placeholder="भाग/बूथ नं"
+  name="भाग/बूथ नं"
+  value={boothOption.find(option => option.value === boothNo) || null} 
+  options={boothOption}
+  onChange={(selectedOption) => setBoothNo(selectedOption?.value || null)} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
 
-<Select
+{/* <Select
               label="भाग/बूथ नं"
               className="w-full"
               placeholder="भाग/बूथ नं"
               value={boothNo}
               options={boothOption}
               onChange={(e)=>setBoothNo(e.target.value)}
-            />
+            /> */}
 
             <InputGroup
               type="text"

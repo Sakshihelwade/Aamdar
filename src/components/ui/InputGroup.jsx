@@ -214,8 +214,8 @@ const InputGroup = ({
   placeholder,
   classLabel = "form-label",
   className = "",
-  value, // <-- Add value prop
-  onChange, // <-- Add onChange handler
+  value, 
+  onChange, 
   id,
   readonly,
   disabled,

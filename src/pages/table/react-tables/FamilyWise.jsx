@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import CommonTable from "./CommonTable";
 import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
-import Select from "@/components/ui/Select";
+// import Select from "@/components/ui/Select";
+import Select, { components } from "react-select";
+
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
 import { toast } from "react-toastify";
@@ -44,10 +46,9 @@ const FamilyWise = () => {
     setCurrentPage(page);
   };
 
-  const handleVillageChange = (e) => {
-    const selectedOption = villageOption.find(option => option.value === e.target.value);
-    setVillageId(e.target.value); 
-    setVillageName(selectedOption?.label || ""); 
+  const handleVillageChange = (selectedOption) => {
+    setVillageId(selectedOption?.value || "");
+    setVillageName(selectedOption?.label || "");
   };
 
   const getVillageOption = () => {
@@ -124,23 +125,38 @@ useEffect(()=>{
             <span className="font-bold ">विधानसभा</span> :
             <span className="font-bold text-lg">199</span>
           </p>
-          <div className="grid grid-cols-4 gap-2">
-            <Select
-              label="गाव"
-              className="w-full"
-              placeholder="गाव"
-              value={villageId}
-              options={villageOption}
-              onChange={handleVillageChange} 
-            />
-            <Select
-              label="भाग/बूथ नं"
-              className="w-full"
-              placeholder="भाग/बूथ नं"
-              options={boothOption}
-              onChange={(e) =>setBoothNo(e.target.value)}
-              value={boothNo}
-            />
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गाव
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गाव"
+  name="गाव" 
+  value={villageOption.find(option => option.value === villageId) || null} 
+  options={villageOption}
+  onChange={handleVillageChange} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+
+<div>
+  <label className="form-label" htmlFor="mul_1">
+    भाग/बूथ नं
+  </label>
+  <Select
+  // isClearable={true}
+  placeholder="भाग/बूथ नं"
+  name="भाग/बूथ नं"
+  value={boothOption.find(option => option.value === boothNo) || null} 
+  options={boothOption}
+  onChange={(selectedOption) => setBoothNo(selectedOption?.value || null)} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
             <InputGroup
               type="text"
               label="यादी नं. पासून"
@@ -158,15 +174,21 @@ useEffect(()=>{
               onChange={(e) => setToList(e.target.value)}
             />
            
-            <Select
-              label="लिंग"
-              className="w-full"
-              placeholder="लिंग"
-              options={SerachBy}
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            />
-           
+           <div>
+  <label className="form-label" htmlFor="mul_1">
+  लिंग
+  </label>
+  <Select
+  // isClearable={true}
+  placeholder="लिंग"
+  name="लिंग"
+  value={SerachBy.find(option => option.value === gender) || null} 
+  options={SerachBy}
+  onChange={(selectedOption) => setGender(selectedOption?.value || null)} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
             <div className="flex justify-end items-center mt-6">
               <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={handleClear}>
                 Clear
