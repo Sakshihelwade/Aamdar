@@ -16,7 +16,7 @@ const SeleteFamilyMemberTable = ({handelSetData,handleFamilyModal,familyMember})
   const [voterName, setVoterName] = useState("");
   const [surname, setSurName] = useState("");
   const [selectedRows, setSelectedRows] = useState([]); 
-
+console.log(selectedRows,"selectedRows")
   const data = allVoter?.length > 0 ? allVoter : [];
   const totalPages = Math.ceil(voterCount?.total / 25);
   const id=localStorage.getItem('_id')
@@ -154,11 +154,8 @@ useEffect(()=>{
                   <td className="px-1 py-2 border border-gray-300">
                     <input
                       type="checkbox"
-                      //  checked={selectedRows.includes(row)}
-                       checked={selectedRows.some(v => {
-                        console.log("Comparing: ", v.id, familyMember._id);
-                        return String(v.id) === String(familyMember._id);
-                    })}
+                        checked={selectedRows.includes(row)}
+                       
                       onChange={() => handleRowSelection(row)}
                      
                     />
