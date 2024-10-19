@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import CommonTable from "../react-tables/CommonTable";
 import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
-import Select from "@/components/ui/Select";
+// import Select from "@/components/ui/Select";
+import Select, { components } from "react-select";
 import { date } from "yup";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
@@ -19,15 +20,20 @@ const NameWiseList = () => {
   const [villageOption, setVillageOption] = useState([]);
   const [boothOption, setBoothOption] = useState([])
 
-  const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
-  const other=voterCount?.total - totalmalefemale || 0
-  
-  const handleVillageChange = (e) => {
-    const selectedOption = villageOption.find(option => option.value === e.target.value);
-    setVillageId(e.target.value);
+  const totalmalefemale = voterCount?.maleCount + voterCount?.femaleCount
+  const other = voterCount?.total - totalmalefemale || 0
+
+  // const handleVillageChange = (e) => {
+  //   const selectedOption = villageOption.find(option => option.value === e.target.value);
+  //   setVillageId(e.target.value);
+  //   setVillageName(selectedOption?.label || "");
+  // };
+
+  const handleVillageChange = (selectedOption) => {
+    setVillageId(selectedOption?.value || "");
     setVillageName(selectedOption?.label || "");
   };
-
+  
   const getVillageOption = () => {
     axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       .then((resp) => {
@@ -84,7 +90,7 @@ const NameWiseList = () => {
 
   useEffect(() => {
     getAllVoters()
-  }, [currentPage, villageName,boothNo])
+  }, [currentPage, villageName, boothNo])
 
   const monthOption = [
     { label: "आज", value: "आज" },
@@ -103,12 +109,12 @@ const NameWiseList = () => {
 
   ]
 
-const clearFields =()=>{
-  setVillageId('');
-  setVillageName('');
-  setBoothNo('');
-  getAllVoters();
-}
+  const clearFields = () => {
+    setVillageId('');
+    setVillageName('');
+    setBoothNo('');
+    getAllVoters();
+  }
   return (
     <div>
       <div className=" mb-4">
@@ -116,11 +122,11 @@ const clearFields =()=>{
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">जन्मतारखेनुसार </h6>
             <p className=" flex gap-6">
-                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
-                            <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
-                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-                        </p>
+              <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+              <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+              <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+            </p>
           </div>
           <hr className="py-2" />
           <p>
@@ -128,22 +134,45 @@ const clearFields =()=>{
             <span className="font-bold text-lg">199</span>
           </p>
           <div className=" grid grid-cols-4 gap-2">
-            <Select
-              label="गाव"
-              className="w-full"
-              placeholder="गाव"
-              value={villageId}
-              options={villageOption}
-              onChange={handleVillageChange}
-            />
-            <Select
+            <div>
+              <label className="form-label" htmlFor="mul_1">
+                गाव
+              </label>
+              <Select
+                // isClearable={true}
+                placeholder="गाव"
+                name="गाव"
+                value={villageOption.find(option => option.value === villageId) || null}
+                options={villageOption}
+                onChange={handleVillageChange}
+                className="react-select"
+                classNamePrefix="select"
+              />
+            </div>
+            {/* <Select
               label="भाग/बूथ नं"
               className="w-full"
               placeholder="भाग/बूथ नं"
               options={boothOption}
               onChange={(e) => setBoothNo(e.target.value)}
               value={boothNo}
-            />
+            /> */}
+            <div>
+              <label className="form-label" htmlFor="mul_1">
+                भाग/बूथ नं
+              </label>
+              <Select
+                // isClearable={true}
+                placeholder="भाग/बूथ नं"
+                name="भाग/बूथ नं"
+                value={boothOption.find(option => option.value === boothNo) || null}
+                options={boothOption}
+                onChange={(selectedOption) => setBoothNo(selectedOption?.value || null)}
+                className="react-select"
+                classNamePrefix="select"
+              />
+            </div>
+
             {/* <Select
               label="महिना निवडा"
               className="w-full"
@@ -166,10 +195,10 @@ const clearFields =()=>{
               <span className=" font-semibold">एकूण : {voterCount?.total}</span>
             </div> */}
             <div className=" flex justify-start items-center mt-6">
-            <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
-              क्लियर करा
-            </button>
-          </div>
+              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
+                क्लियर करा
+              </button>
+            </div>
           </div>
         </Card>
       </div>

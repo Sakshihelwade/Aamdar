@@ -582,6 +582,8 @@ const CompanyTable = () => {
       }
     );
       console.log(response.data, "updated Successfully");
+      setEditVillageModal(false);
+      getAllData();
     } catch (error) {
       console.log("Error updating user:", error);
     }

@@ -21,11 +21,11 @@ const Dubar = () => {
     const [villageId, setVillageId] = useState("")
     const [boothOptions, setBoothOptions] = useState([])
     const [villageOptions, setVillageOptions] = useState([])
-    
+    console.log(voterCount,"hiiiiiiiiiiiiiii")
     const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
   const other=voterCount?.total - totalmalefemale || 0
   
-    console.log(boothOptions, "opppppppp")
+    // console.log(boothOptions, "opppppppp")
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
@@ -41,13 +41,14 @@ const Dubar = () => {
     const getAllVoters = () => {
         axios.get(`${base_url}/api/surve/searchVotter/${id}?nameDuplicate=${selectedDubar?.name}`)
             .then((resp) => {
+                console.log(resp.data,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
                 setAllVoter(resp.data.voters);
                 setVoterCount(resp.data);
-                toast.success('Filter Sucessfully')
+                // toast.success('Filter Sucessfully')
             })
             .catch((error) => {
                 console.log(error);
-                toast.warning('No results found for the provided search criteria')
+                // toast.warning('No results found for the provided search criteria')
             });
     };
 
@@ -123,9 +124,9 @@ const Dubar = () => {
                     <div className="mb-2 flex  justify-between">
                         <h6 className="font-bold text-[#b91c1c]">दुबार </h6>
                         <p className=" flex gap-6">
-                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+                            {/* <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
                             <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
-                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
+                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6> */}
                             <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
                         </p>
                     </div>

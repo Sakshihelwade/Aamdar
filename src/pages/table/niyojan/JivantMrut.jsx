@@ -3,7 +3,7 @@ import axios from "axios"; // Assuming axios is used for API calls
 import CommonTable from "../react-tables/CommonTable";
 import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
-import Select from "@/components/ui/Select";
+import Select, { components } from "react-select";
 import { base_url } from "../../../config/base_url";
 
 const JivantMrut = () => {
@@ -31,9 +31,13 @@ const JivantMrut = () => {
     setCurrentPage(page);
   };
 
-  const handleVillageChange = (e) => {
-    const selectedOption = villageOptions.find(option => option.value === e.target.value);
-    setVillageId(e.target.value);
+  // const handleVillageChange = (e) => {
+  //   const selectedOption = villageOptions.find(option => option.value === e.target.value);
+  //   setVillageId(e.target.value);
+  //   setVillageName(selectedOption?.label || "");
+  // };
+  const handleVillageChange = (selectedOption) => {
+    setVillageId(selectedOption?.value || "");
     setVillageName(selectedOption?.label || "");
   };
 
@@ -128,24 +132,36 @@ const JivantMrut = () => {
             <span className="font-bold text-lg">199</span>
           </p>
           <div className="grid grid-cols-4 gap-2">
-            <Select
-              label="गाव"
-              className="w-full"
-              placeholder="गाव"
-              value={villageId} // Use villageId as value
-              options={villageOptions} // Ensure options are passed correctly
-              onChange={handleVillageChange}
-            />
-
-            {/* Booth Number */}
-            <Select
-              label="भाग/बूथ नं"
-              className="w-full"
-              placeholder="भाग/बूथ नं"
-              value={boothNo}
-              options={boothOptions} // Ensure options are passed correctly
-              onChange={(e) => setBoothNo(e.target.value)} // Set booth number
-            />
+          <div>
+              <label className="form-label" htmlFor="mul_1">
+                गाव
+              </label>
+              <Select
+                // isClearable={true}
+                placeholder="गाव"
+                name="गाव"
+                value={villageOptions.find(option => option.value === villageId) || null}
+                options={villageOptions}
+                onChange={handleVillageChange}
+                className="react-select"
+                classNamePrefix="select"
+              />
+            </div>
+            <div>
+              <label className="form-label" htmlFor="mul_1">
+                भाग/बूथ नं
+              </label>
+              <Select
+                // isClearable={true}
+                placeholder="भाग/बूथ नं"
+                name="भाग/बूथ नं"
+                value={boothOptions.find(option => option.value === boothNo) || null}
+                options={boothOptions}
+                onChange={(selectedOption) => setBoothNo(selectedOption?.value || null)}
+                className="react-select"
+                classNamePrefix="select"
+              />
+            </div>
 
             <InputGroup
               type="text"
