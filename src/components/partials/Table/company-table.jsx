@@ -85,8 +85,8 @@
 //   const [users, setUsers] = useState([]);
 //   const columns = useMemo(() => COLUMNS, []);
 //   const data = useMemo(() => users, [users]);
-  // const [villageName, setVillageName] = useState('')
-  // const [id, setId] = useState('')
+// const [villageName, setVillageName] = useState('')
+// const [id, setId] = useState('')
 //   const toggleDropdown = () => setShowVillageDropdown(!showVillageDropdown);
 
 //   // console.log(selectedUser, "Selected User Data");
@@ -140,7 +140,7 @@
 //   const handleVillageChange = (selectedVillage) => {
 //     setId(selectedVillage._id);
 //     setVillageName(selectedVillage.name);
-    
+
 //     // Check if the selected village is already in the village array
 //     const isAlreadySelected = village.some(v => v.id === selectedVillage._id);
 
@@ -312,23 +312,23 @@
 //                   : "Select villages"}
 //               </div>
 
-              // {showVillageDropdown && (
-              //   <div className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
-              //     {villageOptions.map((villageOption, index) => (
-              //       <div key={index} className="p-2">
-              //         <label className="flex items-center">
-              //           <input
-              //             type="checkbox"
-              //             checked={village.some(v => v.id === villageOption._id)} // Check if this village is in the selected villages
-              //             onChange={() => handleVillageChange(villageOption)}
-              //             className="mr-2"
-              //           />
-              //           {villageOption.name}
-              //         </label>
-              //       </div>
-              //     ))}
-              //   </div>
-              // )}
+// {showVillageDropdown && (
+//   <div className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
+//     {villageOptions.map((villageOption, index) => (
+//       <div key={index} className="p-2">
+//         <label className="flex items-center">
+//           <input
+//             type="checkbox"
+//             checked={village.some(v => v.id === villageOption._id)} // Check if this village is in the selected villages
+//             onChange={() => handleVillageChange(villageOption)}
+//             className="mr-2"
+//           />
+//           {villageOption.name}
+//         </label>
+//       </div>
+//     ))}
+//   </div>
+// )}
 //             </div>
 //             <p className="text-sm text-gray-600 mt-2">
 //               Selected: {village.length > 0 ? village.map(v => v.name).join(", ") : "None"}
@@ -542,7 +542,7 @@ const CompanyTable = () => {
   const getAllData = async () => {
     try {
       const response = await axios.get(`${base_url}/api/getAllUser`);
-      // console.log(response.data, "responseeeeeeeeee");
+      console.log(response.data, "responseeeeeeeeee");
       setUsers(response.data.users)
     } catch (error) {
       console.log(error);
@@ -559,7 +559,7 @@ const CompanyTable = () => {
   }
 
   const updateData = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const selectedVillages = village.map(v => ({
       id: v.id,
       villageName: v.villageName,
@@ -567,42 +567,41 @@ const CompanyTable = () => {
     const payload = {
       cardNumber: voterId,
       email: email,
-      userName: userId,
+      userName: userName,
       mobileNumber: mobile,
-      password: password,
       role: role,
       fullName: name,
       villages: selectedVillages,
     };
     try {
-      const response = await axios.post(`${base_url}/api/updateUser/${selectedUserId}`, payload);
+      const response = await axios.post(`${base_url}/api/updateUser/${selectedUserId}`, payload
+        ,{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      }
+    );
       console.log(response.data, "updated Successfully");
-      
-      toast.success("User updated successfully!"); 
     } catch (error) {
-      console.error("Error updating user:", error);
-      toast.error("Failed to update user. Please try again."); 
+      console.log("Error updating user:", error);
     }
   }
 
   const handleVillageChange = (selectedVillage) => {
     setId(selectedVillage._id);
     setVillageName(selectedVillage.name);
-    // Check if the selected village is already in the village array
     const isAlreadySelected = village.some(v => v.id === selectedVillage._id);
 
     if (isAlreadySelected) {
-        // If it's already selected, remove it from the array
-        setVillage(village.filter(v => v.id !== selectedVillage._id));
+      setVillage(village.filter(v => v.id !== selectedVillage._id));
     } else {
-        // If it's not selected, add it to the array
-        const data = {
-            id: selectedVillage._id,
-            villageName: selectedVillage.name,
-        };
-        setVillage([...village, data]);
+      const data = {
+        id: selectedVillage._id,
+        villageName: selectedVillage.name,
+      };
+      setVillage([...village, data]);
     }
-};
+  };
   const tableInstance = useTable(
     {
       columns,
@@ -743,7 +742,7 @@ const CompanyTable = () => {
         themeClass="bg-blue-500 blue:bg-blue-500 blue:border-b blue:border-blue-700"
         onClose={() => setEditVillageModal(false)}
       >
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={updateData}>
           <div className="grid grid-cols-2 gap-1">
 
             <div className="mx-2 my-1">
@@ -870,7 +869,7 @@ const CompanyTable = () => {
             <button
               type="submit"
               className="btn btn-primary block text-center"
-              onClick={() => updateData}
+              // onClick={() => updateData}
             >
               Update
             </button>

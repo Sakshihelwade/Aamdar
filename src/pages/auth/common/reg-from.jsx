@@ -107,9 +107,7 @@ const RegForm = () => {
       fullName: name,
       villages:selectedVillages,
     };
-
-
-    // console.log(payload, "payyyyload")
+    
     try {
       const response = await axios.post(`${base_url}/api/addUser`, payload, {
         headers: {
