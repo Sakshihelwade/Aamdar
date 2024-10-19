@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react'
 
 const ExportDataTable = () => {
-
   return (
-    <div className="p-1">
+    <div>
+      <div className="p-1">
       <div className="overflow-x-auto">
         <table className="w-full bg-white border border-gray-200">
           <thead>
@@ -45,7 +45,8 @@ const ExportDataTable = () => {
         </table>
       </div>
     </div>
-  );
-};
+    </div>
+  )
+}
 
 export default ExportDataTable;
