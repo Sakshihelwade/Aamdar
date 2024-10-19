@@ -116,6 +116,7 @@ import Select from "../../../components/ui/Select";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
 import ExportDataTable from "./ExportDataTable"; // Assuming this is a different component
+import Card from "../../../components/ui/Card";
 
 const ExportData = () => {
     const id = localStorage.getItem('_id');
@@ -123,7 +124,6 @@ const ExportData = () => {
     const [villageOption, setVillageOption] = useState([]);
     const [boothNo,setBoothNo]=useState('')
     const [boothOption,setBoothOption]=useState([])
-
   
 
     const handleVillageChange = (e) => {
@@ -164,17 +164,21 @@ const ExportData = () => {
     };
 
 
+useEffect(()=>{
+    getVillageOption();
+},[])
+
     useEffect(() => {
-        getVillageOption();
+      
         getBoothNo()
-    }, []);
+    }, [villageId]);
 
     return (
         <div>
             <div className="mb-4">
                 <Card>
                     <div className="mb-2 flex justify-between">
-                        <h6 className="font-bold text-[#b91c1c]">रेड / ग्रीन मतदार</h6>
+                        <h6 className="font-bold text-[#b91c1c]">Print PDF</h6>
                         <div className="flex gap-6">
                             <h6 className="font-bold text-orange-400 text-lg">महिला:</h6>
                             <h6 className="font-bold text-green-500 text-lg">पुरुष:</h6>
