@@ -69,6 +69,8 @@ const ExportData = () => {
     const clearFields = () => {
         setVillageId("");
         setBoothNo("");
+        setAllData([])
+
     };
 
 

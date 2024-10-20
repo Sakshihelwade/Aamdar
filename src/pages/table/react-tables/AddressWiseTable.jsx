@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const COLUMNS = [
   { Header: "पत्ता", accessor: "address" },
   { Header: "पुरुष", accessor: "maleCount" },
-  { Header: "स्त्री", accessor: "femaleCount" },
+  { Header: "महिला", accessor: "femaleCount" },
   { Header: "एकून", accessor: "totalCount" },
 ];
 
