@@ -21,9 +21,9 @@ const JivantMrut = () => {
   const [voterCount, setVoterCount] = useState(0); // Assuming voter count is a number
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
-  const other=voterCount?.total - totalmalefemale || 0
-  
+  const totalmalefemale = voterCount?.maleCount + voterCount?.femaleCount
+  const other = voterCount?.total - totalmalefemale || 0
+
   // const handleSearch = () => {
   //   getAllData();
   // };
@@ -40,6 +40,9 @@ const JivantMrut = () => {
     setVillageId(selectedOption?.value || "");
     setVillageName(selectedOption?.label || "");
   };
+  // const handleStatusChange = (selectedOption) => {
+  //   setStatus(selectedOption?.value || "");
+  // };
 
   // Options for the "जिवंत / मृत" select dropdown
   const statusOptions = [
@@ -120,11 +123,11 @@ const JivantMrut = () => {
           <div className="mb-2 flex justify-between">
             <h6 className="font-bold text-[#b91c1c]">जिवंत / मृत  </h6>
             <p className=" flex gap-6">
-                            <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
-                            <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
-                            <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
-                            <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
-                        </p>
+              <h6 className="font-bold text-orange-400 text-lg">महिला  :  {voterCount?.femaleCount}</h6>
+              <h6 className="font-bold text-green-500 text-lg">पुरुष  :  {voterCount?.maleCount}</h6>
+              <h6 className="font-bold text-blue-400 text-lg">माहित नाही  :  {other}</h6>
+              <h6 className="font-bold text-[#b91c1c] text-lg">एकूण  :  {voterCount?.total}</h6>
+            </p>
           </div>
           <hr className="mb-3" />
           <p>
@@ -132,7 +135,7 @@ const JivantMrut = () => {
             <span className="font-bold text-lg">199</span>
           </p>
           <div className="grid grid-cols-4 gap-2">
-          <div>
+            <div>
               <label className="form-label" htmlFor="mul_1">
                 गाव
               </label>
@@ -180,15 +183,20 @@ const JivantMrut = () => {
               value={maxBoothNo || ''}  // Ensure it doesn't show any value if cleared
               onChange={(e) => setMaxBoothNo(e.target.value)}
             />
-
-            <Select
-              label="जिवंत / मृत"
-              className="w-full"
-              placeholder="Select"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)} // Get the value from the event
-              options={statusOptions}
-            />
+            <div>
+              <label className="form-label" htmlFor="mul_1">
+                जिवंत / मृत
+              </label>
+              <Select
+                placeholder="जिवंत / मृत"
+                name="जिवंत / मृत"
+                value={statusOptions.find(option => option.value === status) || null} 
+                options={statusOptions}
+                onChange={(selectedOption) => setStatus(selectedOption?.value) || null} 
+                className="react-select"
+                classNamePrefix="select"
+              />
+            </div>
 
             <InputGroup
               type="text"

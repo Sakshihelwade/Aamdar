@@ -104,8 +104,9 @@ const Karyakartyanusar = () => {
   const getAllVotersList = async () => {
     try {
       const response = await axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&village=${villageName}&boothNo=${boothNo}&page=${currentPage}`)
-      console.log(response.data,'llllllllllllllll')
+      // console.log(response.data,'llllllllllllllll')
       setAllVoter(response.data.voters)
+      setVoterCount(response.data || 0);
     } catch (error) {
       console.log(error)
     }
@@ -241,7 +242,7 @@ const Karyakartyanusar = () => {
       </div>
 
       <Card>
-        <CommonTable Props={allVoter}
+        <CommonTable Props={allVoter} voterCount={voterCount}
           onPageChange={handlePageChange} />
       </Card>
     </div>

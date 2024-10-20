@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import CommonTable from "../react-tables/CommonTable";
 import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
 import Select from "@/components/ui/Select";
@@ -7,6 +6,7 @@ import DubarTable1 from "./DubarTable1";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
+import DubarTable2 from "./DubarTable2";
 
 const Dubar = () => {
     const id = localStorage.getItem('_id');
@@ -24,7 +24,7 @@ const Dubar = () => {
     console.log(voterCount,"hiiiiiiiiiiiiiii")
     const totalmalefemale=voterCount?.maleCount + voterCount?.femaleCount
   const other=voterCount?.total - totalmalefemale || 0
-  
+  console.log(dubarVoter,"respppppppppppppppppppppp")
     // console.log(boothOptions, "opppppppp")
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -41,7 +41,7 @@ const Dubar = () => {
     const getAllVoters = () => {
         axios.get(`${base_url}/api/surve/searchVotter/${id}?nameDuplicate=${selectedDubar?.name}`)
             .then((resp) => {
-                console.log(resp.data,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+                // console.log(resp.data,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
                 setAllVoter(resp.data.voters);
                 setVoterCount(resp.data);
                 // toast.success('Filter Sucessfully')
@@ -55,9 +55,10 @@ const Dubar = () => {
     const getDubarVoter = () => {
         axios.get(`${base_url}/api/surve/searchVotter/${id}?duplicateNamesWeb=true&page=${currentPage}`)
             .then((resp) => {
-                setDubarVoter(resp.data.duplicates)
+                setDubarVoter(resp?.data.data)
                 setDubarVoterCount(resp.data)
             })
+            // console.log(,"resppppppppppp")
             .catch((error) => {
                 console.log(error)
             })
@@ -169,7 +170,7 @@ const Dubar = () => {
                         <DubarTable1 Props={dubarVoter} voterCount={dubarVoterCount} handleDubarVoter={handleDubarVoter} />
                     </div>
                     <div className="col-span-8 mx-4">
-                        <CommonTable Props={allVoter} voterCount={voterCount}
+                        <DubarTable2 Props={allVoter} voterCount={voterCount}
                             onPageChange={handlePageChange} />
                     </div>
                 </div>

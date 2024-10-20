@@ -14,8 +14,13 @@ import { base_url } from "../../../config/base_url";
 
 // Validation schema
 const schema = yup.object({
-  voterId: yup.string().required("Voter ID is required"),
-  name: yup.string().required("Name is required"),
+  voterId: yup
+  .string()
+  .required("Voter ID is required")
+  .min(10, "Voter ID must be at least 10 characters") // Minimum length check
+  .max(12, "Voter ID must not exceed 12 characters")  // Maximum length check
+  .matches(/^[A-Za-z0-9]+$/, "Voter ID must contain only letters and numbers"), 
+
   mobile: yup
     .string()
     .required("Mobile number is required")
@@ -182,8 +187,8 @@ const RegForm = () => {
         />
         <Textinput
           name="mobile"
-          label="Mobile / मोबाइल"
-          type="number"
+          label="Mobile / मोबाईल"
+          type="text"
           placeholder="Enter your mobile"
           value={mobile}
           onChange={(e) => setMobile(e.target.value)}

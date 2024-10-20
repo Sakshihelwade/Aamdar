@@ -277,7 +277,7 @@ const COLUMNS = [
 const DubarTable1 = ({ title = "", Props, voterCount, handleDubarVoter }) => {
     const columns = useMemo(() => COLUMNS, []);
     const [data, setData] = useState([]);
-    
+    // console.log(prop,"propss")
     useEffect(() => {
         setData(Props);
     }, [Props]);
@@ -404,7 +404,7 @@ const DubarTable1 = ({ title = "", Props, voterCount, handleDubarVoter }) => {
                                         {headerGroup.headers.map((column) => (
                                             <th
                                                 {...column.getHeaderProps(column.getSortByToggleProps())}
-                                                className="table-th"
+                                                className="table-th h-[26px]"
                                             >
                                                 {column.render("Header")}
                                                 <span>
@@ -432,7 +432,7 @@ const DubarTable1 = ({ title = "", Props, voterCount, handleDubarVoter }) => {
                                             className="cursor-pointer"
                                         >
                                             {row.cells.map((cell) => (
-                                                <td {...cell.getCellProps()} className="table-td">
+                                                <td {...cell.getCellProps()} className="table-td py-3">
                                                     {cell.render("Cell")}
                                                 </td>
                                             ))}
@@ -447,7 +447,7 @@ const DubarTable1 = ({ title = "", Props, voterCount, handleDubarVoter }) => {
 
             <div className="md:flex md:space-y-0 space-y-5 justify-between mt-6 items-center">
                 <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <select
+                    {/* <select
                         className="form-control py-2 w-max"
                         value={pageSize}
                         onChange={(e) => setPageSize(Number(e.target.value))}
@@ -457,7 +457,7 @@ const DubarTable1 = ({ title = "", Props, voterCount, handleDubarVoter }) => {
                                 Show {pageSize}
                             </option>
                         ))}
-                    </select>
+                    </select> */}
                     <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
                         Page{" "}
                         <span>

@@ -7,14 +7,14 @@ import { useDispatch } from "react-redux";
 import UserAvatar from "@/assets/images/all-img/user.png";
 import axios from "axios";
 import { base_url } from "../../../../config/base_url";
-
+import logo from "../../../../assets/images/logo/Logo.jpg"
 const profileLabel = () => {
   return (
     <div className="flex items-center">
       <div className="flex-1 ltr:mr-[10px] rtl:ml-[10px]">
-        <div className="lg:h-8 lg:w-8 h-7 w-7 rounded-full">
+        <div className="lg:h-8 lg:w-8 h-7 w-7 rounded-full border border-orange-400 ">
           <img
-            src={UserAvatar}
+            src={logo}
             alt=""
             className="block w-full h-full object-cover rounded-full"
           />
@@ -48,7 +48,7 @@ const Profile = () => {
       deviceId: storedDeviceId,
     };
   
-    console.log(payload, "...................payload");
+    // console.log(payload, "...................payload");
   
     try {
       const response = await axios.post(`${base_url}/api/logout`, payload);
