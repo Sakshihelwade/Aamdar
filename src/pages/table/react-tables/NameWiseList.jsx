@@ -16,6 +16,7 @@ import AddNewVoter from "./AddNewVoter";
 const NameWiseList = () => {
   const [villageId, setVillageId] = useState("");
   const [villageName, setVillageName] = useState("");
+  const [gathName,setGathName]=useState('')
   const [boothNo, setBoothNo] = useState("");
   const [srNo, setSrNo] = useState("");
   const [voterName, setVoterName] = useState("");
@@ -24,6 +25,7 @@ const NameWiseList = () => {
   const [relativeName, setRelativeName] = useState("");
   const [allVoter, setAllVoter] = useState([])
   const [voterCount, setVoterCount] = useState()
+  const [gathOption,setGathOption] = useState([])
   const [villageOption, setVillageOption] = useState([]);
   const [boothOption, setBoothOption] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,6 +73,36 @@ const handelEditModal=(val)=>{
     setVillageName(selectedOption?.label || "");
   };
 
+  const getGath= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGath/${id}`)
+       .then((resp)=>{
+        const gathName=resp.data.gaths.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGathOption(gathName)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const getGan= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGan/${id}?gathId=${gathName}`)
+       .then((resp)=>{
+        console.log(resp.data,"//gan")
+        const gathNo=resp.data.Gans.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGathOption(gathNo)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+
   const getVillageOption = () => {
     axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       .then((resp) => {
@@ -85,6 +117,7 @@ const handelEditModal=(val)=>{
         console.log(error);
       });
   };
+
 
   const getBoothNo = () => {
     axios.get(`${base_url}/api/surve/getSortBooth/${id}?villageId=${villageId}`)
@@ -117,7 +150,12 @@ const handelEditModal=(val)=>{
 
   useEffect(() => {
     getVillageOption();
+    getGath()
    }, []);
+
+useEffect(()=>{
+  getGan()
+},[gathName])
 
 
   useEffect(() => {
@@ -148,7 +186,39 @@ const handelEditModal=(val)=>{
             <span className="font-bold text-lg">199</span>
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-          
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गट
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गट"
+  name="गट" 
+  value={gathOption.find(option => option.value === gathName) || null} 
+  options={gathOption}
+  onChange={(selectedOption) => setGathName(selectedOption?.value || null)} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गण
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गण"
+  name="गण" 
+  value={villageOption.find(option => option.value === villageId) || null} 
+  options={villageOption}
+  onChange={(selectedOption) => setGathNo(selectedOption?.value || null)} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+
+
+
               <div>
         <label className="form-label" htmlFor="mul_1">
         गाव

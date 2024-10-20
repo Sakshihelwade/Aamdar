@@ -96,7 +96,7 @@ console.log(selectedRow)
             {currentRows.map((row, index) => (
               <tr
                 key={index}
-                className={`odd:bg-gray-100 even:bg-white`}
+                className={`odd:bg-gray-100 even:bg-white cursor-pointer`}
                 // className="border-b border-gray-200 hover:bg-gray-100"
                 onDoubleClick={() => handleRowClick(row)}
               >

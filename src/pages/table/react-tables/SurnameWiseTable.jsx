@@ -6,7 +6,7 @@ import GlobalFilter from "./GlobalFilter";
 const COLUMNS = [
   { Header: "आडनाव", accessor: "lastName" },
   { Header: "पुरुष", accessor: "maleCount" },
-  { Header: "स्त्री", accessor: "femaleCount" },
+  { Header: "महिला", accessor: "femaleCount" },
   { Header: "एकून", accessor: "totalCount" },
 ];
 

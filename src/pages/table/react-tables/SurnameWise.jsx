@@ -143,6 +143,37 @@ useEffect(()=>{
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
           <div>
         <label className="form-label" htmlFor="mul_1">
+        गण
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गण"
+  name="गण" 
+  value={villageOption.find(option => option.value === villageId) || null} 
+  options={villageOption}
+  onChange={handleVillageChange} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गट
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गट"
+  name="गट" 
+  value={villageOption.find(option => option.value === villageId) || null} 
+  options={villageOption}
+  onChange={handleVillageChange} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+
+<div>
+        <label className="form-label" htmlFor="mul_1">
         गाव
         </label>
   <Select
