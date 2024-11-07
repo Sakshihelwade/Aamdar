@@ -9,9 +9,9 @@ import Flatpickr from "react-flatpickr";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { v4 as uuidv4 } from "uuid";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+// import { v4 as uuidv4 } from "uuid";
+// import ReactQuill from "react-quill";
+// import "react-quill/dist/quill.snow.css";
 
 import avatar1 from "@/assets/images/avatar/av-1.svg";
 import avatar2 from "@/assets/images/avatar/av-2.svg";
@@ -115,7 +115,7 @@ const ComposeEmail = () => {
   };
   return (
     <div>
-      <Modal
+      {/* <Modal
         title="Compose Eamil
 "
         activeModal={emailModal}
@@ -165,7 +165,7 @@ const ComposeEmail = () => {
             <button className="btn btn-dark  text-center">Submit</button>
           </div>
         </form>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

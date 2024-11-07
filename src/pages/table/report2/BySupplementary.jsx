@@ -10,6 +10,10 @@ const BySupplementary = () => {
   const id = localStorage.getItem('_id')
   const [villageId, setVillageId] = useState("");
   const [villageName, setVillageName] = useState("");
+  const [ganName,setGanName]=useState('')
+  const [ganId,setGanId]=useState('')
+  const [gathName,setGathName]=useState('')
+  const [gathId,setGathId]=useState('')
   const [boothNo, setBoothNo] = useState("");
   const [fromList, setFromList] = useState('')
   const [toList, setToList] = useState('')
@@ -20,6 +24,8 @@ const BySupplementary = () => {
   const [voterCount, setVoterCount] = useState()
   const [villageOption, setVillageOption] = useState([]);
   const [boothOption, setBoothOption] = useState([])
+  const [gathOption,setGathOption] = useState([])
+  const [ganOption,setGanOption]=useState([])
   const [currentPage, setCurrentPage] = useState(1);
   console.log(voterCount, "voterCount")
 
@@ -40,9 +46,49 @@ const BySupplementary = () => {
     setVillageName(selectedOption?.label || "");
   };
 
+  const handleGathChange=(selectedOption) => {
+    setGathName(selectedOption?.label || "")
+    setGathId(selectedOption?.value || "")
+  }
+
+  const handleGanChange=(selectedOption) => {
+    setGanName(selectedOption?.label || "")
+    setGanId(selectedOption?.value || "")
+  }
+
+  const getGath= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGath/${id}`)
+       .then((resp)=>{
+        const gathName=resp.data.gaths.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGathOption(gathName)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const getGan= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGan/${id}?gathId=${gathId}`)
+       .then((resp)=>{
+        console.log(resp.data,"//gan")
+        const gan=resp.data.Gans.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGanOption(gan)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+
 
   const getVillageOption = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}?gathId=${gathId}&ganId=${ganId}`)
       .then((resp) => {
         const villageoption = resp.data.village.map((item) => ({
           label: item.name,
@@ -70,7 +116,7 @@ const BySupplementary = () => {
   }
 
   const getAllVoters = () => {
-    axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&page=${currentPage}&minBooth=${fromList}&maxBooth=${toList}&village=${villageName}&boothNo=${boothNo}`)
+    axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&page=${currentPage}&minBooth=${fromList}&maxBooth=${toList}&village=${villageName}&boothNo=${boothNo}&gath=${gathName}&gathaId=${gathId}&gan=${ganName}&ganId=${ganId}`)
       .then((resp) => {
         setAllVoter(resp.data.voters);
         setVoterCount(resp.data);
@@ -129,7 +175,7 @@ const BySupplementary = () => {
           <p>
 
             <span className="font-bold">विधानसभा</span>{" "}
-            <span className="font-bold text-lg">199</span>
+            <span className="font-bold text-lg"> 8</span>
           </p>
           <div className=" grid grid-cols-4 gap-2">
             <div>

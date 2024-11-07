@@ -46,6 +46,14 @@ export const menuItems = [
         childtitle: "जातीनुसार यादी",
         childlink: "Castwise",
       },
+      {
+        childtitle: "मोबाईल नंबरनुसार यादी",
+        childlink: "MobileNoWise",
+      },
+      {
+        childtitle: "गट गणनुसार गाव यादी",
+        childlink: "GathGanWiseVillage",
+      },
     ],
   },
   {
@@ -67,10 +75,10 @@ export const menuItems = [
       //   childtitle: " लग्नाचा वाढदिवस",
       //   childlink: "by-marriage-anniversary-report2",
       // },
-      {
-        childtitle: "पुरवणी संक्षिप्त मतदार",
-        childlink: "by-supplementary",
-      },
+      // {
+      //   childtitle: "पुरवणी संक्षिप्त मतदार",
+      //   childlink: "by-supplementary",
+      // },
       // {
       //   childtitle: "बदललेले पत्त्यानुसार",
       //   childlink: "by-changed-address",
@@ -100,10 +108,10 @@ export const menuItems = [
       //   childtitle: "यादी कमिटी ",
       //   childlink: "yadi-committee",
       // },
-      {
-        childtitle: "कार्यकर्त्यानुसार",
-        childlink: "karyakartyanusar",
-      },
+      // {
+      //   childtitle: "कार्यकर्त्यानुसार",
+      //   childlink: "karyakartyanusar",
+      // },
       {
         childtitle: "जिवंत / मृत",
         childlink: "jivant-mrut",
@@ -113,6 +121,27 @@ export const menuItems = [
       //   childlink: "survey-result",
       // },
     ],
+  },
+  {
+    title: "इतर फिल्टर",
+    icon: "heroicons-outline:table",
+    link: "Filter",
+    isOpen: true,
+    isHide: true,
+  },
+  {
+    title: "गट गणनुसार",
+    icon: "heroicons-outline:table",
+    link: "GatGanSummary",
+    isOpen: true,
+    isHide: true,
+  },
+  {
+    title: "अहवाल",
+    icon: "heroicons-outline:table",
+    link: "ahawal",
+    isOpen: true,
+    isHide: true,
   },
   // {
   //   title: "सर्वे ",
@@ -151,7 +180,51 @@ export const menuItems = [
   //     },
   //   ],
   // },
-
+  {
+    title: "Meta Data ",
+    icon: "heroicons-outline:table",
+    // link: "vendo-list",
+    isOpen: true,
+    isHide: true,
+    child: [
+      {
+        childtitle: "जात",
+        childlink: "Caste-Meta-Data",
+      },
+      {
+        childtitle: "रंग",
+        childlink: "color",
+      },
+      // {
+      //   childtitle: "कार्यकर्ता",
+      //   childlink: "New-Karyakarta",
+      // },
+      {
+        childtitle: "व्यवसाय",
+        childlink: "Business",
+      },
+      {
+        childtitle: "नगर",
+        childlink: "Nagar",
+      },
+      {
+        childtitle: "योजना",
+        childlink: "Yojana",
+      },
+      {
+        childtitle: " जवळचे ठिकाण",
+        childlink: "Landmark",
+      },
+      {
+        childtitle: "सोसायटी",
+        childlink: "Society",
+      },
+      // {
+      //   childtitle: "Sahdharbh",
+      //   childlink: "by-dob-report2",
+      // },
+    ]
+  },
   {
     title: "Export PDF",
     icon: "heroicons-outline:table",

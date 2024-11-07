@@ -145,12 +145,12 @@ const { address } = location.state || {};
                 <td className="px-1 py-2 border border-gray-300">{row.name}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.age}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.gender}</td>
-                <td className="px-1 py-2 border border-gray-300">{row.MOBILE_NO}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.mobile}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.NEW_ADDRESS}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.houseNo}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.address}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.cardNumber}</td>
-                <td className="px-1 py-2 border border-gray-300">{row.NATIVE_VILLAGE}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.nativePlace}</td>
                 <td className="px-1 py-2 border border-gray-300 flex justify-center items-center">
                 <Tooltip content="View" placement="top" arrow animation="shift-away">
             <button className="action-btn" type="button" onClick={()=>{setSelectedRow(row)
@@ -208,37 +208,85 @@ const { address } = location.state || {};
       <Modal
          title="View Voter Details"
          activeModal={activeViewModal}
-         className="max-w-md"
+         className="max-w-2xl"
          themeClass="bg-blue-500 blue:bg-blue-500 blue:border-b blue:border-blue-700"
          onClose={() => setActiveViewModal(false)}
         >
  
  <h6 className=' bg-blue-200 py-1 px-2 rounded-sm'>
-  <span className='w-32 inline-block'> नाव </span>: {selectedRow?.name}
+  <span className='w-48 font-sans font-semibold inline-block'> नाव </span>: {selectedRow?.name}
 </h6>
 <p> 
-  <span className='w-32 inline-block'> वय </span> <span>: {selectedRow?.age}</span>
+  <span className='w-48 font-sans font-semibold inline-block'> वय </span> <span>: {selectedRow?.age}</span>
 </p>
 <p> 
-  <span className='w-32 inline-block'> आडनाव </span>: {selectedRow?.lastName}
+  <span className='w-48 font-sans font-semibold inline-block'> आडनाव </span>: {selectedRow?.lastName}
 </p>
 <p> 
-  <span className='w-32 inline-block'> पत्ता </span>: {selectedRow?.address}
+  <span className='w-48 font-sans font-semibold inline-block'> पत्ता </span>: {selectedRow?.address}
 </p>
 <p> 
-  <span className='w-32 inline-block'>घर क्र</span>: {selectedRow?.houseNo}
+  <span className='w-48 font-sans font-semibold inline-block'>घर क्र</span>: {selectedRow?.houseNo}
 </p>
 <p> 
-  <span className='w-32 inline-block'> लिंग </span>: {selectedRow?.gender}
+  <span className='w-48 font-sans font-semibold inline-block'> लिंग </span>: {selectedRow?.gender}
 </p>
 <p> 
-  <span className='w-32 inline-block'> अ क्र </span>: {selectedRow?.serialNo}
+  <span className='w-48 font-sans font-semibold inline-block'> अ क्र </span>: {selectedRow?.serialNo}
 </p>
 <p> 
-  <span className='w-32 inline-block'>	कार्ड नं </span>: {selectedRow?.cardNumber}
+  <span className='w-48 font-sans font-semibold inline-block'>	कार्ड नं </span>: {selectedRow?.cardNumber}
 </p>
 <p> 
-  <span className='w-32 inline-block'> बूथ नं </span>: {selectedRow?.boothNo}
+  <span className='w-48 font-sans font-semibold inline-block'> बूथ नं </span>: {selectedRow?.boothNo}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> मतदान केंद्र </span>: {selectedRow?.pollingStation}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> जिवंत / मृत </span>: {selectedRow?.aliveOrDead}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> जात </span>: {selectedRow?.caste}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> नगर </span>: {selectedRow?.city}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> जन्मतारीख </span>: {selectedRow?.dateOfBirth}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> जवळचे ठिकाण </span>: {selectedRow?.landMark}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> मोबाईल नं </span>: {selectedRow?.mobile}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> घर प्रमुख </span>: {selectedRow?.nameOfHeadOfFamily?"हो":"नाही"}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> मुळगाव </span>: {selectedRow?.nativePlace}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> संदर्भ </span>: {selectedRow?.referenceFrom}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> आपले </span>: {selectedRow?.apleNaraj?"हो":"नाही"}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> विरोधी </span>: {selectedRow?.tyncheNaraj?"हो":"नाही"}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> बांधावर </span>: {selectedRow?.mahilaBachatGath?"हो":"नाही"}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> बाहेरचे मतदार </span>: {selectedRow?.outSideVoter?"हो":"नाही"}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> ग्रामपंचायत पदाधिकारी </span>: {selectedRow?.panchayatPad?"हो":"नाही"}
+</p>
+<p> 
+  <span className='w-48 font-sans font-semibold inline-block'> सोसायटी पदाधिकारी </span>: {selectedRow?.societyPad?"हो":"नाही"}
 </p>
 
 

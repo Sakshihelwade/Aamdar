@@ -1,3 +1,303 @@
+// import React, { useEffect, useState } from "react";
+// import { toast } from "react-toastify";
+// import Textinput from "@/components/ui/Textinput";
+// import { useForm } from "react-hook-form";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
+// import { useNavigate } from "react-router-dom";
+// import Checkbox from "@/components/ui/Checkbox";
+// import { useDispatch } from "react-redux";
+// import Select from "@/components/ui/Select";
+// import { handleRegister } from "./store";
+// import axios from "axios";
+// import { base_url } from "../../../config/base_url";
+
+// // Validation schema
+// const schema = yup.object({
+//   voterId: yup
+//   .string()
+//   .required("Voter ID is required"),
+//   // .min(10, "Voter ID must be at least 10 characters") // Minimum length check
+//   // .max(12, "Voter ID must not exceed 12 characters")  // Maximum length check
+//   // .matches(/^[A-Za-z0-9]+$/, "Voter ID must contain only letters and numbers"), 
+
+//   mobile: yup
+//     .string()
+//     .required("Mobile number is required")
+//     .matches(/^[0-9]{10}$/, "Invalid mobile number"),
+//   email: yup.string().email("Invalid email").required("Email is required"),
+//   password: yup
+//     .string()
+//     .min(8, "Password must be at least 8 characters")
+//     .max(20, "Password shouldn't be more than 20 characters")
+//     .required("Please enter a password"),
+//   confirmpassword: yup
+//     .string()
+//     .oneOf([yup.ref("password"), null], "Passwords must match")
+//     .required("Please confirm your password"),
+//   // role: yup.string().required("Role selection is required"),
+//   userId: yup.string().required("User ID is required"),
+// }).required();
+
+// const RegForm = () => {
+//   const token = localStorage.getItem('token');
+//   const id = localStorage.getItem('_id');
+//   // console.log(token, 'Auth Token');
+
+//   const dispatch = useDispatch();
+//   const navigate = useNavigate();
+
+//   // States for input fields
+//   const [voterId, setVoterId] = useState("");
+//   const [name, setName] = useState("");
+//   const [mobile, setMobile] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [confirmpassword, setConfirmPassword] = useState("");
+//   const [userId, setUserId] = useState("");
+//   const [role, setRole] = useState("");
+//   const [checked, setChecked] = useState(false);
+//   const [showVillageDropdown, setShowVillageDropdown] = useState(false);
+//   const [village, setVillage] = useState([]);
+//   const [villageOptions, setVillageOptions] = useState([])
+
+//   const toggleDropdown = () => setShowVillageDropdown(!showVillageDropdown);
+
+//   const handleVillageChange = (villages) => {
+//     if (village.some(v => v._id === village._id)) {
+//       setVillage(village.filter((v) => v._id !== village._id));
+//     } else {
+//       setVillage([...village, villages]);
+//     }
+//   };
+//   // console.log(villageId, villageName, ".........")
+
+//   const {
+//     register,
+//     handleSubmit,
+//     formState: { errors },
+//   } = useForm({
+//     resolver: yupResolver(schema),
+//     mode: "all", // Check if validation is running on every change
+//   });
+//   console.log(errors);
+
+
+//   const onSubmit = async () => {
+//     const selectedVillages = village.map(v => ({
+//       id: v._id,
+//       villageName: v.name,
+//     }));
+//     // const payload = {
+//     //   cardNumber: voterId,
+//     //   email: email,
+//     //   userName: userId,
+//     //   mobileNumber: mobile,
+//     //   password: password,
+//     //   role: role,
+//     //   fullName: name,
+//     //   villageName: selectedVillageNames,
+//     //   villageId: selectedVillageIds,
+//     // }
+//     // const selectedVillageIds = village.map(v => v._id); // Array of village IDs
+//     // const selectedVillageNames = villages.map(v => v.name).join(", "); // Comma-separated village names
+
+//     const payload = {
+//       cardNumber: voterId,
+//       email: email,
+//       userName: userId,
+//       mobileNumber: mobile,
+//       password: password,
+//       role: role,
+//       fullName: name,
+//       villages:selectedVillages,
+//       loginRights:true,
+//     };
+
+//     try {
+//       const response = await axios.post(`${base_url}/api/addUser`, payload, {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//       })
+//       if (response.status === 200) {
+//         toast.success("User Registered successfully!");
+//         dispatch(handleRegister(response.data));
+//         navigate("/dashboard");
+//       }
+//       // console.log(response.data, "hiiiiiiiiiiiiiii");
+//     } catch (error) {
+//       console.log(error)
+//       toast.error("Failed to Register User");
+//     }
+//   }
+
+//   const options = [
+//     { label: "Admin", value: "Admin" },
+//     { label: "Surveyor", value: "Surveyor" },
+//     { label: "Karyakarta", value: "Karyakarta" },
+//   ];
+
+//   useEffect(() => {
+//     getAllVillages();
+//   }, [])
+
+//   const getAllVillages = async () => {
+//     try {
+//       const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
+//       setVillageOptions(response.data.village)
+//       console.log(response.data.village,"kkkkkkkkkkkkkkkkkkk")
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+//   // useEffect(() => {
+//   //   if (villages.length > 0) {
+//   //     const selectedVillageIds = villages.map(v => v._id).join(", ");
+//   //     const selectedVillageNames = villages.map(v => v.name).join(", ");
+//   //     console.log("Selected Village IDs:", selectedVillageIds);
+//   //     console.log("Selected Village Names:", selectedVillageNames);
+//   //   } else {
+//   //     console.log("No villages selected.");
+//   //   }
+//   // }, [villages]);
+
+
+//   return (
+//     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+//       <div className="grid grid-cols-2 gap-2">
+//         <Textinput
+//           name="voterId"
+//           label="Voter ID / ओळखपत्र क्र."
+//           type="text"
+//           placeholder="Enter your Voter ID"
+//           value={voterId}
+//           onChange={(e) => setVoterId(e.target.value)}
+//           error={errors.voterId?.message}
+//           register={register}
+//         />
+//         <Textinput
+//           name="name"
+//           label="Name / नाव"
+//           type="text"
+//           placeholder="Enter your name"
+//           value={name}
+//           onChange={(e) => setName(e.target.value)}
+//           error={errors.name?.message}
+//           register={register}
+//         />
+//         <Textinput
+//           name="mobile"
+//           label="Mobile / मोबाईल"
+//           type="text"
+//           placeholder="Enter your mobile"
+//           value={mobile}
+//           onChange={(e) => setMobile(e.target.value)}
+//           error={errors.mobile?.message}
+//           register={register}
+//         />
+//         <Textinput
+//           name="email"
+//           label="Email / ईमेल"
+//           type="email"
+//           placeholder="Enter your email"
+//           value={email}
+//           onChange={(e) => setEmail(e.target.value)}
+//           error={errors.email?.message}
+//           register={register}
+//         />
+//         <Select
+//           label="Role / पद"
+//           className="w-full"
+//           placeholder="Select Role"
+//           value={role}
+//           onChange={(e) => setRole(e.target.value)}
+//           options={options}
+//           error={errors.role?.message}
+//         />
+
+//         <Textinput
+//           name="userId"
+//           label="UserName / वापरकर्ता"
+//           type="text"
+//           placeholder="Enter your User ID"
+//           value={userId}
+//           onChange={(e) => setUserId(e.target.value)}
+//           error={errors.userId?.message}
+//           register={register}
+//         />
+//         <Textinput
+//           name="password"
+//           label="Password / संकेतशब्द"
+//           type="password"
+//           placeholder="Enter your password"
+//           value={password}
+//           onChange={(e) => setPassword(e.target.value)}
+//           error={errors.password?.message}
+//           register={register}
+//         />
+//         <Textinput
+//           name="confirmpassword"
+//           label="Confirm Password / पुष्टी करा"
+//           type="password"
+//           placeholder="Confirm your password"
+//           value={confirmpassword}
+//           onChange={(e) => setConfirmPassword(e.target.value)}
+//           error={errors.confirmpassword?.message}
+//           register={register}
+//         />
+//       </div>
+//       <div>
+//         <label className="block text-gray-700">Select Villages / गाव </label>
+//         <div className="relative">
+//           <div
+//             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB033] cursor-pointer"
+//             onClick={toggleDropdown}
+//           >
+//             Select villages
+//           </div>
+
+//           {showVillageDropdown && (
+//             <div className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
+//               {villageOptions.map((villageOption, index) => (
+//                 <div key={index} className="p-2">
+//                   <label className="flex items-center">
+//                     <input
+//                       type="checkbox"
+//                       checked={village.some(v => v._id === villageOption._id)}  // Use villageOption here
+//                       onChange={() => handleVillageChange(villageOption)}       // Use villageOption here
+//                       className="mr-2"
+//                     />
+//                     {villageOption.name}
+//                   </label>
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//         <p className="text-sm text-gray-600 mt-2">
+//           Selected: {village.map(v => v.name).join(", ") || "None"}
+//         </p>
+//       </div>
+//       <Checkbox
+//         label="You accept our Terms and Conditions and Privacy Policy"
+//         value={checked}
+//         onChange={() => setChecked(!checked)}
+//       />
+//       <button
+//         type="submit"
+//         className="btn btn-dark block w-full text-center"
+//         disabled={!checked} // Ensure checkbox is checked
+//       >
+//         Create an account
+//       </button>
+//     </form>
+//   );
+// };
+
+// export default RegForm;
+
+
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Textinput from "@/components/ui/Textinput";
@@ -15,12 +315,8 @@ import { base_url } from "../../../config/base_url";
 // Validation schema
 const schema = yup.object({
   voterId: yup
-  .string()
-  .required("Voter ID is required")
-  .min(10, "Voter ID must be at least 10 characters") // Minimum length check
-  .max(12, "Voter ID must not exceed 12 characters")  // Maximum length check
-  .matches(/^[A-Za-z0-9]+$/, "Voter ID must contain only letters and numbers"), 
-
+    .string()
+    .required("Voter ID is required"),
   mobile: yup
     .string()
     .required("Mobile number is required")
@@ -58,19 +354,40 @@ const RegForm = () => {
   const [role, setRole] = useState("");
   const [checked, setChecked] = useState(false);
   const [showVillageDropdown, setShowVillageDropdown] = useState(false);
+  const [showBoothDropdown, setShowBoothDropdown] = useState(false);
   const [village, setVillage] = useState([]);
   const [villageOptions, setVillageOptions] = useState([])
+  const [boothNo, setBoothNo] = useState([]);
+  const [boothNoOptions, setBoothNoOptions] = useState([])
+  const [villageId, setVillageId] = useState('');
 
   const toggleDropdown = () => setShowVillageDropdown(!showVillageDropdown);
+  const toggleDropdownforBooth = () => setShowBoothDropdown(!showBoothDropdown);
 
-  const handleVillageChange = (villages) => {
-    if (village.some(v => v._id === village._id)) {
-      setVillage(village.filter((v) => v._id !== village._id));
-    } else {
-      setVillage([...village, villages]);
-    }
+
+  const handleVillageChange = (selectedVillage) => {
+    setVillage((prev) => {
+      if (prev.some((v) => v._id === selectedVillage._id)) {
+        return prev.filter((v) => v._id !== selectedVillage._id);
+      } else {
+        return [...prev, selectedVillage];
+      }
+    });
+    setVillageId(selectedVillage._id);
   };
-  // console.log(villageId, villageName, ".........")
+
+  const handleBoothChange = (selectedBooth) => {
+    setBoothNo((prev) => {
+      if (prev.some((b) => b.value === selectedBooth.value)) {
+        return prev.filter((b) => b.value !== selectedBooth.value); 
+      } else {
+        return [...prev, selectedBooth]; 
+      }
+    });
+  };
+  console.log(boothNo)
+
+
 
   const {
     register,
@@ -88,19 +405,11 @@ const RegForm = () => {
       id: v._id,
       villageName: v.name,
     }));
-    // const payload = {
-    //   cardNumber: voterId,
-    //   email: email,
-    //   userName: userId,
-    //   mobileNumber: mobile,
-    //   password: password,
-    //   role: role,
-    //   fullName: name,
-    //   villageName: selectedVillageNames,
-    //   villageId: selectedVillageIds,
-    // }
-    // const selectedVillageIds = village.map(v => v._id); // Array of village IDs
-    // const selectedVillageNames = villages.map(v => v.name).join(", "); // Comma-separated village names
+    const selectedBooth = boothNo.map(b => ({
+      id: b.value,
+      boothNo: b.label,
+    }));
+    // console.log(selectedBooth, "mmmmmmmmm")
 
     const payload = {
       cardNumber: voterId,
@@ -110,9 +419,11 @@ const RegForm = () => {
       password: password,
       role: role,
       fullName: name,
-      villages:selectedVillages,
+      villages: selectedVillages,
+      boothNo: selectedBooth,
+      loginRights: true,
     };
-    
+    // console.log(payload)
     try {
       const response = await axios.post(`${base_url}/api/addUser`, payload, {
         headers: {
@@ -132,35 +443,43 @@ const RegForm = () => {
   }
 
   const options = [
-    { label: "Admin", value: "Admin" },
-    { label: "Surveyor", value: "Surveyor" },
-    { label: "Karyakarta", value: "Karyakarta" },
+    { label: "व्यवस्थापक", value: "Admin" },
+    { label: "सर्वेक्षक", value: "Surveyor" },
+    { label: "कार्यकर्ता", value: "Karyakarta" },
+    // { label: "बूथ अधिकारी", value: "Booth Adhikari" }
   ];
 
   useEffect(() => {
     getAllVillages();
+  }, [])
+  useEffect(() => {
+    getBoothNo();
   }, [])
 
   const getAllVillages = async () => {
     try {
       const response = await axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
       setVillageOptions(response.data.village)
-      console.log(response.data.village,"kkkkkkkkkkkkkkkkkkk")
+      // console.log(response.data.village, "kkkkkkkkkkkkkkkkkkk")
     } catch (error) {
       console.log(error);
     }
   }
-  // useEffect(() => {
-  //   if (villages.length > 0) {
-  //     const selectedVillageIds = villages.map(v => v._id).join(", ");
-  //     const selectedVillageNames = villages.map(v => v.name).join(", ");
-  //     console.log("Selected Village IDs:", selectedVillageIds);
-  //     console.log("Selected Village Names:", selectedVillageNames);
-  //   } else {
-  //     console.log("No villages selected.");
-  //   }
-  // }, [villages]);
 
+  // console.log(villageId,"idddddddddd")
+  const getBoothNo = () => {
+    axios.get(`${base_url}/api/surve/getSortBooth/${id}`)
+      .then((resp) => {
+        const boothOptions = resp.data.booths?.map((item) => ({
+          label: item.boothNo,
+          value: item._id
+        }));
+        setBoothNoOptions(boothOptions);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -245,7 +564,8 @@ const RegForm = () => {
           error={errors.confirmpassword?.message}
           register={register}
         />
-      </div>
+     
+
       <div>
         <label className="block text-gray-700">Select Villages / गाव </label>
         <div className="relative">
@@ -263,10 +583,11 @@ const RegForm = () => {
                   <label className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={village.some(v => v._id === villageOption._id)}  // Use villageOption here
-                      onChange={() => handleVillageChange(villageOption)}       // Use villageOption here
+                      checked={village.some(v => v._id === villageOption._id)} // Toggle based on the selected state
+                      onChange={() => handleVillageChange(villageOption)} // Toggle selection
                       className="mr-2"
                     />
+
                     {villageOption.name}
                   </label>
                 </div>
@@ -278,15 +599,45 @@ const RegForm = () => {
           Selected: {village.map(v => v.name).join(", ") || "None"}
         </p>
       </div>
-      <Checkbox
-        label="You accept our Terms and Conditions and Privacy Policy"
-        value={checked}
-        onChange={() => setChecked(!checked)}
-      />
+
+      <div>
+        <label className="block text-gray-700">Select Booth No. / भाग</label>
+        <div className="relative">
+          <div
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB033] cursor-pointer"
+            onClick={toggleDropdownforBooth}
+          >
+            Select Booth No.
+          </div>
+
+          {showBoothDropdown && (
+            <div className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
+              {boothNoOptions.map((boothOption, index) => (
+                <div key={index} className="p-2">
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={boothNo.some(b => b.value === boothOption.value)} // Use value for comparison
+                      onChange={() => handleBoothChange(boothOption)} // Update booth selection correctly
+                      className="mr-2"
+                    />
+                    {boothOption.label}
+                  </label>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <p className="text-sm text-gray-600 mt-2">
+          Selected: {boothNo.map(b => b.label).join(", ") || "None"}
+        </p>
+      </div>
+      
+      </div>
+
       <button
         type="submit"
         className="btn btn-dark block w-full text-center"
-        disabled={!checked} // Ensure checkbox is checked
       >
         Create an account
       </button>
@@ -294,4 +645,4 @@ const RegForm = () => {
   );
 };
 
-export default RegForm;
+export default RegForm

@@ -65,6 +65,7 @@
     "sort-by": "^0.0.2",
     "swiper": "^8.4.5",
     "uuidv4": "^6.2.13",
+    "xlsx": "^0.18.5",
     "yup": "^0.32.11"
   },
   "devDependencies": {

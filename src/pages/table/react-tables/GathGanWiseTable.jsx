@@ -12,7 +12,7 @@ const COLUMNS = [
   { Header: "एकून", accessor: "totalCount" },
 ];
 
-const AddressWiseTable = ({ title = "", Props, handleAddressSelect }) => {
+const GathGanWiseTable = ({ title = "", Props, handleAddressSelect }) => {
   const columns = useMemo(() => COLUMNS, []);
   const [data, setData] = useState(Props);
 
@@ -189,4 +189,4 @@ const AddressWiseTable = ({ title = "", Props, handleAddressSelect }) => {
   );
 };
 
-export default AddressWiseTable;
+export default GathGanWiseTable

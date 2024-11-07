@@ -140,6 +140,22 @@ import CommonTable from "./pages/table/react-tables/CommonTable";
 import AddressWiseTable2 from "./pages/table/react-tables/AddressWiseTable2";
 import AddressWiseTable from "./pages/table/react-tables/AddressWiseTable";
 import ExportData from "./pages/table/Pdf/ExportData";
+import CasteMetaData from './pages/table/meta-data/CasteMetaData'
+import Color from "./pages/table/meta-data/Color";
+import Business from "./pages/table/meta-data/Business";
+import Yojana from "./pages/table/meta-data/Yojana";
+import Nagar from "./pages/table/meta-data/Nagar";
+import Landmark from "./pages/table/meta-data/Landmark";
+import Society from "./pages/table/meta-data/Society";
+import BarGraph from "./pages/table/ReportGraph/BarGraph";
+import ReportGraph from "./pages/table/ReportGraph/ReportGraph";
+import Filter from "./pages/table/react-tables/Filter";
+import FlashScreen from "./pages/table/react-tables/FlashScreen";
+import Ahawal from "./pages/table/Ahawal";
+import NewKaryakarta from "./pages/table/meta-data/NewKaryakarta";
+import GathGanWiseVillage from "./pages/table/react-tables/GathGanWiseVillage";
+import GatGanSummary from "./pages/table/react-tables/GatGanSummary";
+import MobileNoWise from "./pages/table/react-tables/MobileNoWise";
 
 function App() {
   return (
@@ -147,6 +163,16 @@ function App() {
       <Routes>
         <Route
           path="/"
+          element={
+            <Suspense fallback={<Loading />}>
+              {/* <Login /> */}
+              <FlashScreen />
+            </Suspense>
+          }
+        />
+
+<Route
+          path="/login"
           element={
             <Suspense fallback={<Loading />}>
               <Login />
@@ -262,6 +288,9 @@ function App() {
           <Route path="CommonTable" element={<CommonTable />} />
           <Route path="AddressWiseTable" element={<AddressWiseTable />} />
           <Route path="AddressWiseTable2" element={<AddressWiseTable2 />} />
+          <Route path="GathGanWiseVillage" element={<GathGanWiseVillage/>}/>
+          <Route path="MobileNoWise" element={<MobileNoWise/>}/>
+
           {/* report2  */}
           <Route path="dubar" element={<Dubar />} />
           <Route path="by-dob-report2" element={<ByDob />} />
@@ -284,6 +313,20 @@ function App() {
           <Route path="with-location" element={<WithLocation />} />
           <Route path="surveyed-or-unsurveyed" element={<SurveyedOrUnsurveyed />} />
           <Route path="new-voters" element={<NewVoters />} />
+          {/* Ahawal */}
+          <Route path="ahawal" element={<Ahawal/>}/>
+          <Route path="GatGanSummary" element={<GatGanSummary/>}/>
+          {/* Filter */}
+          <Route path="Filter" element={<Filter/>}/>
+          {/* MetaData */}
+          <Route path="Caste-Meta-Data" element={<CasteMetaData/>}/>
+          <Route path="color" element={<Color/>}/>
+          <Route path="Business" element={<Business/>}/>
+          <Route path="Yojana" element={<Yojana/>}/>
+          <Route path="Nagar" element={<Nagar/>}/>
+          <Route path="Landmark" element={<Landmark/>}/>
+          <Route path="Society" element={<Society/>}/>
+          <Route path="New-Karyakarta" element={<NewKaryakarta/>}/>
           {/* export pdf  */}
           <Route path="export-pdf" element={<ExportData/>}/>
           {/* App pages */}

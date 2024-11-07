@@ -89,7 +89,7 @@ const CommonTableAddressWise = ({ Props, onPageChange, voterCount }) => {
                 <td className="px-1 py-2 border border-gray-300">{row.name}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.age}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.gender}</td>
-                <td className="px-1 py-2 border border-gray-300">{row.MOBILE_NO}</td>
+                <td className="px-1 py-2 border border-gray-300">{row.mobile}</td>
                 <td className="px-1 py-2 border border-gray-300">{row.NEW_ADDRESS}</td>
                
                 <td className="px-1 py-2 border border-gray-300">{row.address}</td>

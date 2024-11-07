@@ -106,20 +106,20 @@ const SurnameWiseTable = ({ title = "", Props, handleAddressSelect }) => {
 
   return (
     <>
-      <Card>
-        <div className="md:flex justify-between items-center mb-6">
-          {/* <h4 className="card-title">{title}</h4> */}
+      {/* <Card> */}
+        {/* <div className="md:flex justify-between items-center  mb-2">
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-        </div>
+        </div> */}
+        <div className="p-1 px-5">
         <div className="overflow-x-auto -mx-6">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden">
-              <table {...getTableProps()} className="min-w-full divide-y divide-slate-100 table-fixed">
+              <table {...getTableProps()} className="w-full bg-white border border-gray-200">
                 <thead className="bg-slate-200">
                   {headerGroups.map(headerGroup => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
+                    <tr {...headerGroup.getHeaderGroupProps()} className="bg-gray-200 text-gray-600 text-sm leading-normal">
                       {headerGroup.headers.map(column => (
-                        <th {...column.getHeaderProps(column.getSortByToggleProps())} className="table-th">
+                        <th {...column.getHeaderProps(column.getSortByToggleProps())} className="px-1 py-2 border border-gray-300 ">
                           {column.render("Header")}
                           <span>{column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}</span>
                         </th>
@@ -127,13 +127,13 @@ const SurnameWiseTable = ({ title = "", Props, handleAddressSelect }) => {
                     </tr>
                   ))}
                 </thead>
-                <tbody {...getTableBodyProps()} className="bg-white divide-y divide-slate-100">
+                <tbody {...getTableBodyProps()} className="text-gray-600 text-sm font-light">
                   {page.map(row => {
                     prepareRow(row);
                     return (
-                      <tr {...row.getRowProps()} className="cursor-pointer" onClick={() => handleAddressSelect(row.original.lastName)}>
+                      <tr {...row.getRowProps()} className="cursor-pointer border-b border-gray-200 hover:bg-gray-100" onClick={() => handleAddressSelect(row.original.lastName)}>
                         {row.cells.map(cell => (
-                          <td {...cell.getCellProps()} className="table-td">
+                          <td {...cell.getCellProps()} className="px-1 py-2 border border-gray-300 hover:text-blue-600 hover:underline">
                             {cell.render("Cell")}
                           </td>
                         ))}
@@ -145,7 +145,7 @@ const SurnameWiseTable = ({ title = "", Props, handleAddressSelect }) => {
             </div>
           </div>
         </div>
-        <div className="md:flex justify-between mt-6 items-center">
+        <div className=" justify-between mt-6 items-center">
           <select
             className="form-control py-2 w-max"
             value={pageSize}
@@ -175,7 +175,8 @@ const SurnameWiseTable = ({ title = "", Props, handleAddressSelect }) => {
             </button>
           </div>
         </div>
-      </Card>
+        </div>
+      {/* </Card> */}
     </>
   );
 };

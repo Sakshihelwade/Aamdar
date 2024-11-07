@@ -8,15 +8,18 @@ import Select, { components } from "react-select";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
 import { toast } from "react-toastify";
+import * as XLSX from "xlsx";
 
 import NameWiseCommonTable from "./NameWiseCommonTable";
-import AddNewVoter from "./AddNewVoter";
 
 
 const NameWiseList = () => {
   const [villageId, setVillageId] = useState("");
   const [villageName, setVillageName] = useState("");
+  const [ganName,setGanName]=useState('')
+  const [ganId,setGanId]=useState('')
   const [gathName,setGathName]=useState('')
+  const [gathId,setGathId]=useState('')
   const [boothNo, setBoothNo] = useState("");
   const [srNo, setSrNo] = useState("");
   const [voterName, setVoterName] = useState("");
@@ -26,6 +29,7 @@ const NameWiseList = () => {
   const [allVoter, setAllVoter] = useState([])
   const [voterCount, setVoterCount] = useState()
   const [gathOption,setGathOption] = useState([])
+  const [ganOption,setGanOption]=useState([])
   const [villageOption, setVillageOption] = useState([]);
   const [boothOption, setBoothOption] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,11 +50,56 @@ const handelEditModal=(val)=>{
     { label: "पतीचे नाव", value: "पतीचे नाव" },
     { label: "इतर", value: "इतर" },
   ];
-
   
+
+  const generateExcel = (data) => {
+    const rows = data.map((item) => ({
+      ['भाग/बूथ नं']: item.boothNo, 
+      ['अ.क्र.']: item.serialNo, 
+      ['नाव']: item.name, 
+      ['वय']: item.age  , 
+      ['लिंग']: item.gender, 
+      ['घर नं']: item.houseNo, 
+      ['पत्ता']: item.address , 
+      ['कार्ड नं']: item.cardNumber,
+     
+    }));
+
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+
+    // Convert the data into a worksheet
+    const ws = XLSX.utils.json_to_sheet(rows);
+
+    // Append the worksheet to the workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Namewise Data");
+
+    // Create a downloadable Excel file
+    XLSX.writeFile(wb, "मतदार.xlsx");
+  };
+
+  const handleExcel = () => {
+    const url = `${base_url}/api/surve/searchVotter/${id}?name=true&printOut=true&boothNo=${boothNo}&serialNo=${srNo}&nameFilter=${voterName}&village=${villageName}&cardNumber=${cardNo}&gath=${gathName}&gathaId=${gathId}&gan=${ganName}&ganId=${ganId}`;
+    axios
+      .get(url)
+      .then((resp) => {
+        var voters = resp.data.voters;
+       
+        generateExcel(voters);
+      })
+      .catch((error) => {
+        toast.warning('You can only print 5000 records at a time')
+        console.error(error);
+      });
+  };
 
   const handleClear = () => {
     setVillageId("");
+   setGanId('')
+   setGanName('')
+   setGathId("")
+   setGathName('')
+    setGathName('')
     setVillageName("");
     setBoothNo("");
     setSrNo("");
@@ -71,7 +120,27 @@ const handelEditModal=(val)=>{
   const handleVillageChange = (selectedOption) => {
     setVillageId(selectedOption?.value || "");
     setVillageName(selectedOption?.label || "");
+    setBoothNo('')
+  
   };
+
+  const handleGathChange=(selectedOption) => {
+    setGathName(selectedOption?.label || "")
+    setGathId(selectedOption?.value || "")
+    setGanId('')
+    setGanName('')
+    setVillageName('')
+    setVillageId('')
+    setBoothNo('')
+  }
+
+  const handleGanChange=(selectedOption) => {
+    setGanName(selectedOption?.label || "")
+    setGanId(selectedOption?.value || "")
+    setVillageId('')
+    setVillageName('')
+    setBoothNo('')
+  }
 
   const getGath= () => {
     axios.get(`${base_url}/api/surve/getAllVoterGath/${id}`)
@@ -88,13 +157,12 @@ const handelEditModal=(val)=>{
   }
 
   const getGan= () => {
-    axios.get(`${base_url}/api/surve/getAllVoterGan/${id}?gathId=${gathName}`)
+    axios.get(`${base_url}/api/surve/getAllVoterGan/${id}?gathaId=${gathId}`)
        .then((resp)=>{
-        console.log(resp.data,"//gan")
-        const gathNo=resp.data.Gans.map((item)=>({
+        const gan=resp.data.Gans.map((item)=>({
             label:item.name , value:item._id
         }))
-        setGathOption(gathNo)
+        setGanOption(gan)
 
       })
       .catch((error) => {
@@ -104,7 +172,7 @@ const handelEditModal=(val)=>{
 
 
   const getVillageOption = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}?gathId=${gathId}&ganId=${ganId}`)
       .then((resp) => {
        
         const villageoption = resp.data.village.map((item) => ({
@@ -135,7 +203,7 @@ const handelEditModal=(val)=>{
 
   const getAllVoters = () => {
     axios
-      .get(`${base_url}/api/surve/searchVotter/${id}?name=true&boothNo=${boothNo}&serialNo=${srNo}&nameFilter=${voterName}&village=${villageName}&cardNumber=${cardNo}&page=${currentPage}`)
+      .get(`${base_url}/api/surve/searchVotter/${id}?name=true&boothNo=${boothNo}&serialNo=${srNo}&nameFilter=${voterName}&village=${villageName}&cardNumber=${cardNo}&gath=${gathName}&gathaId=${gathId}&gan=${ganName}&ganId=${ganId}&page=${currentPage}`)
       .then((resp) => {
         setAllVoter(resp.data.voters);
         setVoterCount(resp.data);
@@ -149,9 +217,13 @@ const handelEditModal=(val)=>{
 
 
   useEffect(() => {
-    getVillageOption();
     getGath()
    }, []);
+
+  
+   useEffect(()=>{
+    getVillageOption();
+   },[gathName,ganName])
 
 useEffect(()=>{
   getGan()
@@ -164,7 +236,7 @@ useEffect(()=>{
 
   useEffect(() => {
     getAllVoters()
-  }, [currentPage,villageName,boothNo,srNo,voterName,cardNo,editModal])
+  }, [gathName,ganName,currentPage,villageName,boothNo,srNo,voterName,cardNo,editModal])
   
 
   return (
@@ -183,7 +255,7 @@ useEffect(()=>{
           <hr className="py-2" />
           <p className=" text-[#b91c1c]">
             <span className="font-bold">विधानसभा</span> :
-            <span className="font-bold text-lg">199</span>
+            <span className="font-bold text-lg"> 8</span>
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
           <div>
@@ -194,9 +266,9 @@ useEffect(()=>{
   // isClearable={true}
   placeholder="गट"
   name="गट" 
-  value={gathOption.find(option => option.value === gathName) || null} 
+  value={gathOption.find(option => option.value === gathId) || null} 
   options={gathOption}
-  onChange={(selectedOption) => setGathName(selectedOption?.value || null)} 
+  onChange={handleGathChange} 
   className="react-select"
   classNamePrefix="select"
 />
@@ -209,9 +281,9 @@ useEffect(()=>{
   // isClearable={true}
   placeholder="गण"
   name="गण" 
-  value={villageOption.find(option => option.value === villageId) || null} 
-  options={villageOption}
-  onChange={(selectedOption) => setGathNo(selectedOption?.value || null)} 
+  value={ganOption.find(option => option.value === ganId) || null} 
+  options={ganOption}
+  onChange={handleGanChange} 
   className="react-select"
   classNamePrefix="select"
 />
@@ -316,12 +388,13 @@ useEffect(()=>{
               value={relativeName}
               onChange={(e) => setRelativeName(e.target.value)}
             /> */}
-            <div className="flex justify-end items-center mt-6">
+            <div className="flex justify-end items-center gap-2 mt-6">
             
 
              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={handleClear}>
               Clear
               </button>
+              <button onClick={handleExcel} className="bg-[#b91c1c] text-white px-5 h-10 rounded-md"> Excel</button>
            
             </div>
           </div>

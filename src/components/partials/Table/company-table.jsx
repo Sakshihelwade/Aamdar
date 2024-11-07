@@ -377,6 +377,7 @@ import Modal from "../../ui/Modal";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
 import InputGroup from "../../ui/Inputgroup";
+import { toast } from "react-toastify";
 
 
 const CompanyTable = () => {
@@ -455,7 +456,7 @@ const CompanyTable = () => {
       },
     },
     {
-      Header: "नेमलेली गावे",
+      Header: "",
       accessor: "villages",
       Cell: (row) => {
         const villages = row?.cell?.value;
@@ -475,8 +476,9 @@ const CompanyTable = () => {
       Header: "बदल करा",
       accessor: "",
       Cell: (row) => {
+    
         return (
-          <div>
+          <div className=" flex gap-2">
             <button
               onClick={() => {
                 setEditVillageModal(true);
@@ -494,6 +496,12 @@ const CompanyTable = () => {
             >
               <Icon icon="heroicons:pencil-square" />
             </button>
+            {
+              row.cell.row.original.isActive?
+            <button className=" bg-red-500 text-white px-1 rounded-[3px]" onClick={()=>ActiveDeactive(row.cell.row.original._id)}>Deactive</button>
+           : <button className="bg-green-500 text-white px-1 rounded-[3px]" onClick={()=>ActiveDeactive(row.cell.row.original._id)}>Active</button>
+
+            }
           </div>
         );
       },
@@ -502,9 +510,9 @@ const CompanyTable = () => {
   ];
 
   const Roleoptions = [
-    { value: 'admin', label: 'Admin' },
-    { value: 'Surveyor', label: 'Surveyor' },
-    { value: 'Karyakarta', label: 'Karyakarta' },
+    { label: "व्यवस्थापक", value: "Admin" },
+    { label: "सर्वेक्षक", value: "Surveyor" },
+    { label: "कार्यकर्ता", value: "Karyakarta" },
     // Add other roles as needed
   ];
   const token = localStorage.getItem('token');
@@ -531,8 +539,6 @@ const CompanyTable = () => {
   const columns = useMemo(() => COLUMNS, []);
   const data = useMemo(() => users, [users]);
   const toggleDropdown = () => setShowVillageDropdown(!showVillageDropdown);
-  // console.log(village,"villlllllage")
-
   useEffect(() => {
     getAllData();
     getAllVillages();
@@ -542,7 +548,6 @@ const CompanyTable = () => {
   const getAllData = async () => {
     try {
       const response = await axios.get(`${base_url}/api/getAllUser`);
-      console.log(response.data, "responseeeeeeeeee");
       setUsers(response.data.users)
     } catch (error) {
       console.log(error);
@@ -564,6 +569,7 @@ const CompanyTable = () => {
       id: v.id,
       villageName: v.villageName,
     }));
+
     const payload = {
       cardNumber: voterId,
       email: email,
@@ -581,7 +587,7 @@ const CompanyTable = () => {
         }
       }
     );
-      console.log(response.data, "updated Successfully");
+      toast.success("updated Successfully");
       setEditVillageModal(false);
       getAllData();
     } catch (error) {
@@ -604,6 +610,21 @@ const CompanyTable = () => {
       setVillage([...village, data]);
     }
   };
+
+const ActiveDeactive=(id)=>{
+  axios.get(`${base_url}/api/InActive-User/${id}`)
+  .then((resp)=>{
+    console.log(resp)
+    toast.success('Update Sucessfully')
+    getAllData()
+  })
+  .catch((error)=>{
+    console.log(error)
+  })
+}
+
+
+
   const tableInstance = useTable(
     {
       columns,
@@ -801,19 +822,21 @@ const CompanyTable = () => {
 
             <div className="mx-2 my-1">
               <label htmlFor="role" className="block text-gray-700">Role / पद</label>
-              <select
+              <Select
                 id="role"
                 name="role"
+                placeholder={"Role / पद"}
                 className="w-full border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-[#FFB033]"
-              // value={role}
-
+                value={role}
+               options={Roleoptions}
+              onChange={(e)=>setRole(e.target.value)}
               >
-                {Roleoptions.map((item) => {
+                {/* {Roleoptions.map((item) => {
                   return (
                     <><option value={role} onChange={(selectedRole) => setRole(selectedRole)}>{item.label}</option></>
                   )
-                })}
-              </select>
+                })} */}
+              </Select>
             </div>
 
             <div className="mx-2 my-1">

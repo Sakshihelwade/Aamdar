@@ -6,20 +6,28 @@ import InputGroup from "@/components/ui/InputGroup";
 import Select, { components } from "react-select";
 import { date } from "yup";
 import axios from "axios";
+import * as XLSX from "xlsx";
+
 import { base_url } from "../../../config/base_url";
+import { toast } from "react-toastify";
 
 const NameWiseList = () => {
   const id = localStorage.getItem('_id')
   const [month, setMonth] = useState('');
   const [villageId, setVillageId] = useState("");
+  const [ganName,setGanName]=useState('')
+  const [ganId,setGanId]=useState('')
+  const [gathName,setGathName]=useState('')
+  const [gathId,setGathId]=useState('')
   const [villageName, setVillageName] = useState("");
   const [boothNo, setBoothNo] = useState("");
   const [allVoter, setAllVoter] = useState('')
   const [voterCount, setVoterCount] = useState()
   const [currentPage, setCurrentPage] = useState(1);
   const [villageOption, setVillageOption] = useState([]);
+  const [gathOption,setGathOption] = useState([])
+  const [ganOption,setGanOption]=useState([])
   const [boothOption, setBoothOption] = useState([])
-
   const totalmalefemale = voterCount?.maleCount + voterCount?.femaleCount
   const other = voterCount?.total - totalmalefemale || 0
 
@@ -29,13 +37,103 @@ const NameWiseList = () => {
   //   setVillageName(selectedOption?.label || "");
   // };
 
+  const generateExcel = (data) => {
+    const rows = data.map((item) => ({
+      ['भाग/बूथ नं']: item.boothNo, 
+      ['अ.क्र.']: item.serialNo, 
+      ['नाव']: item.name, 
+      ['वय']: item.age  , 
+      ['लिंग']: item.gender, 
+      ['घर नं']: item.houseNo, 
+      ['पत्ता']: item.address , 
+      ['कार्ड नं']: item.cardNumber,
+     
+    }));
+
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+
+    // Convert the data into a worksheet
+    const ws = XLSX.utils.json_to_sheet(rows);
+
+    // Append the worksheet to the workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Namewise Data");
+
+    // Create a downloadable Excel file
+    XLSX.writeFile(wb, "मतदार.xlsx");
+  };
+
+  const handleExcel = () => {
+    const url = `${base_url}/api/surve/searchVotter/${id}?name=true&printOut=true&village=${villageName}&boothNo=${boothNo}&gath=${gathName}&gathaId=${gathId}&gan=${ganName}&ganId=${ganId}&dateOfBirth=${month}`;
+    axios
+      .get(url)
+      .then((resp) => {
+        var voters = resp.data.voters;
+       
+        generateExcel(voters);
+      })
+      .catch((error) => {
+        toast.warning('You can only print 5000 records at a time')
+        console.error(error);
+      });
+  };
+
   const handleVillageChange = (selectedOption) => {
     setVillageId(selectedOption?.value || "");
     setVillageName(selectedOption?.label || "");
+    setBoothNo('')
   };
+
+  const handleGathChange=(selectedOption) => {
+    setGathName(selectedOption?.label || "")
+    setGathId(selectedOption?.value || "")
+    setGanId('')
+    setGanName('')
+    setVillageName('')
+    setVillageId('')
+    setBoothNo('')
+  }
+
+  const handleGanChange=(selectedOption) => {
+    setGanName(selectedOption?.label || "")
+    setGanId(selectedOption?.value || "")
+    setVillageId('')
+    setVillageName('')
+    setBoothNo('')
+  }
+
+  const getGath= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGath/${id}`)
+       .then((resp)=>{
+        const gathName=resp.data.gaths.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGathOption(gathName)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const getGan= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGan/${id}?gathaId=${gathId}`)
+       .then((resp)=>{
+   
+        const gan=resp.data.Gans.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGanOption(gan)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   
   const getVillageOption = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}?gathId=${gathId}&ganId=${ganId}`)
       .then((resp) => {
         const villageoption = resp.data.village.map((item) => ({
           label: item.name,
@@ -63,15 +161,14 @@ const NameWiseList = () => {
   }
 
   const getAllVoters = () => {
-    axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&village=${villageName}&boothNo=${boothNo}&page=${currentPage}`)
+    axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&village=${villageName}&boothNo=${boothNo}&page=${currentPage}&gath=${gathName}&gathaId=${gathId}&gan=${ganName}&ganId=${ganId}&dateOfBirth=${month}`)
       .then((resp) => {
+
         setAllVoter(resp.data.voters);
         setVoterCount(resp.data);
-        toast.success('Filter Sucessfully')
       })
       .catch((error) => {
         console.log(error);
-        toast.warning('No results found for the provided search criteria')
       });
   };
 
@@ -80,41 +177,60 @@ const NameWiseList = () => {
   };
 
 
-  useEffect(() => {
-    getVillageOption()
-  }, [])
+useEffect(() => {
+    getGath()
+   }, []);
+
+  
+   useEffect(()=>{
+    getVillageOption();
+   },[gathName,ganName])
+
+useEffect(()=>{
+  getGan()
+},[gathName])
+
 
   useEffect(() => {
     getBoothNo()
-  }, [villageId])
+ },[villageId])
+
 
   useEffect(() => {
     getAllVoters()
-  }, [currentPage, villageName, boothNo])
+  }, [currentPage, villageName, boothNo,gathName,ganName,month])
 
   const monthOption = [
-    { label: "आज", value: "आज" },
-    { label: "जानेवारी", value: "जानेवारी" },
-    { label: "फेब्रुवारी", value: "फेब्रुवारी" },
-    { label: "मार्च", value: "मार्च" },
-    { label: "एप्रिल", value: "एप्रिल" },
-    { label: "मे", value: "मे" },
-    { label: "जून", value: "जून" },
-    { label: "जुलै", value: "जुलै" },
-    { label: "ऑगस्ट", value: "ऑगस्ट" },
-    { label: "सप्टेंबर", value: "सप्टेंबर" },
-    { label: "ऑक्टोबर", value: "ऑक्टोबर" },
-    { label: "नोव्हेंबर", value: "नोव्हेंबर" },
-    { label: "डिसेंबर", value: "डिसेंबर" },
+    { label: "आज", value: true },
+    { label: "जानेवारी", value: 1 },
+    { label: "फेब्रुवारी", value: 2},
+    { label: "मार्च", value: 3 },
+    { label: "एप्रिल", value: 4 },
+    { label: "मे", value: 5 },
+    { label: "जून", value: 6 },
+    { label: "जुलै", value: 7 },
+    { label: "ऑगस्ट", value: 8 },
+    { label: "सप्टेंबर", value: 9},
+    { label: "ऑक्टोबर", value: 10 },
+    { label: "नोव्हेंबर", value: 11},
+    { label: "डिसेंबर", value: 12 },
 
   ]
 
   const clearFields = () => {
     setVillageId('');
     setVillageName('');
-    setBoothNo('');
-    getAllVoters();
-  }
+    setGathId('');    
+    setGathName('');  
+    setGanId('');     
+    setGanName('');  
+    setBoothNo('');   
+    setCurrentPage(1); 
+    setAllVoter('');  
+    setMonth('')
+    getAllVoters();   
+  };
+  
   return (
     <div>
       <div className=" mb-4">
@@ -131,9 +247,40 @@ const NameWiseList = () => {
           <hr className="py-2" />
           <p>
             <span className="font-bold">विधानसभा</span>{" "}
-            <span className="font-bold text-lg">199</span>
+            <span className="font-bold text-lg"> 8</span>
           </p>
           <div className=" grid grid-cols-4 gap-2">
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गट
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गट"
+  name="गट" 
+  value={gathOption.find(option => option.value === gathId) || null} 
+  options={gathOption}
+  onChange={handleGathChange} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गण
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गण"
+  name="गण" 
+  value={ganOption.find(option => option.value === ganId) || null} 
+  options={ganOption}
+  onChange={handleGanChange} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+
             <div>
               <label className="form-label" htmlFor="mul_1">
                 गाव
@@ -172,15 +319,19 @@ const NameWiseList = () => {
                 classNamePrefix="select"
               />
             </div>
-
-            {/* <Select
-              label="महिना निवडा"
-              className="w-full"
-              placeholder="महिना निवडा"
-              options={monthOption}
-              onChange={(e) => setMonth(e.target.value)}
-              value={month}
-            /> */}
+            <div>
+              <label className="form-label" htmlFor="mul_1">
+              महिना निवडा
+              </label>
+            <Select
+  // label="महिना निवडा"
+  className="w-full"
+  placeholder="महिना निवडा"
+  options={monthOption}
+  onChange={(selectedOption) => setMonth(selectedOption?.value || null)}
+  value={monthOption.find(option => option.value === month) || null} // Ensure the selected value is correctly matched
+/>
+</div>
             {/* <div></div>
 <div className=" flex  gap-7 ">
             <div className="col-span-1 flex mt-8 items-center">
@@ -194,12 +345,15 @@ const NameWiseList = () => {
             <div className="col-span-1 flex mt-8 items-center">
               <span className=" font-semibold">एकूण : {voterCount?.total}</span>
             </div> */}
-            <div className=" flex justify-start items-center mt-6">
-              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
-                क्लियर करा
-              </button>
-            </div>
+           
           </div>
+          <div className=" flex justify-end items-center gap-2 mt-8">
+              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
+              Clear
+              </button>
+              <button onClick={handleExcel} className="bg-[#b91c1c] text-white px-5 h-10 rounded-md"> Excel</button>
+
+            </div>
         </Card>
       </div>
       <Card>

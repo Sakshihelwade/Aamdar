@@ -5,11 +5,18 @@ import Card from "../../../components/ui/Card";
 import InputGroup from "@/components/ui/InputGroup";
 import Select, { components } from "react-select";
 import { base_url } from "../../../config/base_url";
+import * as XLSX from "xlsx";
+import { toast } from "react-toastify";
+
 
 const JivantMrut = () => {
   const id = localStorage.getItem('_id')
   const [minBoothNo, setMinBoothNo] = useState('');
   const [maxBoothNo, setMaxBoothNo] = useState('');
+  const [ganName,setGanName]=useState('')
+  const [ganId,setGanId]=useState('')
+  const [gathName,setGathName]=useState('')
+  const [gathId,setGathId]=useState('')
   const [status, setStatus] = useState('');
   const [boothNo, setBoothNo] = useState(''); // Uncomment and use a single value
   const [voterName, setVoterName] = useState('');
@@ -17,6 +24,8 @@ const JivantMrut = () => {
   const [villageId, setVillageId] = useState('');
   const [villageOptions, setVillageOptions] = useState([]);
   const [boothOptions, setBoothOptions] = useState([]);
+  const [gathOption,setGathOption] = useState([])
+  const [ganOption,setGanOption]=useState([])
   const [allVoters, setAllVoters] = useState([]);
   const [voterCount, setVoterCount] = useState(0); // Assuming voter count is a number
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,7 +48,98 @@ const JivantMrut = () => {
   const handleVillageChange = (selectedOption) => {
     setVillageId(selectedOption?.value || "");
     setVillageName(selectedOption?.label || "");
+    setBoothNo('')
   };
+
+  const handleGathChange=(selectedOption) => {
+    setGathName(selectedOption?.label || "")
+    setGathId(selectedOption?.value || "")
+    setGanId('')
+    setGanName('')
+    setVillageName('')
+    setVillageId('')
+    setBoothNo('')
+  }
+
+  const handleGanChange=(selectedOption) => {
+    setGanName(selectedOption?.label || "")
+    setGanId(selectedOption?.value || "")
+    setVillageId('')
+    setVillageName('')
+    setBoothNo('')
+  }
+
+
+  const generateExcel = (data) => {
+    const rows = data.map((item) => ({
+      ['भाग/बूथ नं']: item.boothNo, 
+      ['अ.क्र.']: item.serialNo, 
+      ['नाव']: item.name, 
+      ['वय']: item.age  , 
+      ['लिंग']: item.gender, 
+      ['घर नं']: item.houseNo, 
+      ['पत्ता']: item.address , 
+      ['कार्ड नं']: item.cardNumber,
+     
+    }));
+
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+
+    // Convert the data into a worksheet
+    const ws = XLSX.utils.json_to_sheet(rows);
+
+    // Append the worksheet to the workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Namewise Data");
+
+    // Create a downloadable Excel file
+    XLSX.writeFile(wb, "मतदार.xlsx");
+  };
+
+  const handleExcel = () => {
+    const url = `${base_url}/api/surve/searchVotter/${id}?name=true&printOut=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${minBoothNo}&maxBooth=${maxBoothNo}&aliveOrDead=${status}&nameFilter=${voterName}&gath=${gathName}&gathaId=${gathId}&gan=${ganName}&ganId=${ganId}`;
+    axios
+      .get(url)
+      .then((resp) => {
+        var voters = resp.data.voters;
+       
+        generateExcel(voters);
+      })
+      .catch((error) => {
+        toast.warning('You can only print 5000 records at a time')
+        console.error(error);
+      });
+  };
+
+  const getGath= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGath/${id}`)
+       .then((resp)=>{
+        const gathName=resp.data.gaths.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGathOption(gathName)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const getGan= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGan/${id}?gathaId=${gathId}`)
+       .then((resp)=>{
+        console.log(resp.data,"//gan")
+        const gan=resp.data.Gans.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGanOption(gan)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   // const handleStatusChange = (selectedOption) => {
   //   setStatus(selectedOption?.value || "");
   // };
@@ -52,7 +152,7 @@ const JivantMrut = () => {
 
   // Fetch village options from API
   const getVillageOptions = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}?gathId=${gathId}&ganId=${ganId}`)
       .then((resp) => {
         const villageOptions = resp.data.village?.map((item) => ({
           label: item.name,
@@ -83,7 +183,7 @@ const JivantMrut = () => {
   // Fetch voter data from API
   const getAllData = async () => {
     try {
-      const response = await axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${minBoothNo}&maxBooth=${maxBoothNo}&aliveOrDead=${status}&nameFilter=${voterName}`);
+      const response = await axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&boothNo=${boothNo}&village=${villageName}&page=${currentPage}&minBooth=${minBoothNo}&maxBooth=${maxBoothNo}&aliveOrDead=${status}&nameFilter=${voterName}&gath=${gathName}&gathaId=${gathId}&gan=${ganName}&ganId=${ganId}`);
       setAllVoters(response.data.voters);
       setVoterCount(response.data || 0);
       console.log(response.data);
@@ -94,20 +194,35 @@ const JivantMrut = () => {
 
   useEffect(() => {
     getAllData();
-  }, [currentPage, boothNo, villageId, minBoothNo, maxBoothNo, voterName, status]);
+  }, [currentPage, boothNo, villageId, minBoothNo, maxBoothNo, voterName, status,ganName,gathName]);
 
+  
   useEffect(() => {
-    getBoothNo();
-  }, [villageId]);
+    getGath()
+   }, []);
 
-  useEffect(() => {
+  
+   useEffect(()=>{
     getVillageOptions();
-  }, []);
+   },[gathName,ganName])
+
+useEffect(()=>{
+  getGan()
+},[gathName])
+
+
+  useEffect(() => {
+    getBoothNo()
+ },[villageId])
 
   const clearFields = () => {
     setVillageId('');
     setVillageName('');
     setBoothNo('');
+    setGanName('')
+    setGanId('')
+    setGathId('')
+    setGathName('')
     setMinBoothNo('');
     setMaxBoothNo('');
     setStatus('');
@@ -132,9 +247,40 @@ const JivantMrut = () => {
           <hr className="mb-3" />
           <p>
             <span className="font-bold">विधानसभा</span>{" "}
-            <span className="font-bold text-lg">199</span>
+            <span className="font-bold text-lg"> 8</span>
           </p>
           <div className="grid grid-cols-4 gap-2">
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गट
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गट"
+  name="गट" 
+  value={gathOption.find(option => option.value === gathId) || null} 
+  options={gathOption}
+  onChange={handleGathChange} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गण
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गण"
+  name="गण" 
+  value={ganOption.find(option => option.value === ganId) || null} 
+  options={ganOption}
+  onChange={handleGanChange} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+    
             <div>
               <label className="form-label" htmlFor="mul_1">
                 गाव
@@ -207,20 +353,17 @@ const JivantMrut = () => {
               onChange={(e) => setVoterName(e.target.value)}
             />
 
-            {/* <span className="mt-10">एकूण : {voterCount?.total}</span> */}
             <span></span>
-            <div className="flex justify-end items-center mt-6">
-              {/* <button
-                className="bg-[#b91c1c] text-white px-5 h-10 rounded-md"
-                onClick={handleSearch}
-              >
-                शोधा
-              </button> */}
-              <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
-                क्लियर करा
-              </button>
-            </div>
+          
           </div>
+          <div className="flex justify-end items-center gap-2 mt-6">
+             
+             <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
+              Clear
+             </button>
+             <button onClick={handleExcel} className="bg-[#b91c1c] text-white px-5 h-10 rounded-md"> Excel</button>
+
+           </div>
         </Card>
       </div>
       <Card>

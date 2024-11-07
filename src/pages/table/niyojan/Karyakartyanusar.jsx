@@ -5,6 +5,8 @@ import InputGroup from "@/components/ui/InputGroup";
 import Select, { components } from "react-select";
 import axios from "axios";
 import { base_url } from "../../../config/base_url";
+import * as XLSX from "xlsx";
+
 
 const Karyakartyanusar = () => {
   // State management
@@ -13,16 +15,21 @@ const Karyakartyanusar = () => {
   const [villageName, setVillageName] = useState("");
   const [endListNo, setEndListNo] = useState("");
   const [voterCount, setVoterCount] = useState();
+  const [ganName,setGanName]=useState('')
+  const [ganId,setGanId]=useState('')
+  const [gathName,setGathName]=useState('')
+  const [gathId,setGathId]=useState('')
   const [karyakartaName, setKaryakartaName] = useState("");
-  const [maleCount, setMaleCount] = useState(12345); // Example counts
-  const [femaleCount, setFemaleCount] = useState(123456); // Example counts
+
   const [allVoter, setAllVoter] = useState([])
-  const [villageId, setVillageId] = useState(""); // State for selected village ID
-  const [villageOption, setVillageOption] = useState([]); // State for village dropdown options
-  const [boothOption, setBoothOption] = useState([]); // State for booth dropdown options
-  const [minBoothNo, setMinBoothNo] = useState(""); // State for minimum booth number
-  const [maxBoothNo, setMaxBoothNo] = useState(""); // State for maximum booth number
+  const [villageId, setVillageId] = useState(""); 
+  const [villageOption, setVillageOption] = useState([]); 
+  const [boothOption, setBoothOption] = useState([]); 
+  const [minBoothNo, setMinBoothNo] = useState(""); 
+  const [maxBoothNo, setMaxBoothNo] = useState(""); 
   const [currentPage, setCurrentPage] = useState(1);
+  const [gathOption,setGathOption] = useState([])
+  const [ganOption,setGanOption]=useState([])
   const [users, setUsers] = useState([])
   // console.log(boothOption, "///")
   const totalmalefemale = voterCount?.maleCount + voterCount?.femaleCount
@@ -37,6 +44,94 @@ const Karyakartyanusar = () => {
     setVillageId(selectedOption?.value || "");
     setVillageName(selectedOption?.label || "");
   };
+
+  const handleGathChange=(selectedOption) => {
+    setGathName(selectedOption?.label || "")
+    setGathId(selectedOption?.value || "")
+    setGanId('')
+    setGanName('')
+    setVillageName('')
+    setVillageId('')
+    setBoothNo('')
+  }
+
+  const handleGanChange=(selectedOption) => {
+    setGanName(selectedOption?.label || "")
+    setGanId(selectedOption?.value || "")
+    setVillageId('')
+    setVillageName('')
+    setBoothNo('')
+  }
+
+  const generateExcel = (data) => {
+    const rows = data.map((item) => ({
+      ['भाग/बूथ नं']: item.boothNo, 
+      ['अ.क्र.']: item.serialNo, 
+      ['नाव']: item.name, 
+      ['वय']: item.age  , 
+      ['लिंग']: item.gender, 
+      ['घर नं']: item.houseNo, 
+      ['पत्ता']: item.address , 
+      ['कार्ड नं']: item.cardNumber,
+     
+    }));
+
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+
+    // Convert the data into a worksheet
+    const ws = XLSX.utils.json_to_sheet(rows);
+
+    // Append the worksheet to the workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Namewise Data");
+
+    // Create a downloadable Excel file
+    XLSX.writeFile(wb, "मतदार.xlsx");
+  };
+
+  const handleExcel = () => {
+    const url = `${base_url}/api/surve/get-karaykarta-Voters/${karyakartaName}?checkNonVoted=true&printOut=true&village=${villageName}&boothNo=${boothNo}&gathaId=${gathId}&gan=${ganName}&ganId=${ganId}&page=${currentPage}`;
+    axios
+      .get(url)
+      .then((resp) => {
+        var voters = resp.data.voters;
+       
+        generateExcel(voters);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const getGath= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGath/${id}`)
+       .then((resp)=>{
+        const gathName=resp.data.gaths.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGathOption(gathName)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const getGan= () => {
+    axios.get(`${base_url}/api/surve/getAllVoterGan/${id}?gathaId=${gathId}`)
+       .then((resp)=>{
+        console.log(resp.data,"//gan")
+        const gan=resp.data.Gans.map((item)=>({
+            label:item.name , value:item._id
+        }))
+        setGanOption(gan)
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   const handleKaryakartaChange = (selectedOption) => {
     setKaryakartaName(selectedOption?.value || "");
   };
@@ -58,7 +153,7 @@ const Karyakartyanusar = () => {
 
 
   const getVillageOption = () => {
-    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}`)
+    axios.get(`${base_url}/api/surve/getAllVoterVillages/${id}?gathId=${gathId}&ganId=${ganId}`)
       .then((resp) => {
         const villageOptions = resp.data.village?.map((item) => ({
           label: item.name,
@@ -90,7 +185,6 @@ const Karyakartyanusar = () => {
   const getAllData = async () => {
     try {
       const response = await axios.get(`${base_url}/api/getAllUser`);
-      console.log(response.data.users, "responseeeeeeeeee");
       const karyakarta = response.data.users?.map((item) => ({
         label: item?.fullName,
         value: item?._id,
@@ -103,8 +197,7 @@ const Karyakartyanusar = () => {
 
   const getAllVotersList = async () => {
     try {
-      const response = await axios.get(`${base_url}/api/surve/searchVotter/${id}?name=true&village=${villageName}&boothNo=${boothNo}&page=${currentPage}`)
-      // console.log(response.data,'llllllllllllllll')
+      const response = await axios.get(`${base_url}/api/surve/get-karaykarta-Voters/${karyakartaName}?checkNonVoted=true&village=${villageName}&boothNo=${boothNo}&gathaId=${gathId}&gan=${ganName}&ganId=${ganId}&page=${currentPage}`)
       setAllVoter(response.data.voters)
       setVoterCount(response.data || 0);
     } catch (error) {
@@ -119,15 +212,34 @@ const Karyakartyanusar = () => {
 
   useEffect(() => {
     getAllVotersList()
-  }, [currentPage, villageName, boothNo])
+  }, [currentPage, villageName, boothNo,gathName,ganName,karyakartaName])
+
+  useEffect(() => {
+    getGath()
+   }, []);
+
+  
+   useEffect(()=>{
+    getVillageOption();
+   },[gathName,ganName])
+
+useEffect(()=>{
+  getGan()
+},[gathName])
+
 
   useEffect(() => {
     getBoothNo()
-  }, [villageId])
+ },[villageId])
+
 
   const clearFields = () => {
     setVillageId('');
     setVillageName('');
+    setGanId('')
+    setGanName('')
+    setGathId('')
+    setGathName('')
     setKaryakartaName('');
     setBoothNo('');
   }
@@ -147,9 +259,40 @@ const Karyakartyanusar = () => {
           <hr className="mb-3" />
           <p>
             <span className="font-bold">विधानसभा</span>{" "}
-            <span className="font-bold text-lg">199</span>
+            <span className="font-bold text-lg"> 8</span>
           </p>
           <div className="grid grid-cols-4 gap-2">
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गट
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गट"
+  name="गट" 
+  value={gathOption.find(option => option.value === gathId) || null} 
+  options={gathOption}
+  onChange={handleGathChange} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+          <div>
+        <label className="form-label" htmlFor="mul_1">
+        गण
+        </label>
+  <Select
+  // isClearable={true}
+  placeholder="गण"
+  name="गण" 
+  value={ganOption.find(option => option.value === ganId) || null} 
+  options={ganOption}
+  onChange={handleGanChange} 
+  className="react-select"
+  classNamePrefix="select"
+/>
+</div>
+
             {/* गाव (Village) */}
             <div>
               <label className="form-label" htmlFor="mul_1">
@@ -232,10 +375,12 @@ const Karyakartyanusar = () => {
             </div> */}
 
             {/* Search button */}
-            <div className="flex justify-end items-center mt-6">
+            <div className="flex justify-end items-center gap-2 mt-8">
               <button className="bg-[#b91c1c] text-white px-5 h-10 rounded-md" onClick={clearFields}>
-                क्लियर करा
+              Clear
               </button>
+              <button onClick={handleExcel} className="bg-[#b91c1c] text-white px-5 h-10 rounded-md"> Excel</button>
+
             </div>
           </div>
         </Card>

@@ -139,7 +139,7 @@ useEffect(()=>{
           <hr className="py-2" />
           <p className=" text-[#b91c1c]">
             <span className="font-bold">विधानसभा</span> :
-            <span className="font-bold text-lg">199</span>
+            <span className="font-bold text-lg"> 8</span>
           </p>
           {/* <div className="grid grid-cols-4 gap-2">
             <Select

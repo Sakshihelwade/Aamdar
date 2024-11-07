@@ -265,6 +265,20 @@ const COLUMNS = [
         },
     },
     {
+        Header: "पत्ता",
+        accessor: "address",
+        Cell: (row) => {
+            return <span>{row?.cell?.value}</span>;
+        },
+    },
+    {
+        Header: "बूथ नं",
+        accessor: "boothNo",
+        Cell: (row) => {
+            return <span>{row?.cell?.value}</span>;
+        },
+    },
+    {
         Header: "संख्या",
         accessor: "count",
         Cell: (row) => {
